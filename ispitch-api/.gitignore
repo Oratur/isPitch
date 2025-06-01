@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+*.env
+
+# Poetry
+poetry.lock
+
+# Pytest
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Ruff
+.ruff_cache/
+
+# VSCode/IDE
+.vscode/
