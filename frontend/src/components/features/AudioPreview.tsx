@@ -6,8 +6,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FileAudio, Send, Trash2 } from 'lucide-react';
-import { create } from 'domain';
-import { createAudioAnalysis } from '@/services/audioService';
+import { createAudioAnalysis } from '@/services/analysisService';
 
 interface AudioPreviewProps {
   file: File;
