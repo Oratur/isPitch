@@ -16,9 +16,6 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ['var(--font-geist-sans)', 'Arial', 'sans-serif'].join(','),
-    h6: {
-      fontFamily: ['var(--font-bruno-ace)', 'sans-serif'].join(','),
-    }
   }
 });
 
