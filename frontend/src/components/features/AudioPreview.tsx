@@ -6,6 +6,8 @@ import {
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FileAudio, Send, Trash2 } from 'lucide-react';
+import { create } from 'domain';
+import { createAudioAnalysis } from '@/services/audioService';
 
 interface AudioPreviewProps {
   file: File;
@@ -26,17 +28,32 @@ export function AudioPreview({ file, onClear }: AudioPreviewProps) {
     };
   }, [file]);
 
-  const handleSendAudio = () => {
-    setIsUploading(true);
-    console.log('Enviando áudio:', file.name);
+  // const handleSendAudio = () => {
+  //   setIsUploading(true);
+  //   console.log('Enviando áudio:', file.name);
 
-    // Simula uma chamada de API de 2 segundos
-    setTimeout(() => {
-      const analysisId = 'exemplo-12345';
+  //   // Simula uma chamada de API de 2 segundos
+  //   setTimeout(() => {
+  //     const analysisId = 'exemplo-12345';
+  //     router.push(`/analysis/${analysisId}`);
+  //     // setIsUploading(false); // Não é necessário se a página vai mudar
+  //   }, 2000);
+  // };
+
+  const handleSendAudio = async () => {
+    setIsUploading(true);
+
+    try {
+      const response = await createAudioAnalysis(file);
+      const analysisId = response.id;
+      
       router.push(`/analysis/${analysisId}`);
-      // setIsUploading(false); // Não é necessário se a página vai mudar
-    }, 2000);
-  };
+    } catch (error) {
+      console.error('Erro ao enviar o áudio:', error);
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   return (
     <Box className="flex flex-col items-center gap-6 w-full max-w-2xl text-center">
