@@ -10,6 +10,15 @@ interface AudioDropzoneProps {
 
 export function AudioDropzone({ onFileAccepted }: AudioDropzoneProps) {
   const [isDragOver, setIsDragOver] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const isValidAudioFile = (file: File) => {
+    const validTypes = ['audio/mpeg', 'audio/wav'];
+    const validExtensions = ['.mp3', '.wav'];
+    const fileName = file.name.toLowerCase();
+    return validTypes.includes(file.type) 
+        && validExtensions.some(ext => fileName.endsWith(ext));
+  };
 
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
@@ -17,6 +26,11 @@ export function AudioDropzone({ onFileAccepted }: AudioDropzoneProps) {
       event.stopPropagation();
       setIsDragOver(false);
       if (event.dataTransfer.files && event.dataTransfer.files[0]) {
+        const file = event.dataTransfer.files[0];
+        if (!isValidAudioFile(file)) {
+          setError('Apenas arquivos .mp3 ou .wav são permitidos.');
+          return;
+        }
         onFileAccepted(event.dataTransfer.files[0]);
       }
     },
@@ -34,7 +48,14 @@ export function AudioDropzone({ onFileAccepted }: AudioDropzoneProps) {
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      if (!isValidAudioFile(file)) {
+        setError('Apenas arquivos .mp3 ou .wav são permitidos.');
+        return;
+      }
+
       onFileAccepted(event.target.files[0]);
     }
   };
@@ -57,8 +78,8 @@ export function AudioDropzone({ onFileAccepted }: AudioDropzoneProps) {
         Análise de Áudio
       </Typography>
       <Typography variant="body1" color="text.secondary">
-        Mussum Ipsum, cacilds vidis litro abertis. Suco de cevadiss, é um leite
-        divinis, qui tem lupuliz, matis, aguis e fermentis.
+          Faça upload de um arquivo de áudio nos formatos <b>.mp3</b> ou <b>.wav</b> para análise. 
+          Você pode selecionar um arquivo do seu computador ou arrastar e soltar aqui.
       </Typography>
 
       <Paper
@@ -95,6 +116,13 @@ export function AudioDropzone({ onFileAccepted }: AudioDropzoneProps) {
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
           ou arraste e solte aqui
         </Typography>
+        {
+          error && (
+            <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+              {error}
+            </Typography>
+          )
+        }
       </Paper>
     </Box>
   );
