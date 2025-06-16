@@ -31,13 +31,13 @@ class AnalysisService:
         if file.size > self.MAX_FILE_SIZE_BYTES:
             raise FileTooLargeError(
                 'Arquivo muito grande. O tamanho máximo permitido é de'
-                + f'{self.MAX_FILE_SIZE_BYTES / (1024 * 1024)} MB.'
+                + f' {self.MAX_FILE_SIZE_BYTES / (1024 * 1024)} MB.'
             )
 
         if file.content_type not in self.VALID_CONTENT_TYPES:
             raise UnsupportedFileTypeError(
                 'Formato de arquivo não suportado.'
-                + f'Use um dos seguintes: {self.VALID_CONTENT_TYPES}.'
+                + f' Use um dos seguintes: {self.VALID_CONTENT_TYPES}.'
             )
 
     def create_new_analysis(self, file: UploadFile) -> str:
@@ -49,7 +49,7 @@ class AnalysisService:
         analysis_id = str(uuid.uuid4())
         print(
             f'SERVICE: Análise criada com ID: {analysis_id}'
-            + f'para o arquivo: {file.filename}'
+            + f' para o arquivo: {file.filename}'
         )
 
         return analysis_id
