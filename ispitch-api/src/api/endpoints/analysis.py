@@ -15,8 +15,15 @@ router = APIRouter(prefix='/analysis', tags=['Analysis'])
     + 'starts the analysis process and returns a unique ID.',
 )
 def create_audio_analysis(
+    background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     analysis_service: AnalysisService = Depends(AnalysisService),
+):
+    analysis_id = analysis_service.start_analysis_process(
+        file, background_tasks
+    )
+    return AnalysisCreateResponse(id=analysis_id)
+
 ):
     """
     Endpoint to create a new audio analysis.

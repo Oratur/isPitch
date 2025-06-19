@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import tempfile
@@ -44,18 +45,19 @@ class StorageService:
             )
             raise
 
-    def save_analysis_result(self, analysis_id: str, transcription: str):
+    def save_analysis_result(self, analysis_id: str, result_data: dict):
         """
-        Saves the transcription result to a file.
+        Saves the analysis result dictionary to a JSON file.
 
         Args:
             analysis_id: Unique identifier for the analysis.
+            result_data: Dictionary containing the analysis results.
         """
 
-        output_path = os.path.join(self.RESULTS_DIR, f'{analysis_id}.txt')
+        output_path = os.path.join(self.RESULTS_DIR, f'{analysis_id}.json')
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
-                f.write(transcription)
+                json.dump(result_data, f, ensure_ascii=False, indent=4)
             logger.info(f'Analysis result saved at: {output_path}')
         except Exception as e:
             logger.error(
