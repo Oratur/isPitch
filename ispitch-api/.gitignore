@@ -20,3 +20,5 @@ htmlcov/
 
 # VSCode/IDE
 .vscode/
+
+analysis_results/

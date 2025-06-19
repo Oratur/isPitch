@@ -1,26 +1,28 @@
-from fastapi import APIRouter, File, UploadFile, status
+from fastapi import APIRouter, Depends, File, UploadFile, status
 
 from src.api.schemas.analysis import AnalysisCreateResponse
 from src.services.analysis_service import AnalysisService
 
 router = APIRouter(prefix='/analysis', tags=['Analysis'])
-analysis_service = AnalysisService()
 
 
 @router.post(
     '/',
     response_model=AnalysisCreateResponse,
     status_code=status.HTTP_201_CREATED,
-    summary='Cria uma nova análise de áudio',
-    description='Recebe um arquivo de áudio (.mp3 ou .wav), '
-    + 'inicia o processo de análise e retorna um ID único.',
+    summary='Create a new audio analysis',
+    description='Receives an audio file (.mp3 or .wav), '
+    + 'starts the analysis process and returns a unique ID.',
 )
-def create_audio_analysis(file: UploadFile = File(...)):
+def create_audio_analysis(
+    file: UploadFile = File(...),
+    analysis_service: AnalysisService = Depends(AnalysisService),
+):
     """
-    Endpoint para criar uma nova análise de áudio.
-    Delega a lógica para o AnalysisService e confia nos manipuladores
-    globais de exceção para tratar os erros.
+    Endpoint to create a new audio analysis.
+    Delegates the logic to the AnalysisService and relies on global
+    exception handlers to handle errors.
     """
 
-    analysis_id = analysis_service.create_new_analysis(file=file)
+    analysis_id = analysis_service.create_analysis(file)
     return AnalysisCreateResponse(id=analysis_id)
