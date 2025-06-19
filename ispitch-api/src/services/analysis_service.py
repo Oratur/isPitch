@@ -64,6 +64,7 @@ class AnalysisService:
         analysis_id = str(uuid.uuid4())
         logger.info(f'Creating analysis with ID: {analysis_id}')
 
+        temp_audio_path = None
         try:
             temp_audio_path = self.storage_service.save_temporary_audio(file)
             transcription = self.transcription_service.transcribe(
