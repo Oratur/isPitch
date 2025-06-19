@@ -4,6 +4,7 @@ from src.services.storage_service import StorageService
 from src.services.transcription_service import TranscriptionService
 
 
+@lru_cache(maxsize=1)
 def get_storage_service() -> StorageService:
     """
     Dependency to get the StorageService instance.
