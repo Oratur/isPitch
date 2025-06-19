@@ -33,7 +33,8 @@ class StorageService:
                 delete=False,
                 suffix='.mp3' if file.content_type == 'audio/mpeg' else '.wav',
             ) as temp_file:
-                temp_file.write(file.file.read())
+                for chunk in iter(lambda: file.file.read(1024 * 1024), b''):
+                    temp_file.write(chunk)
                 temp_file_path = temp_file.name
                 logger.info(f'Temporary audio file saved at: {temp_file_path}')
                 return temp_file_path
