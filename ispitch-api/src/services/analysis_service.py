@@ -3,6 +3,7 @@ import uuid
 
 from fastapi import BackgroundTasks, Depends, UploadFile
 
+from src.api.schemas.analysis import AnalysisResultData, AnalysisResultResponse
 from src.core.dependencies import (
     get_storage_service,
     get_transcription_service,
@@ -87,3 +88,26 @@ class AnalysisService:
         finally:
             self.storage_service.cleanup_temporary_file(audio_path)
 
+    def get_analysis(self, analysis_id: str) -> AnalysisResultResponse:
+        """
+        Retrieves the result of an analysis by its ID.
+        Args:
+            analysis_id (str): The unique ID of the analysis.
+        Returns:
+            AnalysisResultResponse: The result of the analysis.
+        """
+        try:
+            logger.info(f'Retrieving analysis result for ID: {analysis_id}')
+            result_data = self.storage_service.get_analysis_result(analysis_id)
+            return AnalysisResultResponse(
+                id=analysis_id,
+                status='COMPLETED',
+                data=AnalysisResultData(**result_data),
+            )
+        except FileNotFoundError:
+            logger.error(f'Analysis result not found for ID: {analysis_id}')
+            return AnalysisResultResponse(
+                id=analysis_id,
+                status='PENDING',
+                data=None,
+            )

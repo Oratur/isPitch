@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import pathlib
 import tempfile
 
 from fastapi import UploadFile
@@ -83,3 +84,25 @@ class StorageService:
                 exc_info=True,
             )
             raise
+
+    def get_analysis_result(self, analysis_id: str) -> dict:
+        """
+        Reads the analysis result JSON file.
+
+        Args:
+            analysis_id: The ID of the analysis.
+
+        Returns:
+            A dictionary containing the analysis results.
+
+        Raises:
+            FileNotFoundError: If the result file does not exist.
+        """
+        result_path = pathlib.Path(self.RESULTS_DIR, f'{analysis_id}.json')
+        if not result_path.exists():
+            raise FileNotFoundError(
+                f'Result file for analysis ID {analysis_id} not found.'
+            )
+
+        with open(result_path, 'r', encoding='utf-8') as f:
+            return json.load(f)

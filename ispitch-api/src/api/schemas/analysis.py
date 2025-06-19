@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -15,3 +17,21 @@ class AnalysisCreateResponse(BaseModel):
 
     class Config:
         json_schema_extra = {'example': {'id': 'example-12345'}}
+
+
+class AnalysisResultData(BaseModel):
+    """
+    Schema for the nested data within the analysis result.
+    """
+
+    transcription: Optional[str] = None
+
+
+class AnalysisResultResponse(BaseModel):
+    """
+    Schema for the response when querying for an analysis result.
+    """
+
+    id: str
+    status: str  # Ex: 'COMPLETED', 'PENDING', 'FAILED'
+    data: Optional[AnalysisResultData] = None
