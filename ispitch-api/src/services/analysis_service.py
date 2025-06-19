@@ -1,6 +1,16 @@
+import logging
 import uuid
 
-from fastapi import UploadFile
+from fastapi import Depends, UploadFile
+
+from src.core.dependencies import (
+    get_storage_service,
+    get_transcription_service,
+)
+from src.services.storage_service import StorageService
+from src.services.transcription_service import TranscriptionService
+
+logger = logging.getLogger(__name__)
 
 
 class InvalidFileError(ValueError):
@@ -17,39 +27,55 @@ class UnsupportedFileTypeError(InvalidFileError):
 
 class AnalysisService:
     """
-    Encapsula toda a lógica de negócio para criar e gerir uma análise de áudio.
+    Service responsible for handling audio analysis operations.
     """
 
     MAX_FILE_SIZE_BYTES = 60 * 1024 * 1024
     VALID_CONTENT_TYPES = ['audio/mpeg', 'audio/wav']
 
+    def __init__(
+        self,
+        storage_service: StorageService = Depends(get_storage_service),
+        transcription_service: TranscriptionService = Depends(
+            get_transcription_service
+        ),
+    ):
+        self.storage_service = storage_service
+        self.transcription_service = transcription_service
+
     def _validate_file(self, file: UploadFile):
         """
-        Método privado para validar o arquivo. Levanta exceções de negócio
-        específicas em caso de falha.
+        Validates the uploaded audio file.
+        Raises exceptions for invalid files.
         """
-        if file.size > self.MAX_FILE_SIZE_BYTES:
-            raise FileTooLargeError(
-                'Arquivo muito grande. O tamanho máximo permitido é de'
-                + f' {self.MAX_FILE_SIZE_BYTES / (1024 * 1024)} MB.'
-            )
-
         if file.content_type not in self.VALID_CONTENT_TYPES:
             raise UnsupportedFileTypeError(
-                'Formato de arquivo não suportado.'
-                + f' Use um dos seguintes: {self.VALID_CONTENT_TYPES}.'
+                f'Unsupported file type: {file.content_type}. '
+                'Supported types are: ' + ', '.join(self.VALID_CONTENT_TYPES)
+            )
+        if file.size > self.MAX_FILE_SIZE_BYTES:
+            raise FileTooLargeError(
+                'File size exceeds the limit of '
+                + f'{self.MAX_FILE_SIZE_BYTES} bytes.'
             )
 
-    def create_new_analysis(self, file: UploadFile) -> str:
-        """
-        Orquestra a criação de uma nova análise.
-        """
+    def create_analysis(self, file: UploadFile) -> str:
         self._validate_file(file)
-
         analysis_id = str(uuid.uuid4())
-        print(
-            f'SERVICE: Análise criada com ID: {analysis_id}'
-            + f' para o arquivo: {file.filename}'
-        )
+        logger.info(f'Creating analysis with ID: {analysis_id}')
 
-        return analysis_id
+        temp_audio_path = None
+        try:
+            temp_audio_path = self.storage_service.save_temporary_audio(file)
+            transcription = self.transcription_service.transcribe(
+                temp_audio_path
+            )
+            self.storage_service.save_analysis_result(
+                analysis_id, transcription
+            )
+
+            return analysis_id
+        finally:
+            # Clean up temporary audio file
+            if temp_audio_path:
+                self.storage_service.cleanup_temporary_file(temp_audio_path)
