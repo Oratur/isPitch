@@ -22,8 +22,8 @@ export function useAudioUpload() {
         setError(null);
 
         try {
-            const analysisId = await createAudioAnalysis(audioFile);
-            router.push(`/analysis/${analysisId}`);
+            const response = await createAudioAnalysis(audioFile);
+            router.push(`/analysis/${response.id}`);
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : 'Ocorreu um erro desconhecido durante o upload.';
             setError(errorMessage);
