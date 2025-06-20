@@ -21,6 +21,7 @@
     "postcss": "^8.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
     "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
