@@ -1,98 +1,89 @@
 'use client';
 
+import { useCallback } from 'react';
+import { useDropzone, FileRejection } from 'react-dropzone';
 import { Box, Button, Typography, Paper } from '@mui/material';
 import { UploadCloud } from 'lucide-react';
-import { useCallback, useState } from 'react';
 
 interface AudioDropzoneProps {
   onFileAccepted: (file: File) => void;
+  onError: (message: string) => void;
 }
 
-export function AudioDropzone({ onFileAccepted }: AudioDropzoneProps) {
-  const [isDragOver, setIsDragOver] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const audioValidator = (file: File) => {
+  if (!file || typeof file.name !== 'string' || typeof file.type !== 'string') {
+    return null;
+  }
 
-  const isValidAudioFile = (file: File) => {
-    const validTypes = ['audio/mpeg', 'audio/wav'];
-    const validExtensions = ['.mp3', '.wav'];
-    const fileName = file.name.toLowerCase();
-    return validTypes.includes(file.type) 
-        && validExtensions.some(ext => fileName.endsWith(ext));
-  };
+  const validTypes = ['audio/mpeg', 'audio/wav'];
+  const fileName = file.name.toLowerCase();
+  
+  if (!validTypes.includes(file.type) && !fileName.endsWith('.mp3') && !fileName.endsWith('.wav')) {
+    return {
+      code: 'invalid-audio-type',
+      message: 'Tipo de arquivo inválido. Apenas MP3 ou WAV são permitidos.',
+    };
+  }
 
-  const handleDrop = useCallback(
-    (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-      setIsDragOver(false);
-      if (event.dataTransfer.files && event.dataTransfer.files[0]) {
-        const file = event.dataTransfer.files[0];
-        if (!isValidAudioFile(file)) {
-          setError('Apenas arquivos .mp3 ou .wav são permitidos.');
-          return;
-        }
-        onFileAccepted(event.dataTransfer.files[0]);
-      }
-    },
-    [onFileAccepted]
-  );
+  return null;
+};
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsDragOver(true);
-  };
 
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setIsDragOver(false);
-  };
+export function AudioDropzone({ onFileAccepted, onError }: AudioDropzoneProps) {
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      onError(''); 
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setError(null);
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      if (!isValidAudioFile(file)) {
-        setError('Apenas arquivos .mp3 ou .wav são permitidos.');
+      if (fileRejections.length > 0) {
+        const errorMessage = fileRejections[0].errors[0].message;
+        onError(errorMessage);
         return;
       }
 
-      onFileAccepted(event.target.files[0]);
-    }
+      if (acceptedFiles.length > 0) {
+        onFileAccepted(acceptedFiles[0]);
+      }
+    },
+    [onFileAccepted, onError],
+  );
+
+  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
+    onDrop,
+    accept: {
+      'audio/mpeg': ['.mp3'],
+      'audio/wav': ['.wav'],
+    },
+    maxFiles: 1,
+    validator: audioValidator,
+  });
+
+  const getBorderColor = () => {
+    if (isDragReject) return 'error.main';
+    if (isDragActive) return 'primary.main';
+    return 'grey.400';
   };
 
   return (
-    <Box
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      className="text-center"
-    >
-      <input
-        type="file"
-        id="audio-upload-input"
-        accept="audio/*"
-        onChange={handleFileSelect}
-        hidden
-      />
+    <Box className="text-center">
       <Typography variant="h4" component="h1" gutterBottom>
         Análise de Áudio
       </Typography>
       <Typography variant="body1" color="text.secondary">
-          Faça upload de um arquivo de áudio nos formatos <b>.mp3</b> ou <b>.wav</b> para análise. 
-          Você pode selecionar um arquivo do seu computador ou arrastar e soltar aqui.
+        Faça upload de um arquivo de áudio nos formatos <b>.mp3</b> ou <b>.wav</b> para análise. 
+        Você pode selecionar um arquivo do seu computador ou arrastar e soltar aqui.
       </Typography>
 
       <Paper
+        {...getRootProps()}
         variant="outlined"
-        component="label"
-        htmlFor="audio-upload-input"
         sx={{
           borderStyle: 'dashed',
           borderWidth: 2,
-          borderColor: isDragOver ? 'primary.main' : 'grey.400',
-          backgroundColor: isDragOver ? 'action.hover' : 'transparent',
+          borderColor: getBorderColor(),
+          backgroundColor: isDragActive ? 'action.hover' : 'transparent',
           cursor: 'pointer',
           p: { xs: 4, sm: 6 },
+          mt: 2,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -100,29 +91,19 @@ export function AudioDropzone({ onFileAccepted }: AudioDropzoneProps) {
           transition: 'border-color 0.2s, background-color 0.2s',
         }}
       >
+        <input {...getInputProps({ name: 'file' })} />
         <UploadCloud
           size={48}
           className={`mb-4 transition-colors ${
-            isDragOver ? 'text-blue-500' : 'text-gray-400'
+            isDragActive ? 'text-blue-500' : 'text-gray-400'
           }`}
         />
-        <Button
-          variant="contained"
-          size="large"
-          component="span"
-        >
+        <Button variant="contained" size="large" component="span">
           Selecionar Arquivo de Áudio
         </Button>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
           ou arraste e solte aqui
         </Typography>
-        {
-          error && (
-            <Typography variant="body2" color="error" sx={{ mt: 2 }}>
-              {error}
-            </Typography>
-          )
-        }
       </Paper>
     </Box>
   );

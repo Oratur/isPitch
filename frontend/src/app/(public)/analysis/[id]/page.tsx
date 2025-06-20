@@ -1,61 +1,107 @@
+'use client'; 
+
+import { useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import { notFound } from 'next/navigation';
-import { cache } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
+import { Box, CircularProgress, Typography, Alert } from '@mui/material';
+import {AnalysisLayout} from '@/components/layouts/AnalysisLayout';
+import {TranscriptionCard} from '@/components/features/TranscriptionCard';
+import { getAnalysis } from '@/services/analysisService';
+import type { AnalysisResult } from '@/types/analysis';
 import { AnalyticsCard } from '@/components/features/AnalyticsCard';
-import { TranscriptionCard } from '@/components/features/TranscriptionCard';
-import { AnalysisLayout } from '@/components/layouts/AnalysisLayout'; // ✅ Importa o novo componente de layout
 
-// --- Mock de Dados ---
-const getAnalysisData = cache(async (id: string) => {
-  console.log(`Buscando dados para o ID: ${id}`);
-  if (id === 'not-found') return null;
-  return {
-    id,
-    fileName: 'audio_file_name.mp3',
-    transcription: 'Mussum Ipsum, cacilds vidis litro abertis...',
-    analytics: [
-      { id: 'metric1', title: 'Análise de Sentimento' },
-      { id: 'metric2', title: 'Densidade de Palavras-chave' },
-      { id: 'metric3', title: 'Tópicos Principais' },
-    ],
-  };
-});
+export default function AnalysisPage() {
+  const params = useParams();
+  const searchParams = useSearchParams();  
 
-interface AnalysisPageProps {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+  const id = params.id as string;
+  const currentView = searchParams.get('view') || 'transcription';
 
-export default async function AnalysisPage({ params, searchParams }: AnalysisPageProps) {
-  const data = await getAnalysisData(params.id);
-  
-  if (!data) {
-    notFound();
+  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+    let isMounted = true;
+    const POLLING_INTERVAL = 3000;
+
+    const fetchResult = async () => {
+      try {
+        const result = await getAnalysis(id);
+        if (!isMounted) return;
+
+        if (result.status === 'COMPLETED') {
+          setAnalysis(result);
+        } else if (result.status === 'PENDING') {
+          setTimeout(fetchResult, POLLING_INTERVAL);
+        } else {
+          setError('A análise falhou. Por favor, tente novamente.');
+        }
+      } catch {
+        if (!isMounted) return;
+        setError('Não foi possível obter o resultado da análise.');
+      }
+    };
+
+    fetchResult();
+
+    return () => { isMounted = false; };
+  }, [id]);
+
+  if (error) {
+    return (
+      <Box sx={{ p: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
   }
 
-  const currentView = searchParams.view || 'transcription';
+
+  if (!analysis) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '80vh',
+          gap: 2,
+        }}
+      >
+        <CircularProgress />
+        <Typography>Processando sua análise, por favor aguarde...</Typography>
+      </Box>
+    );
+  }
+
 
   return (
-    // ✅ A página agora se envolve com o AnalysisLayout
-    <AnalysisLayout data={data}>
-      {/*
-        O conteúdo abaixo será passado como `children` para o AnalysisLayout
-        e renderizado dentro da tag <main> dele.
-      */}
+    <AnalysisLayout
+      analysisId={analysis.id}
+      fileName={analysis.data?.fileName ?? 'Nome não encontrado'}
+    >
       {currentView === 'analytics' ? (
         <Grid container spacing={4}>
-          {data.analytics.map((metric) => (
-            <Grid size={{xs: 12, lg: 6, xl: 4}} key={metric.id}>
-              <AnalyticsCard title={metric.title}>
-                <div className="bg-gray-200 h-64 flex items-center justify-center rounded-lg">
-                  Gráfico para {metric.title}
-                </div>
-              </AnalyticsCard>
-            </Grid>
-          ))}
+          <Grid size={{xs: 12, lg: 6, xl: 4}}>
+            <AnalyticsCard title="Vícios de Linguagem">
+              <Box sx={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'grey.100', borderRadius: 1 }}>
+                <Typography>Gráfico de Vícios de Linguagem (Em breve)</Typography>
+              </Box>
+            </AnalyticsCard>
+          </Grid>
+          <Grid size={{xs: 12, lg: 6, xl: 4}}>
+            <AnalyticsCard title="Ritmo da Fala">
+              <Box sx={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'grey.100', borderRadius: 1 }}>
+                <Typography>Gráfico de Ritmo da Fala (Em breve)</Typography>
+              </Box>
+            </AnalyticsCard>
+          </Grid>
         </Grid>
       ) : (
-        <TranscriptionCard transcriptionText={data.transcription} />
+        <TranscriptionCard
+          transcription={analysis.data?.transcription ?? 'Transcrição não disponível.'}
+        />
       )}
     </AnalysisLayout>
   );

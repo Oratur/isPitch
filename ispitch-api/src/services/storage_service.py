@@ -1,5 +1,7 @@
+import json
 import logging
 import os
+import pathlib
 import tempfile
 
 from fastapi import UploadFile
@@ -44,18 +46,19 @@ class StorageService:
             )
             raise
 
-    def save_analysis_result(self, analysis_id: str, transcription: str):
+    def save_analysis_result(self, analysis_id: str, result_data: dict):
         """
-        Saves the transcription result to a file.
+        Saves the analysis result dictionary to a JSON file.
 
         Args:
             analysis_id: Unique identifier for the analysis.
+            result_data: Dictionary containing the analysis results.
         """
 
-        output_path = os.path.join(self.RESULTS_DIR, f'{analysis_id}.txt')
+        output_path = os.path.join(self.RESULTS_DIR, f'{analysis_id}.json')
         try:
             with open(output_path, 'w', encoding='utf-8') as f:
-                f.write(transcription)
+                json.dump(result_data, f, ensure_ascii=False, indent=4)
             logger.info(f'Analysis result saved at: {output_path}')
         except Exception as e:
             logger.error(
@@ -81,3 +84,25 @@ class StorageService:
                 exc_info=True,
             )
             raise
+
+    def get_analysis_result(self, analysis_id: str) -> dict:
+        """
+        Reads the analysis result JSON file.
+
+        Args:
+            analysis_id: The ID of the analysis.
+
+        Returns:
+            A dictionary containing the analysis results.
+
+        Raises:
+            FileNotFoundError: If the result file does not exist.
+        """
+        result_path = pathlib.Path(self.RESULTS_DIR, f'{analysis_id}.json')
+        if not result_path.exists():
+            raise FileNotFoundError(
+                f'Result file for analysis ID {analysis_id} not found.'
+            )
+
+        with open(result_path, 'r', encoding='utf-8') as f:
+            return json.load(f)

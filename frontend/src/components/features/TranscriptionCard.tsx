@@ -5,14 +5,14 @@ import { Box, Card, CardContent, CardHeader, IconButton, Tooltip, Typography } f
 import { Check, Copy } from 'lucide-react';
 
 interface TranscriptionCardProps {
-  transcriptionText: string;
+  transcription: string;
 }
 
-export function TranscriptionCard({ transcriptionText }: TranscriptionCardProps) {
+export function TranscriptionCard({ transcription }: TranscriptionCardProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(transcriptionText);
+    navigator.clipboard.writeText(transcription);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -46,7 +46,7 @@ export function TranscriptionCard({ transcriptionText }: TranscriptionCardProps)
             color: 'text.secondary',
           }}
         >
-          {transcriptionText}
+          {transcription}
         </Box>
       </CardContent>
     </Card>

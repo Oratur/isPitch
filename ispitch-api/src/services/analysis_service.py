@@ -1,8 +1,9 @@
 import logging
 import uuid
 
-from fastapi import Depends, UploadFile
+from fastapi import BackgroundTasks, Depends, UploadFile
 
+from src.api.schemas.analysis import AnalysisResultData, AnalysisResultResponse
 from src.core.dependencies import (
     get_storage_service,
     get_transcription_service,
@@ -59,23 +60,63 @@ class AnalysisService:
                 + f'{self.MAX_FILE_SIZE_BYTES} bytes.'
             )
 
-    def create_analysis(self, file: UploadFile) -> str:
+    def start_analysis_process(
+        self, file: UploadFile, background_tasks: BackgroundTasks
+    ):
+        """
+        Starts the analysis process in the background.
+        Args:
+            file (UploadFile): The audio file to analyze.
+            background_tasks (BackgroundTasks): FastAPI's background
+            tasks manager.
+        """
         self._validate_file(file)
         analysis_id = str(uuid.uuid4())
-        logger.info(f'Creating analysis with ID: {analysis_id}')
+        temp_audio_path = self.storage_service.save_temporary_audio(file)
+        original_filename = file.filename
 
-        temp_audio_path = None
+        background_tasks.add_task(
+            self._run_transcription_and_save,
+            analysis_id,
+            temp_audio_path,
+            original_filename,
+        )
+
+        return analysis_id
+
+    def _run_transcription_and_save(
+        self, analysis_id: str, audio_path: str, original_filename: str
+    ):
         try:
-            temp_audio_path = self.storage_service.save_temporary_audio(file)
-            transcription = self.transcription_service.transcribe(
-                temp_audio_path
-            )
-            self.storage_service.save_analysis_result(
-                analysis_id, transcription
-            )
-
-            return analysis_id
+            transcription = self.transcription_service.transcribe(audio_path)
+            result_data = {
+                'fileName': original_filename,
+                'transcription': transcription,
+            }
+            self.storage_service.save_analysis_result(analysis_id, result_data)
         finally:
-            # Clean up temporary audio file
-            if temp_audio_path:
-                self.storage_service.cleanup_temporary_file(temp_audio_path)
+            self.storage_service.cleanup_temporary_file(audio_path)
+
+    def get_analysis(self, analysis_id: str) -> AnalysisResultResponse:
+        """
+        Retrieves the result of an analysis by its ID.
+        Args:
+            analysis_id (str): The unique ID of the analysis.
+        Returns:
+            AnalysisResultResponse: The result of the analysis.
+        """
+        try:
+            logger.info(f'Retrieving analysis result for ID: {analysis_id}')
+            result_data = self.storage_service.get_analysis_result(analysis_id)
+            return AnalysisResultResponse(
+                id=analysis_id,
+                status='COMPLETED',
+                data=AnalysisResultData(**result_data),
+            )
+        except FileNotFoundError:
+            logger.error(f'Analysis result not found for ID: {analysis_id}')
+            return AnalysisResultResponse(
+                id=analysis_id,
+                status='PENDING',
+                data=None,
+            )
