@@ -73,13 +73,13 @@ class AnalysisService:
         self._validate_file(file)
         analysis_id = str(uuid.uuid4())
         temp_audio_path = self.storage_service.save_temporary_audio(file)
-        orignal_filename = file.filename
+        original_filename = file.filename
 
         background_tasks.add_task(
             self._run_transcription_and_save,
             analysis_id,
             temp_audio_path,
-            orignal_filename,
+            original_filename,
         )
 
         return analysis_id
