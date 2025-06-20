@@ -25,6 +25,7 @@ class AnalysisResultData(BaseModel):
     """
 
     transcription: Optional[str] = None
+    fileName: Optional[str] = None
 
 
 class AnalysisResultResponse(BaseModel):

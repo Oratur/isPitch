@@ -67,23 +67,32 @@ class AnalysisService:
         Starts the analysis process in the background.
         Args:
             file (UploadFile): The audio file to analyze.
-            background_tasks (BackgroundTasks): FastAPI's background tasks manager.
+            background_tasks (BackgroundTasks): FastAPI's background
+            tasks manager.
         """
         self._validate_file(file)
         analysis_id = str(uuid.uuid4())
         temp_audio_path = self.storage_service.save_temporary_audio(file)
+        orignal_filename = file.filename
 
-        # Agenda a tarefa demorada para rodar em segundo plano
         background_tasks.add_task(
-            self._run_transcription_and_save, analysis_id, temp_audio_path
+            self._run_transcription_and_save,
+            analysis_id,
+            temp_audio_path,
+            orignal_filename,
         )
 
         return analysis_id
 
-    def _run_transcription_and_save(self, analysis_id: str, audio_path: str):
+    def _run_transcription_and_save(
+        self, analysis_id: str, audio_path: str, original_filename: str
+    ):
         try:
             transcription = self.transcription_service.transcribe(audio_path)
-            result_data = {'transcription': transcription}
+            result_data = {
+                'fileName': original_filename,
+                'transcription': transcription,
+            }
             self.storage_service.save_analysis_result(analysis_id, result_data)
         finally:
             self.storage_service.cleanup_temporary_file(audio_path)

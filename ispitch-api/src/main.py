@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from src.api.endpoints import analysis
 from src.api.exception_handler import register_exception_handlers
+from src.core.middlewares import configure_cors
 
 app = FastAPI(
     title='isPitch API',
@@ -9,9 +10,11 @@ app = FastAPI(
     description='API for verbal communication analysis from audio.',
 )
 
+configure_cors(app)
+
 register_exception_handlers(app)
 
-app.include_router(analysis.router, prefix='/api')
+app.include_router(analysis.router)
 
 
 @app.get('/', tags=['Root'])
