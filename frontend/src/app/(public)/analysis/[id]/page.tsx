@@ -9,7 +9,7 @@ import {TranscriptionCard} from '@/components/features/TranscriptionCard';
 import { getAnalysis } from '@/services/analysisService';
 import type { AnalysisResult } from '@/types/analysis';
 import { AnalyticsCard } from '@/components/features/AnalyticsCard';
-import SilenceAnalysisCard from '@/components/features/SilenceAnalisysCard';
+import SilenceAnalysisCard from '@/components/features/SilenceAnalysisCard';
 
 export default function AnalysisPage() {
   const params = useParams();
