@@ -1,5 +1,3 @@
-# ispitch-api/src/services/speech_analysis_service.py
-
 from typing import Any, Dict, List
 
 
