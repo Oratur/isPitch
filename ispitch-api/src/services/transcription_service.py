@@ -1,4 +1,5 @@
 import logging
+from typing import Any, Dict
 
 import whisper
 
@@ -14,7 +15,7 @@ class TranscriptionService:
     def __init__(self):
         self.model = whisper.load_model('base')
 
-    def transcribe(self, audio_path: str) -> str:
+    def transcribe(self, audio_path: str) -> Dict[str, Any]:
         """
         Transcribe the audio file at the given path using the Whisper model.
 
@@ -27,10 +28,11 @@ class TranscriptionService:
 
         try:
             logger.info(f'Starting transcription for audio file: {audio_path}')
-            result = self.model.transcribe(audio_path, fp16=False)
-            transcription_text = result.get('text', 'Transcription failed.')
+            result = self.model.transcribe(
+                audio_path, fp16=False, word_timestamps=True
+            )
             logger.info('Transcription completed successfully.')
-            return transcription_text
+            return result
         except Exception as e:
             logger.error(
                 f'An error occurred during transcription: {e}', exc_info=True
