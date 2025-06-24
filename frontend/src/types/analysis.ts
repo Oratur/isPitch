@@ -1,10 +1,19 @@
+export interface Silence {
+    start: number;
+    end: number;
+    duration: number;
+}
+
+export interface AnalysisResultData {
+    fileName?: string;
+    transcription?: string;
+    silences?: Silence[];
+}
+
 export interface AnalysisResult {
     id: string;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    data?: {
-        fileName?: string;
-        transcription?: string;
-    }
+    data?: AnalysisResultData;
 }
 
 export interface AnalysisCreateResponse {
