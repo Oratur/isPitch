@@ -5,9 +5,11 @@ from fastapi import BackgroundTasks, Depends, UploadFile
 
 from src.api.schemas.analysis import AnalysisResultData, AnalysisResultResponse
 from src.core.dependencies import (
+    get_speech_analysis_service,
     get_storage_service,
     get_transcription_service,
 )
+from src.services.speech_analysis_service import SpeechAnalysisService
 from src.services.storage_service import StorageService
 from src.services.transcription_service import TranscriptionService
 
@@ -40,9 +42,13 @@ class AnalysisService:
         transcription_service: TranscriptionService = Depends(
             get_transcription_service
         ),
+        speech_analysis_service: SpeechAnalysisService = Depends(
+            get_speech_analysis_service
+        ),
     ):
         self.storage_service = storage_service
         self.transcription_service = transcription_service
+        self.speech_analysis_service = speech_analysis_service
 
     def _validate_file(self, file: UploadFile):
         """
@@ -76,7 +82,7 @@ class AnalysisService:
         original_filename = file.filename
 
         background_tasks.add_task(
-            self._run_transcription_and_save,
+            self._run_analysis,
             analysis_id,
             temp_audio_path,
             original_filename,
@@ -84,15 +90,24 @@ class AnalysisService:
 
         return analysis_id
 
-    def _run_transcription_and_save(
+    def _run_analysis(
         self, analysis_id: str, audio_path: str, original_filename: str
     ):
         try:
-            transcription = self.transcription_service.transcribe(audio_path)
+            transcription_result = self.transcription_service.transcribe(
+                audio_path
+            )
+
+            silences = self.speech_analysis_service.detect_silences(
+                transcription_result
+            )
+
             result_data = {
                 'fileName': original_filename,
-                'transcription': transcription,
+                'transcription': transcription_result.get('text', '').strip(),
+                'silences': silences,
             }
+
             self.storage_service.save_analysis_result(analysis_id, result_data)
         finally:
             self.storage_service.cleanup_temporary_file(audio_path)
