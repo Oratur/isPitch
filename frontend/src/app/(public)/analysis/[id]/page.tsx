@@ -9,6 +9,7 @@ import {TranscriptionCard} from '@/components/features/TranscriptionCard';
 import { getAnalysis } from '@/services/analysisService';
 import type { AnalysisResult } from '@/types/analysis';
 import { AnalyticsCard } from '@/components/features/AnalyticsCard';
+import SilenceAnalysisCard from '@/components/features/SilenceAnalysisCard';
 
 export default function AnalysisPage() {
   const params = useParams();
@@ -83,6 +84,9 @@ export default function AnalysisPage() {
     >
       {currentView === 'analytics' ? (
         <Grid container spacing={4}>
+          <Grid size={{xs: 12, lg: 6, xl: 4}}>
+            <SilenceAnalysisCard silences={analysis.data?.silences || []} />
+          </Grid>  
           <Grid size={{xs: 12, lg: 6, xl: 4}}>
             <AnalyticsCard title="Vícios de Linguagem">
               <Box sx={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'grey.100', borderRadius: 1 }}>
