@@ -1,7 +1,13 @@
-export interface Silence {
+interface Silence {
     start: number;
     end: number;
     duration: number;
+}
+
+export interface SilenceAnalysis {
+    silences: Silence[];
+    totalDuration: number;
+    numberOfPauses: number;
 }
 
 export interface FillerWordAnalysis {
@@ -11,6 +17,9 @@ export interface FillerWordAnalysis {
 
 
 export interface AnalysisResultData {
+    fileName: string;
+    transcription: string;
+    silences: SilenceAnalysis;
     fillerWords: FillerWordAnalysis;
 }
 
