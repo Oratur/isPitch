@@ -102,10 +102,15 @@ class AnalysisService:
                 transcription_result
             )
 
+            filler_words = self.speech_analysis_service.detect_filler_words(
+                transcription
+            )
+
             result_data = {
                 'fileName': original_filename,
                 'transcription': transcription_result.get('text', '').strip(),
                 'silences': silences,
+                'filler_words': filler_words,
             }
 
             self.storage_service.save_analysis_result(analysis_id, result_data)
