@@ -4,16 +4,20 @@ export interface Silence {
     duration: number;
 }
 
+export interface FillerWordAnalysis {
+    totalFillerWords: number;
+    fillerWordsCount: Record<string, number>;
+}
+
+
 export interface AnalysisResultData {
-    fileName?: string;
-    transcription?: string;
-    silences?: Silence[];
+    fillerWords: FillerWordAnalysis;
 }
 
 export interface AnalysisResult {
     id: string;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    data?: AnalysisResultData;
+    data: AnalysisResultData;
 }
 
 export interface AnalysisCreateResponse {
