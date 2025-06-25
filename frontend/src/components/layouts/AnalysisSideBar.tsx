@@ -107,7 +107,7 @@ export function AnalysisSidebar({ fileName, basePath }: AnalysisSidebarProps) {
       <Box sx={{ mb: 4 }}>
         <Typography variant="h6" noWrap>Análise de Áudio</Typography>
         <Typography variant="body2" color="text.secondary" noWrap>
-          Ficheiro: <strong>{fileName}</strong>
+          Arquivo: <strong>{fileName}</strong>
         </Typography>
       </Box>
 
