@@ -1,4 +1,10 @@
-from typing import Any, Dict, List
+from collections import Counter
+from typing import Any, Dict
+
+import spacy
+from spacy.matcher import Matcher
+
+from src.api.schemas.analysis import SilenceAnalysis
 
 
 class SpeechAnalysisService:
@@ -6,10 +12,35 @@ class SpeechAnalysisService:
     Service responsible for analyzing speech data from a transcription result.
     """
 
+    FILLER_WORDS = [
+        'né',
+        'tipo',
+        'então',
+        'aí',
+        'quer dizer',
+        'assim',
+        'bom',
+        'certo',
+        'ok',
+        'tá',
+        'é',
+        'tipo assim',
+        'daí',
+        'hã',
+        'ãh',
+        'hum',
+    ]
+
+    def __init__(self):
+        try:
+            self.nlp = spacy.load('pt_core_news_sm')
+        except OSError:
+            self.nlp = None
+
     @staticmethod
     def detect_silences(
         result: Dict[str, Any], threshold_ms: int = 1000
-    ) -> List[Dict[str, float]]:
+    ) -> SilenceAnalysis:
         """
         Detects silences in the audio based on word timestamps.
         """
@@ -43,4 +74,39 @@ class SpeechAnalysisService:
                     'duration': round(gap, 2),
                 })
 
-        return silences
+        return {
+            'total_duration': sum(silence['duration'] for silence in silences),
+            'silences': silences,
+            'number_of_pauses': len(silences),
+        }
+
+    def detect_filler_words(self, transcription: str):
+        """
+        Detects filler words in the transcription.
+        Args:
+            transcription (str): The transcription text to analyze.
+        Returns:
+            List[str]: A list of detected filler words.
+        """
+        doc = self.nlp(transcription)
+
+        matcher = Matcher(self.nlp.vocab)
+
+        for filler in self.FILLER_WORDS:
+            pattern_words = filler.split()
+            pattern = [{'LOWER': word} for word in pattern_words]
+            matcher.add(filler, [pattern])
+
+        matches = matcher(doc)
+
+        filler_word_counts = Counter()
+        for match_id, start, end in matches:
+            filler_text = self.nlp.vocab.strings[match_id]
+            filler_word_counts[filler_text] += 1
+
+        total_filler_words = sum(filler_word_counts.values())
+
+        return {
+            'total_filler_words': total_filler_words,
+            'filler_words_count': dict(filler_word_counts),
+        }

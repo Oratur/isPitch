@@ -1,18 +1,15 @@
 'use client';
 
-import  { Silence }  from '@/types/analysis';
+import  { SilenceAnalysis }  from '@/types/analysis';
 import { Card, CardContent, Divider, Stack, Typography, Box, CardHeader } from '@mui/material';
 import { BarChart3, Hourglass, Timer } from 'lucide-react';
 
 
 interface SilenceAnalysisCardProps {
-    silences: Silence[];
+    silences: SilenceAnalysis;
 }
 
 export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardProps) {
-
-    const totalSilenceDuration = silences.reduce((total, silence) => total + silence.duration, 0);
-    const numberOfPauses = silences.length;
 
     return (
         <Card elevation={2} sx={{ borderRadius: 3, height: '100%' }}>
@@ -30,7 +27,7 @@ export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardPro
                     <Box sx={{ textAlign: 'center' }}>
                        <Hourglass size={28} className='text-blue-500' />
                         <Typography variant="h5" component="p" fontWeight="bold">
-                            {numberOfPauses}
+                            {silences.numberOfPauses}
                         </Typography>
                         <Typography variant="body1" color="text.secondary">
                             Pausas Longas
@@ -40,7 +37,7 @@ export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardPro
                     <Box sx={{textAlign:'center'}}>
                         <Timer size={28} className='text-green-500' />
                         <Typography variant="h5" component="p" fontWeight="bold">
-                            {totalSilenceDuration.toFixed(2)}s
+                            {silences.totalDuration}
                         </Typography>
                         <Typography variant="body1" color="text.secondary">
                             Tempo Total em Pausa
