@@ -40,7 +40,7 @@ class SpeechAnalysisService:
     @staticmethod
     def detect_silences(
         result: Dict[str, Any], threshold_ms: int = 1000
-    ) -> List[Dict[str, float]]:
+    ) -> SilenceAnalysis:
         """
         Detects silences in the audio based on word timestamps.
         """
@@ -73,6 +73,12 @@ class SpeechAnalysisService:
                     'end': round(start_of_next_word, 2),
                     'duration': round(gap, 2),
                 })
+
+        return {
+            'total_duration': sum(silence['duration'] for silence in silences),
+            'silences': silences,
+            'number_of_pauses': len(silences),
+        }
 
     def detect_filler_words(self, transcription: str):
         """

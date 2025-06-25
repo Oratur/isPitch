@@ -98,6 +98,7 @@ class AnalysisService:
             transcription_result = self.transcription_service.transcribe(
                 audio_path
             )
+            transcription = transcription_result.get('text', '').strip()
             logger.info(f'[{analysis_id}] Transcription completed')
 
             logger.info(f'[{analysis_id}] Detecting silences in transcription')
@@ -113,8 +114,8 @@ class AnalysisService:
             logger.info(f'[{analysis_id}] Filler words analysis completed')
 
             result_data = {
-                'fileName': original_filename,
-                'transcription': transcription_result.get('text', '').strip(),
+                'file_name': original_filename,
+                'transcription': transcription,
                 'silences': silences,
                 'filler_words': filler_words,
             }
