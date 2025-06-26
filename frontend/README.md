@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend - isPitch
 
-## Getting Started
+Este é o frontend da plataforma **isPitch**, construído com [Next.js](https://nextjs.org), [React](https://react.dev/) e [Material-UI (MUI)](https://mui.com/).
 
-First, run the development server:
+## Visão Geral
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A interface do usuário (UI) é responsável por permitir que o usuário faça o upload de arquivos de áudio, acompanhe o processo de análise e visualize os resultados de forma clara e interativa.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologias Principais
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* **Framework**: [Next.js](https://nextjs.org) 
+* **Biblioteca UI**: [React](https://react.dev/) 
+* **Componentes**: [Material-UI (MUI)](https://mui.com/) 
+* **Estilização**: [Tailwind CSS](https://tailwindcss.com/) 
+* **Linguagem**: TypeScript
+* **Comunicação com API**: Fetch API nativa 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Primeiros Passos
 
-## Learn More
+Para executar o servidor de desenvolvimento localmente:
 
-To learn more about Next.js, take a look at the following resources:
+1.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.  **Crie um arquivo de ambiente:**
+    Renomeie o arquivo `.env.example` (se existir) para `.env.local` e configure a variável de ambiente necessária para apontar para o backend:
+    ```
+    NEXT_PUBLIC_API_BASE_URL=[http://127.0.0.1:8000](http://127.0.0.1:8000)
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  **Execute o servidor:**
+    ```bash
+    npm run dev
+    ```
 
-## Deploy on Vercel
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver a aplicação em funcionamento.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts Disponíveis
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* `npm run dev`: Inicia o servidor em modo de desenvolvimento.
+* `npm run build`: Compila a aplicação para produção.
+* `npm run start`: Inicia um servidor de produção.
+* `npm run lint`: Executa o linter (ESLint) para verificar a qualidade do código.
