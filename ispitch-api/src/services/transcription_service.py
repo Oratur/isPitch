@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict
 
-from src.core.dependencies import get_whisper_model
+from src.core.model_registry import get_whisper_model
 
 logger = logging.getLogger(__name__)
 

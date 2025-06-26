@@ -3,7 +3,7 @@ from typing import Any, Dict
 
 from spacy.matcher import Matcher
 
-from src.core.dependencies import get_spacy_model
+from src.core.model_registry import get_spacy_model
 
 
 class FillerWordAnalyzer:

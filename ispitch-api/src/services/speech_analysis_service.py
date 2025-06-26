@@ -3,8 +3,8 @@ from src.services.analyzers.silence_analyzer import SilenceAnalyzer
 
 
 class SpeechAnalysisService:
-    def __init__(self, nlp=None):
-        self.filler_analyzer = FillerWordAnalyzer(nlp)
+    def __init__(self):
+        self.filler_analyzer = FillerWordAnalyzer()
 
     @staticmethod
     def detect_silences(result, threshold_ms=1000):

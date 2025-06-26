@@ -1,8 +1,5 @@
 from functools import lru_cache
 
-import spacy
-import whisper
-
 from src.services.speech_analysis_service import SpeechAnalysisService
 from src.services.storage_service import StorageService
 from src.services.transcription_service import TranscriptionService
@@ -36,13 +33,3 @@ def get_speech_analysis_service() -> SpeechAnalysisService:
     """
 
     return SpeechAnalysisService()
-
-
-@lru_cache(maxsize=1)
-def get_whiper_model():
-    return whisper.load_model('base')
-
-
-@lru_cache(maxsize=1)
-def get_spacy_model():
-    return spacy.load('pt_core_news_sm')
