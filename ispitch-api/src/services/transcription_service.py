@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict
 
-import whisper
+from src.core.model_registry import get_whisper_model
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ class TranscriptionService:
     """
 
     def __init__(self):
-        self.model = whisper.load_model('base')
+        self.model = get_whisper_model()
 
     def transcribe(self, audio_path: str) -> Dict[str, Any]:
         """
