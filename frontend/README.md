@@ -27,7 +27,7 @@ Para executar o servidor de desenvolvimento localmente:
 2.  **Crie um arquivo de ambiente:**
     Renomeie o arquivo `.env.example` (se existir) para `.env.local` e configure a variável de ambiente necessária para apontar para o backend:
     ```
-    NEXT_PUBLIC_API_BASE_URL=[http://127.0.0.1:8000](http://127.0.0.1:8000)
+    NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
     ```
 
 3.  **Execute o servidor:**
