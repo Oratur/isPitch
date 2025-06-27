@@ -17,9 +17,16 @@ class SilenceAnalysis(CamelCaseModel):
     number_of_pauses: int
 
 
+class FillerWordPosition(CamelCaseModel):
+    start: int
+    end: int
+    word: str
+
+
 class FillerWordAnalysis(CamelCaseModel):
     total_filler_words: int
     filler_words_count: dict[str, int]
+    words: list[FillerWordPosition]
 
 
 class AnalysisCreateResponse(CamelCaseModel):
