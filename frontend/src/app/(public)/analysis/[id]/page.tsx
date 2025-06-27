@@ -102,6 +102,7 @@ export default function AnalysisPage() {
       ) : (
         <TranscriptionCard
           transcription={analysis.data?.transcription ?? 'Transcrição não disponível.'}
+          fillerWords={analysis.data?.fillerWords}
         />
       )}
     </AnalysisLayout>

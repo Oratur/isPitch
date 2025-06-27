@@ -29,7 +29,11 @@ class FillerWordAnalyzer:
 
     def analyze(self, transcription: str) -> Dict[str, Any]:
         if not self.nlp:
-            return {'total_filler_words': 0, 'filler_words_count': {}}
+            return {
+                'total_filler_words': 0,
+                'filler_words_count': {},
+                'words': [],
+            }
 
         doc = self.nlp(transcription.lower())
 
@@ -75,6 +79,7 @@ class FillerWordAnalyzer:
             found_matches.add(doc[start:end].start_char)
 
         filler_word_counts = Counter()
+        filler_word_positions = []
 
         for _, start, end in matches:
             span = doc[start:end]
@@ -84,14 +89,32 @@ class FillerWordAnalyzer:
                     span[0] if span[0].text in self.FILLER_WORDS else span[1]
                 )
                 filler_word_counts[filler_token.text] += 1
+                filler_word_positions.append({
+                    'start': span.start_char,
+                    'end': span.end_char,
+                    'word': filler_token.text,
+                })
                 found_matches.remove(span.start_char)
 
         if e_hesitations > 0:
             filler_word_counts['é...'] = e_hesitations
+
+            idx = 0
+            while True:
+                idx = transcription.lower.find('é...', idx)
+                if idx == -1:
+                    break
+                filler_word_positions.append({
+                    'start': idx,
+                    'end': idx + 3,
+                    'word': 'é...',
+                })
+                idx += 4
 
         total_filler_words = sum(filler_word_counts.values())
 
         return {
             'total_filler_words': total_filler_words,
             'filler_words_count': dict(filler_word_counts),
+            'words': filler_word_positions,
         }

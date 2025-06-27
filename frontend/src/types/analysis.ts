@@ -10,9 +10,16 @@ export interface SilenceAnalysis {
     numberOfPauses: number;
 }
 
+export interface FillerWordPosition {
+    start: number;
+    end: number;
+    word: string;
+}
+
 export interface FillerWordAnalysis {
     totalFillerWords: number;
     fillerWordsCount: Record<string, number>;
+    words: FillerWordPosition[];
 }
 
 
