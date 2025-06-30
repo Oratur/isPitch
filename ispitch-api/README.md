@@ -44,6 +44,10 @@ Para configurar e executar a API localmente:
     ```bash
     poetry shell
     ```
+    Nota: Se for a primeira vez que você usa o comando shell em uma nova instalação do Poetry, pode ser necessário instalar o plugin correspondente com: 
+    ```bash
+    poetry self add poetry-plugin-shell.
+    ```
 
 2.  **(Opcional, para GPU) Instale os drivers e o PyTorch com suporte a CUDA:**
     Para acelerar o processamento do Whisper utilizando uma GPU NVIDIA, siga estes passos **antes** de instalar as dependências do projeto.
