@@ -9,6 +9,7 @@ from src.core.dependencies import (
     get_storage_service,
     get_transcription_service,
 )
+from src.services.audio_analysis_service import AudioAnalysisService
 from src.services.speech_analysis_service import SpeechAnalysisService
 from src.services.storage_service import StorageService
 from src.services.transcription_service import TranscriptionService
@@ -49,6 +50,7 @@ class AnalysisService:
         self.storage_service = storage_service
         self.transcription_service = transcription_service
         self.speech_analysis_service = speech_analysis_service
+        self.audio_analysis_service = AudioAnalysisService()
 
     def _validate_file(self, file: UploadFile):
         """
@@ -107,6 +109,14 @@ class AnalysisService:
             )
             logger.info(f'[{analysis_id}] Silences detection completed')
 
+            logger.info(f'[{analysis_id}] Calculating speech rate')
+            speech_rate = self.audio_analysis_service.get_speech_rate(
+                audio_path, transcription, silences['total_duration']
+            )
+            logger.info(
+                f'[{analysis_id}] Speech rate calculated: {speech_rate} WPM'
+            )
+
             logger.info(f'[{analysis_id}] Starting filler words analysis')
             filler_words = self.speech_analysis_service.detect_filler_words(
                 transcription
@@ -118,6 +128,7 @@ class AnalysisService:
                 'transcription': transcription,
                 'silences': silences,
                 'filler_words': filler_words,
+                'speech_rate': speech_rate,
             }
 
             self.storage_service.save_analysis_result(analysis_id, result_data)
