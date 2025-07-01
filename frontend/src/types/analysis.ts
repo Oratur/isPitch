@@ -28,6 +28,7 @@ export interface AnalysisResultData {
     transcription: string;
     silences: SilenceAnalysis;
     fillerWords: FillerWordAnalysis;
+    speechRate: number;
 }
 
 export interface AnalysisResult {
