@@ -7,11 +7,12 @@ interface SpeechRateCardProps {
 }
 
 export default function SpeechRateCard({ speechRate }: SpeechRateCardProps) {
+    const MIN_RECOMMENDED_RATE = 100;
+    const MAX_RECOMMENDED_RATE = 160;
 
-    const getSpeechRateFeedback = (rate?: number) => {
-        if (rate === undefined) return 'Ritmo não calculado.';
-        if (rate <= 100) return 'Seu ritmo está abaixo do recomendado. Tente falar um pouco mais rápido.';
-        if (rate > 160) return 'Seu ritmo está acima do recomendado. Tente falar um pouco mais devagar.';
+    const getSpeechRateFeedback = (rate: number) => {
+        if (rate <= MIN_RECOMMENDED_RATE) return 'Seu ritmo está abaixo do recomendado. Tente falar um pouco mais rápido.';
+        if (rate > MAX_RECOMMENDED_RATE) return 'Seu ritmo está acima do recomendado. Tente falar um pouco mais devagar.';
         
         return 'Seu ritmo está dentro da faixa recomendada!';
     };
@@ -33,7 +34,6 @@ export default function SpeechRateCard({ speechRate }: SpeechRateCardProps) {
             <CardContent>
                 <Stack spacing={2} alignItems="center">
                     <Typography variant="h3" fontWeight="bold" color="primary">
-                        {speechRate !== undefined ? Math.round(speechRate) : '--'}
                         <Typography variant="h6" component="span" color="text.secondary" sx={{ ml: 1 }}>
                         PPM
                         </Typography>
