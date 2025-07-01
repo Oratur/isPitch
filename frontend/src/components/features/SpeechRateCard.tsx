@@ -34,6 +34,7 @@ export default function SpeechRateCard({ speechRate }: SpeechRateCardProps) {
             <CardContent>
                 <Stack spacing={2} alignItems="center">
                     <Typography variant="h3" fontWeight="bold" color="primary">
+                        {Math.round(speechRate)}
                         <Typography variant="h6" component="span" color="text.secondary" sx={{ ml: 1 }}>
                         PPM
                         </Typography>
