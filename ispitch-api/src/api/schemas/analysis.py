@@ -54,6 +54,7 @@ class AnalysisResultData(CamelCaseModel):
     file_name: Optional[str] = None
     silences: Optional[SilenceAnalysis] = None
     filler_words: Optional[FillerWordAnalysis] = None
+    speech_rate: Optional[float] = None
 
 
 class AnalysisResultResponse(CamelCaseModel):
