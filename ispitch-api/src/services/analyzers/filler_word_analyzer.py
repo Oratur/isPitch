@@ -101,7 +101,7 @@ class FillerWordAnalyzer:
 
             idx = 0
             while True:
-                idx = transcription.lower.find('é...', idx)
+                idx = transcription.lower().find('é...', idx)
                 if idx == -1:
                     break
                 filler_word_positions.append({
