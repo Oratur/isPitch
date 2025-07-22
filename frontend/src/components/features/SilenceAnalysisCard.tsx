@@ -31,7 +31,7 @@ export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardPro
           <Box sx={{ textAlign: 'center' }}>
             <Timer size={28} className="text-green-500" />
             <Typography variant="h3" component="p" fontWeight="bold">
-              {silences.totalDuration}
+                {silences.totalDuration.toFixed(2)}
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Tempo Total em Pausa

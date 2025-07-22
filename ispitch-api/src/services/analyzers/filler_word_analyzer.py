@@ -72,6 +72,7 @@ class FillerWordAnalyzer:
         e_hesitations = transcription.lower().count('é...')
 
         matches = matcher(doc)
+        matches = self.get_non_overlapping_matches(matches, doc)
 
         found_matches = set()
 
@@ -118,3 +119,21 @@ class FillerWordAnalyzer:
             'filler_words_count': dict(filler_word_counts),
             'words': filler_word_positions,
         }
+
+    @staticmethod
+    def get_non_overlapping_matches(matches, doc):
+        sorted_matches = sorted(
+            matches,
+            key=lambda m: (
+                doc[m[1] : m[2]].start_char,
+                -(doc[m[1] : m[2]].end_char - doc[m[1] : m[2]].start_char),
+            ),
+        )
+        result = []
+        last_end = -1
+        for match_id, start, end in sorted_matches:
+            span = doc[start:end]
+            if span.start_char >= last_end:
+                result.append((match_id, start, end))
+                last_end = span.end_char
+        return result

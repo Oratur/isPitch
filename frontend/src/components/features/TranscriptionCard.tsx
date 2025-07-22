@@ -38,11 +38,7 @@ export function TranscriptionCard({ transcription, fillerWords }: TranscriptionC
       if (word.start > lastIndex) {
         parts.push(transcription.substring(lastIndex, word.start));
       }
-      // parts.push(
-      //   <span key={word.start} style={{ backgroundColor: 'yellow' }}>
-      //     {transcription.substring(word.start, word.end)}
-      //   </span>
-      // );
+      
       parts.push(
         <mark key={`filler-${index}`}>
           {transcription.substring(word.start, word.end)}
