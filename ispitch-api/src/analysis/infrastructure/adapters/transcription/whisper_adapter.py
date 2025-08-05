@@ -13,7 +13,7 @@ class WhisperAdapter(TranscriptionPort):
     def __init__(self, whisper: Whisper):
         self.whisper = whisper
 
-    def transcribe(self, audio_path):
+    def transcribe(self, audio_path: str):
         """
         Transcribe the audio file at the given path using the Whisper model.
 
