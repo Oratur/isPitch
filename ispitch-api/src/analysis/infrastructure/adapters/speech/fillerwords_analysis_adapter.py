@@ -54,7 +54,7 @@ class FillerWordsAnalysisAdapter(FillerWordsAnalysisPort):
         )
 
     @classmethod
-    def _empty_analysis(self):
+    def _empty_analysis(cls):
         """Returns an empty FillerWordsAnalysis."""
         return FillerWordsAnalysis(
             total=0,
@@ -123,7 +123,7 @@ class FillerWordsAnalysisAdapter(FillerWordsAnalysisPort):
 
     @classmethod
     def _add_e_hesitations(
-        self, transcription, filler_word_counts, filler_word_positions
+        cls, transcription, filler_word_counts, filler_word_positions
     ):
         """
         Adds occurrences of 'é...' hesitations to the counts and positions.
@@ -147,8 +147,8 @@ class FillerWordsAnalysisAdapter(FillerWordsAnalysisPort):
             )
             idx += 4
 
-    @staticmethod
-    def _get_non_overlapping_matches(matches, doc):
+    @classmethod
+    def _get_non_overlapping_matches(cls, matches, doc):
         """
         Returns non-overlapping matches sorted by start position and length.
         """

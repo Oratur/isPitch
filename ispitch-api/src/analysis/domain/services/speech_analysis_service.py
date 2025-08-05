@@ -11,7 +11,7 @@ class SpeechAnalysisService(SpeechAnalysisPort):
 
     @classmethod
     def detect_silences(
-        self, transcription: Transcription, threshold_ms=1000
+        cls, transcription: Transcription, threshold_ms=1000
     ) -> SilenceAnalysis:
         def is_silence(gap):
             return gap * 1000 >= threshold_ms
@@ -52,5 +52,5 @@ class SpeechAnalysisService(SpeechAnalysisPort):
             pauses=len(silences),
         )
 
-    def detect_fillerwords(self, trasncription) -> FillerWordsAnalysis:
-        return self.fillerwords_analysis_port.detect(trasncription)
+    def detect_fillerwords(self, transcription) -> FillerWordsAnalysis:
+        return self.fillerwords_analysis_port.detect(transcription)

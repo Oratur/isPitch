@@ -5,7 +5,7 @@ from ....domain.ports.output import AudioPort
 
 class AudioAdapter(AudioPort):
     @classmethod
-    def get_audio_duration(self, audio_path: str) -> float:
+    def get_audio_duration(cls, audio_path: str) -> float:
         """
         Get the duration of an audio file in seconds.
 

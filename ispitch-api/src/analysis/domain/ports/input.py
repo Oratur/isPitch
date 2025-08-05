@@ -29,7 +29,7 @@ class SpeechAnalysisPort(ABC):
 
     @abstractmethod
     def detect_fillerwords(
-        self, trasncription: Transcription
+        self, transcription: Transcription
     ) -> FillerWordsAnalysis:
         pass
 

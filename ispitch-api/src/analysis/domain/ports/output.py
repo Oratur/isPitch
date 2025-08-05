@@ -14,15 +14,15 @@ class TranscriptionPort(ABC):
 
 class StoragePort(ABC):
     @abstractmethod
-    def save_temporary_audio(file: UploadFile) -> str:
+    def save_temporary_audio(self, file: UploadFile) -> str:
         pass
 
     @abstractmethod
-    def save_analysis_result(analysis_id: str, result: dict):
+    def save_analysis_result(self, analysis_id: str, result: dict):
         pass
 
     @abstractmethod
-    def cleanup_temporary_file(file_path: str):
+    def cleanup_temporary_file(self, file_path: str):
         pass
 
     @abstractmethod
