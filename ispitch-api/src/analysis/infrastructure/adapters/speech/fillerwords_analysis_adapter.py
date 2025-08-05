@@ -7,6 +7,7 @@ from ....domain.models.fillerwords import (
     FillerWordPosition,
     FillerWordsAnalysis,
 )
+from ....domain.models.transcription import Transcription
 from ....domain.ports.output import FillerWordsAnalysisPort
 
 
@@ -31,7 +32,7 @@ class FillerWordsAnalysisAdapter(FillerWordsAnalysisPort):
     def __init__(self, spacy: Language):
         self.spacy = spacy
 
-    def detect(self, transcription) -> FillerWordsAnalysis:
+    def detect(self, transcription: Transcription) -> FillerWordsAnalysis:
         """
         Detects filler words in the given transcription and returns analysis.
         """
