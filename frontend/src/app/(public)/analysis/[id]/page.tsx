@@ -7,7 +7,7 @@ import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import {AnalysisLayout} from '@/components/layouts/AnalysisLayout';
 import {TranscriptionCard} from '@/components/features/TranscriptionCard';
 import { getAnalysis } from '@/services/analysisService';
-import type { AnalysisResult } from '@/types/analysis';
+import type { Analysis } from '@/types/analysis';
 import SilenceAnalysisCard from '@/components/features/SilenceAnalysisCard';
 import { FillerWordAnalysisCard } from '@/components/features/FillerWordAnalysisCard';
 import SpeechRateCard from '@/components/features/SpeechRateCard';
@@ -19,7 +19,7 @@ export default function AnalysisPage() {
   const id = params.id as string;
   const currentView = searchParams.get('view') || 'transcription';
 
-  const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
+  const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -81,24 +81,24 @@ export default function AnalysisPage() {
   return (
     <AnalysisLayout
       analysisId={analysis.id}
-      fileName={analysis.data?.fileName ?? 'Nome não encontrado'}
+      fileName={analysis.filename ?? 'Nome não encontrado'}
     >
       {currentView === 'analytics' ? (
         <Grid container spacing={4}>
           <Grid size={{xs: 12, lg: 6, xl: 4}}>
-            <FillerWordAnalysisCard analysis={analysis.data.fillerWords} />
+            <FillerWordAnalysisCard analysis={analysis.speechAnalysis.fillerwordsAnalysis} />
           </Grid>
           <Grid size={{xs: 12, lg: 6, xl: 4}}>
-            <SilenceAnalysisCard silences={analysis.data.silences} />
+            <SilenceAnalysisCard silences={analysis.speechAnalysis.silenceAnalysis} />
           </Grid>  
           <Grid size={{xs: 12, lg: 6, xl: 4}}>
-            <SpeechRateCard speechRate={analysis.data.speechRate} />
+            <SpeechRateCard speechRate={analysis.audioAnalysis.speechRate} />
           </Grid>
         </Grid>
       ) : (
         <TranscriptionCard
-          transcription={analysis.data?.transcription ?? 'Transcrição não disponível.'}
-          fillerWords={analysis.data?.fillerWords}
+          transcription={analysis.transcription ?? 'Transcrição não disponível.'}
+          fillerWords={analysis.speechAnalysis.fillerwordsAnalysis}
         />
       )}
     </AnalysisLayout>

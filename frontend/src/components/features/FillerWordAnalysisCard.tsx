@@ -11,17 +11,17 @@ import {
   Button,
   Divider,
 } from '@mui/material';
-import { FillerWordAnalysis } from '@/types/analysis';
+import { FillerwordAnalysis } from '@/types/analysis';
 import { BarChart3 } from 'lucide-react';
 import React, { useState } from 'react';
 
 interface FillerWordAnalysisCardProps {
-  analysis: FillerWordAnalysis;
+  analysis: FillerwordAnalysis;
 }
 
 export function FillerWordAnalysisCard({ analysis }: FillerWordAnalysisCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const sortedFillerWords = Object.entries(analysis.fillerWordsCount).sort(
+  const sortedFillerWords = Object.entries(analysis.distribution).sort(
     (a, b) => b[1] - a[1],
   );
 
@@ -41,7 +41,7 @@ export function FillerWordAnalysisCard({ analysis }: FillerWordAnalysisCardProps
       <CardContent>
         <Box sx={{ textAlign: 'center', mb: 2 }}>
           <Typography variant="h3" fontWeight="bold" color="primary">
-            {analysis.totalFillerWords}
+            {analysis.total}
             <Typography variant="h6" component='span' color="text.secondary" sx={{ ml: 1 }}>
               Total Encontrado
             </Typography>

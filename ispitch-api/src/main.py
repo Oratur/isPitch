@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
-from src.api.endpoints import analysis
-from src.api.exception_handler import register_exception_handlers
+from src.analysis.application.rest.endpoints import analysis
 from src.core.middlewares import configure_cors
 
 app = FastAPI(
@@ -12,7 +11,6 @@ app = FastAPI(
 
 configure_cors(app)
 
-register_exception_handlers(app)
 
 app.include_router(analysis.router)
 
