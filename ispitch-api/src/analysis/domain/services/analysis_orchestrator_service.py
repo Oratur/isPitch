@@ -52,7 +52,14 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
             return AnalysisModelMapper.from_dict(analysis)
         except FileNotFoundError:
             logger.error(f'Analysis result not found for ID: {analysis_id}')
-            return Analysis(analysis_id=analysis_id, status='PENDING')
+            return Analysis(
+                id=analysis_id,
+                status='PENDING',
+                filename='',
+                transcription='',
+                speech_analysis=None,
+                audio_analysis=None,
+            )
 
     def _run_analysis(self, analysis_id: str, audio_path: str, filename: str):
         try:

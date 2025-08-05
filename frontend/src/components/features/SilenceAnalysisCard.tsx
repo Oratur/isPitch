@@ -21,7 +21,7 @@ export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardPro
           <Box sx={{ textAlign: 'center' }}>
             <Hourglass size={28} className="text-blue-500" />
             <Typography variant="h3" component="p" fontWeight="bold">
-              {silences.numberOfPauses}
+              {silences.pauses}
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Pausas Longas
@@ -31,7 +31,7 @@ export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardPro
           <Box sx={{ textAlign: 'center' }}>
             <Timer size={28} className="text-green-500" />
             <Typography variant="h3" component="p" fontWeight="bold">
-                {silences.totalDuration.toFixed(2)}
+                {silences.duration.toFixed(2)}
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Tempo Total em Pausa

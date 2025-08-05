@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { Box, Card, CardContent, CardHeader, IconButton, Tooltip, Typography } from '@mui/material';
 import { Check, Copy, Highlighter } from 'lucide-react';
-import { FillerWordAnalysis } from '@/types/analysis';
+import { FillerwordAnalysis } from '@/types/analysis';
 
 interface TranscriptionCardProps {
   transcription: string;
-  fillerWords?: FillerWordAnalysis;
+  fillerWords?: FillerwordAnalysis;
 }
 
 export function TranscriptionCard({ transcription, fillerWords }: TranscriptionCardProps) {
@@ -25,11 +25,11 @@ export function TranscriptionCard({ transcription, fillerWords }: TranscriptionC
   };
 
   const getHighlightedText = () => {
-    if (!highlight || !fillerWords?.words || fillerWords.words.length === 0) {
+    if (!highlight || !fillerWords?.occurrences || fillerWords.occurrences.length === 0) {
       return transcription;
     }
     
-    const sortedWords = [...fillerWords.words].sort((a, b) => a.start - b.start);
+    const sortedWords = [...fillerWords.occurrences].sort((a, b) => a.start - b.start);
   
     const parts = [];
     let lastIndex = 0;
@@ -54,7 +54,7 @@ export function TranscriptionCard({ transcription, fillerWords }: TranscriptionC
     return parts;
   }
 
-  const hasFillerWords = fillerWords && fillerWords.totalFillerWords > 0;
+  const hasFillerWords = fillerWords && fillerWords.total > 0;
 
   return (
     <Card elevation={2} sx={{ borderRadius: 3 }}>

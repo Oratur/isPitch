@@ -1,11 +1,13 @@
+from typing import Optional
+
 from .....core.schemas.camel_case_model import CamelCaseModel
 from ..schemas.fillerwords import FillerWordsAnalysisSchema
 from ..schemas.silence import SilenceAnalysisSchema
 
 
 class SpeechAnalysisSchema(CamelCaseModel):
-    silence_analysis: SilenceAnalysisSchema
-    fillerwords_analysis: FillerWordsAnalysisSchema
+    silence_analysis: Optional[SilenceAnalysisSchema] = None
+    fillerwords_analysis: Optional[FillerWordsAnalysisSchema] = None
 
 
 class AudioAnalysisSchema(CamelCaseModel):
@@ -16,6 +18,6 @@ class AnalysisSchema(CamelCaseModel):
     id: str
     status: str
     filename: str
-    transcription: str
-    speech_analysis: SpeechAnalysisSchema
-    audio_analysis: AudioAnalysisSchema
+    transcription: Optional[str] = None
+    speech_analysis: Optional[SpeechAnalysisSchema] = None
+    audio_analysis: Optional[AudioAnalysisSchema] = None

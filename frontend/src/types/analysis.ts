@@ -5,38 +5,38 @@ interface Silence {
 }
 
 export interface SilenceAnalysis {
+    duration: number;
     silences: Silence[];
-    totalDuration: number;
-    numberOfPauses: number;
+    pauses: number;
 }
 
-export interface FillerWordPosition {
+export interface FillerwordOccurrence {
     start: number;
     end: number;
     word: string;
 }
 
-export interface FillerWordAnalysis {
-    totalFillerWords: number;
-    fillerWordsCount: Record<string, number>;
-    words: FillerWordPosition[];
+export interface FillerwordAnalysis {
+    total: number;
+    distribution: Record<string, number>;
+    occurrences: FillerwordOccurrence[];
 }
 
 
-export interface AnalysisResultData {
-    fileName: string;
-    transcription: string;
-    silences: SilenceAnalysis;
-    fillerWords: FillerWordAnalysis;
+export interface SpeechAnalysis {
+    silenceAnalysis: SilenceAnalysis;
+    fillerwordsAnalysis: FillerwordAnalysis;
+}
+
+export interface AudioAnalysis {
     speechRate: number;
 }
 
-export interface AnalysisResult {
+export interface Analysis {
     id: string;
     status: 'PENDING' | 'COMPLETED' | 'FAILED';
-    data: AnalysisResultData;
-}
-
-export interface AnalysisCreateResponse {
-    id: string;
+    filename: string;
+    transcription: string;
+    speechAnalysis: SpeechAnalysis;
+    audioAnalysis: AudioAnalysis;
 }
