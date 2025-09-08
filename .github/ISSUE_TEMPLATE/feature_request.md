@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Sugira novas funcionalidades para o projeto
-title: ''
+title: "[FEAT] titulo"
 labels: ''
 assignees: ''
 
