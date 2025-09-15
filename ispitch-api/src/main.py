@@ -3,13 +3,20 @@ from fastapi.concurrency import asynccontextmanager
 from pymongo.errors import ConnectionFailure
 
 from src.analysis.application.rest.endpoints import analysis
+from src.analysis.infrastructure.persistance.documents.analysis_document import (
+    AnalysisDocument,
+)
 from src.core.database import db
 from src.core.middlewares import configure_cors
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await db.connect()
+    models_to_init = [
+        AnalysisDocument,
+    ]
+
+    await db.connect(document_models=models_to_init)
     yield
     await db.close()
 
