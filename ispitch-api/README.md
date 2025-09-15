@@ -70,7 +70,18 @@ Para configurar e executar a API localmente:
     ```
     Isso instalará todos os pacotes definidos no `pyproject.toml`, incluindo o modelo `pt_core_news_sm` do spaCy.
 
-4.  **Execute a API:**
+4. **Crie o arquivo de variáveis de ambiente:**
+
+    A API precisa de um arquivo .env na raiz do projeto para carregar configurações essenciais. Crie este arquivo e adicione o seguinte conteúdo, por exemplo:
+
+    ```
+    ALLOWED_ORIGINS='["http://localhost:3000"]'
+    DATABASE_URL="mongodb://root:root@localhost:27017/ispitch?authSource=admin"
+    ```
+    - ALLOWED_ORIGINS: Define quais origens (frontends) podem fazer requisições para esta API.
+    - DATABASE_URL: A string de conexão para o banco de dados MongoDB.
+
+5.  **Execute a API:**
     Utilize o comando `task` definido no `pyproject.toml`:
     ```bash
     poetry run task run
