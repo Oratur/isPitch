@@ -32,14 +32,14 @@ router = APIRouter(prefix='/analysis', tags=['Analysis'])
     description='Receives an audio file (.mp3 or .wav), '
     + 'starts the analysis process and returns an unique ID',
 )
-def initiate(
+async def initiate(
     background_tasks: BackgroundTasks,
     file: Annotated[UploadFile, Depends(validate_audio_file)] = File(...),
     analysis_orchestrator: AnalysisOrchestratorPort = Depends(
         get_analysis_orchestrator
     ),
 ):
-    analysis_id = analysis_orchestrator.initiate(file, background_tasks)
+    analysis_id = await analysis_orchestrator.initiate(file, background_tasks)
     return analysis_id
 
 
@@ -50,7 +50,7 @@ def initiate(
     description='Retrieves the status and result of an audio '
     + 'analysis by its ID.',
 )
-def get_by_id(
+async def get_by_id(
     analysis_id: str,
     analysis_orchestrator: AnalysisOrchestratorPort = Depends(
         get_analysis_orchestrator
@@ -61,5 +61,5 @@ def get_by_id(
 
     - **analysis_id**: The ID of the analysis returned by the POST endpoint.
     """
-    analysis = analysis_orchestrator.get_by_id(analysis_id)
+    analysis = await analysis_orchestrator.get_by_id(analysis_id)
     return AnalysisSchemaMapper.from_model(analysis)

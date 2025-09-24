@@ -8,6 +8,7 @@ from ...domain.ports.input import (
     SpeechAnalysisPort,
 )
 from ...domain.ports.output import (
+    AnalysisRepositoryPort,
     AudioPort,
     FillerWordsAnalysisPort,
     StoragePort,
@@ -19,14 +20,17 @@ from ...domain.services.analysis_orchestrator_service import (
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
 from ...infrastructure.adapters.audio.audio_adapter import AudioAdapter
-from ...infrastructure.adapters.persistence.storage_adapter import (
-    StorageAdapter,
-)
 from ...infrastructure.adapters.speech.fillerwords_analysis_adapter import (
     FillerWordsAnalysisAdapter,
 )
 from ...infrastructure.adapters.transcription.whisper_adapter import (
     WhisperAdapter,
+)
+from ...infrastructure.persistance.adapters.analysis_repository_adapter import (
+    AnalysisRepositoryAdapter,
+)
+from ...infrastructure.persistance.adapters.storage_adapter import (
+    StorageAdapter,
 )
 
 
@@ -36,6 +40,7 @@ def get_analysis_orchestrator() -> AnalysisOrchestratorPort:
         get_storage_port(),
         get_speech_analysis_port(),
         get_audio_analysis_port(),
+        get_analysis_repository(),
     )
 
 
@@ -61,3 +66,7 @@ def get_audio_analysis_port() -> AudioAnalysisPort:
 
 def get_audio_port() -> AudioPort:
     return AudioAdapter()
+
+
+def get_analysis_repository() -> AnalysisRepositoryPort:
+    return AnalysisRepositoryAdapter()

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from beanie import Document
 from pydantic import BaseModel
 
@@ -56,6 +58,9 @@ class AudioAnalysis(BaseModel):
 class AnalysisDocument(Document):
     status: str
     filename: str
-    transcription: Transcription
-    speech_analysis: SpeechAnalysis
-    audio_analysis: AudioAnalysis
+    transcription: Optional[Transcription] = None
+    speech_analysis: Optional[SpeechAnalysis] = None
+    audio_analysis: Optional[AudioAnalysis] = None
+
+    class Settings:
+        name = 'analysis'

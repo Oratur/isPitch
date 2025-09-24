@@ -1,8 +1,5 @@
 import logging
-import uuid
-from dataclasses import asdict
 
-from ..mappers.analysis_mapper import AnalysisModelMapper
 from ..models.analysis import Analysis, AudioAnalysis, SpeechAnalysis
 from ..models.transcription import Transcription
 from ..ports.input import (
@@ -10,7 +7,7 @@ from ..ports.input import (
     AudioAnalysisPort,
     SpeechAnalysisPort,
 )
-from ..ports.output import StoragePort, TranscriptionPort
+from ..ports.output import AnalysisRepositoryPort, StoragePort, TranscriptionPort
 
 logger = logging.getLogger(__name__)
 
@@ -22,23 +19,35 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
         storage_port: StoragePort,
         speech_analysis_port: SpeechAnalysisPort,
         audio_analysis_port: AudioAnalysisPort,
+        analysis_repository_port: AnalysisRepositoryPort,
     ):
         self.transcription_port = transcription_port
         self.storage_port = storage_port
         self.speech_analysis_port = speech_analysis_port
         self.audio_analysis_port = audio_analysis_port
+        self.analysis_repository_port = analysis_repository_port
 
-    def initiate(self, file, background_tasks) -> str:
-        analysis_id = str(uuid.uuid4())
+    async def initiate(self, file, background_tasks) -> str:
+        analysis = await self.analysis_repository_port.save(
+            Analysis(
+                id=None,
+                status='PENDING',
+                filename=file.filename,
+                transcription=None,
+                speech_analysis=None,
+                audio_analysis=None,
+            )
+        )
+
         temp_audio_path = self.storage_port.save_temporary_audio(file)
 
         background_tasks.add_task(
-            self._run_analysis, analysis_id, temp_audio_path, file.filename
+            self._run_analysis, analysis.id, temp_audio_path, file.filename
         )
 
-        return analysis_id
+        return analysis.id
 
-    def get_by_id(self, analysis_id: str) -> Analysis:
+    async def get_by_id(self, analysis_id: str) -> Analysis:
         """
         Retrieves the result of an analysis by its ID.
         Args:
@@ -48,8 +57,11 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
         """
         try:
             logger.info(f'Retrieving analysis result for ID: {analysis_id}')
-            analysis = self.storage_port.get_analysis_result(analysis_id)
-            return AnalysisModelMapper.from_dict(analysis)
+            analysis = await self.analysis_repository_port.find_by_id(
+                analysis_id
+            )
+            return analysis
+        # TODO: THROW NOT FOUND EXCEPTION
         except FileNotFoundError:
             logger.error(f'Analysis result not found for ID: {analysis_id}')
             return Analysis(
@@ -61,7 +73,9 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
                 audio_analysis=None,
             )
 
-    def _run_analysis(self, analysis_id: str, audio_path: str, filename: str):
+    async def _run_analysis(
+        self, analysis_id: str, audio_path: str, filename: str
+    ):
         try:
             transcription = self._run_transcription(
                 analysis_id=analysis_id,
@@ -86,7 +100,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
                 speech_analysis=speech_analysis,
                 audio_analysis=audio_analysis,
             )
-            self.storage_port.save_analysis_result(analysis_id, asdict(result))
+            await self.analysis_repository_port.save(result)
         finally:
             self.storage_port.cleanup_temporary_file(audio_path)
 
@@ -130,8 +144,6 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
             transcription=transcription.text,
             silence_duration=speech_analysis.silence_analysis.duration,
         )
-        logger.info(
-            f'[{analysis_id}] Speech rate calculated: {speech_rate} WPM'
-        )
+        logger.info(f'[{analysis_id}] Speech rate calculated: {speech_rate} WPM')
 
         return AudioAnalysis(speech_rate=speech_rate)
