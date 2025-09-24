@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import { apiRequest } from '@/lib/apiClient'
 import type { Analysis } from '@/types/analysis';
 
 /**
@@ -9,7 +9,13 @@ export const createAudioAnalysis = async (audioFile: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', audioFile);
 
-    return apiClient.post<string>('/analysis/initiate', formData);
+    return apiRequest<string>({
+        url: '/analysis/initiate',
+        options: {
+            method: 'POST',
+            body: formData
+        }
+    });
 };
 
 /**
@@ -17,5 +23,10 @@ export const createAudioAnalysis = async (audioFile: File): Promise<string> => {
  * This is also cleaner, delegating the call to the apiClient.
  */
 export const getAnalysis = (id: string): Promise<Analysis> => {
-    return apiClient.get<Analysis>(`/analysis/${id}`);
+    return apiRequest<Analysis>({
+        url: `/analysis/${id}`,
+        options: {
+            method: 'GET',
+        }
+    });
 };
