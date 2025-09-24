@@ -6,6 +6,7 @@ import theme from '@/styles/theme';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { Header } from '@/components/layouts/Header';
 import { Footer } from '@/components/layouts/Footer';
+import QueryProvider from '@/contexts/QueryProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,14 +39,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${brunoAce.variable}`}>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <div className='flex flex-col min-h-screen'>
-              <Header/>
-              <main className='flex-grow flex flex-col'>
-                {children}
-              </main>
-              <Footer/>
-            </div>
+            <QueryProvider>
+              <CssBaseline />
+              <div className='flex flex-col min-h-screen'>
+                <Header/>
+                <main className='flex-grow flex flex-col'>
+                  {children}
+                </main>
+                <Footer/>
+              </div>
+            </QueryProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
