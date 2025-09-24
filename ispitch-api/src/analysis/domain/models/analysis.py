@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from .fillerwords import FillerWordsAnalysis
 from .silence import SilenceAnalysis
@@ -21,6 +22,6 @@ class Analysis:
     id: str
     status: str
     filename: str
-    transcription: Transcription
-    speech_analysis: SpeechAnalysis
-    audio_analysis: AudioAnalysis
+    transcription: Optional[Transcription] = None
+    speech_analysis: Optional[SpeechAnalysis] = None
+    audio_analysis: Optional[AudioAnalysis] = None

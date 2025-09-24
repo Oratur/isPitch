@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 
 from fastapi import UploadFile
 
+from src.analysis.domain.models.analysis import Analysis
+
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.transcription import Transcription
 
@@ -18,15 +20,7 @@ class StoragePort(ABC):
         pass
 
     @abstractmethod
-    def save_analysis_result(self, analysis_id: str, result: dict):
-        pass
-
-    @abstractmethod
     def cleanup_temporary_file(self, file_path: str):
-        pass
-
-    @abstractmethod
-    def get_analysis_result(self, analysis_id: str) -> dict:
         pass
 
 
@@ -39,4 +33,22 @@ class FillerWordsAnalysisPort(ABC):
 class AudioPort(ABC):
     @abstractmethod
     def get_audio_duration(self, audio_path: str) -> float:
+        pass
+
+
+class AnalysisRepositoryPort(ABC):
+    @abstractmethod
+    def save(self, analysis: Analysis) -> Analysis:
+        pass
+
+    @abstractmethod
+    def find_by_id(self, analysis_id: str) -> Analysis:
+        pass
+
+    @abstractmethod
+    def find_all(self) -> list[Analysis]:
+        pass
+
+    @abstractmethod
+    def delete_by_id(self, analysis_id: str):
         pass
