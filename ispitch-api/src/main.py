@@ -7,6 +7,7 @@ from src.analysis.infrastructure.persistance.documents.analysis_document import 
     AnalysisDocument,
 )
 from src.core.database import db
+from src.core.exception_handlers import add_exception_handlers
 from src.core.middlewares import configure_cors
 
 
@@ -30,6 +31,7 @@ app = FastAPI(
 
 
 configure_cors(app)
+add_exception_handlers(app)
 
 
 app.include_router(analysis.router)
