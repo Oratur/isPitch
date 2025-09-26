@@ -1,3 +1,4 @@
+import { handleApiErrorResponse } from './apiErrorHandler';
 import { API_BASE_URL } from './env';
 
 
@@ -30,6 +31,10 @@ export async function apiRequest<T>({ url, options = {} }: ApiRequestParameters)
     };
 
     const response = await fetch(`${API_BASE_URL}${url}`, requestOptions);
+
+    if (!response.ok) {
+        await handleApiErrorResponse(response);
+    }
 
     if (response.status === 204) {
         return undefined as T;

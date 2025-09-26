@@ -7,6 +7,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { Header } from '@/components/layouts/Header';
 import { Footer } from '@/components/layouts/Footer';
 import QueryProvider from '@/contexts/QueryProvider';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,6 +40,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${brunoAce.variable}`}>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>
+            <Toaster 
+              position='bottom-left' 
+              toastOptions={{
+              duration: 5000
+              }}
+            />
             <QueryProvider>
               <CssBaseline />
               <div className='flex flex-col min-h-screen'>
