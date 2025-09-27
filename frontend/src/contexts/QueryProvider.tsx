@@ -15,7 +15,7 @@ export const handleGlobalError = (error: unknown) => {
     } else {
         toast.error('Ocorreu um erro inesperado.');
     }
-}
+};
 
 export default function QueryProvider({children}: QueryProviderProps) {
     const [queryClient] = useState(() => new QueryClient({
@@ -34,5 +34,5 @@ export default function QueryProvider({children}: QueryProviderProps) {
         <QueryClientProvider client={queryClient}>
             {children}
         </QueryClientProvider>
-    )
+    );
 }

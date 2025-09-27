@@ -1,6 +1,6 @@
-import { getAnalysis } from '@/services/analysisService'
-import { Analysis } from '@/types/analysis'
-import { useQuery } from '@tanstack/react-query'
+import { getAnalysis } from '@/services/analysisService';
+import { Analysis } from '@/types/analysis';
+import { useQuery } from '@tanstack/react-query';
 
 
 export const useGetAnalysis = (id: string) => {
@@ -14,4 +14,4 @@ export const useGetAnalysis = (id: string) => {
         },
         retry: false,
     });
-}
+};

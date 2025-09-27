@@ -46,6 +46,6 @@ export default function SpeechRateCard({ speechRate }: SpeechRateCardProps) {
                 </Stack>
             </CardContent>
         </Card>
-    )
+    );
 
 }
