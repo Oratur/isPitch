@@ -27,7 +27,7 @@ export async function handleApiErrorResponse(response: Response) {
             message: `Ocorreu um erro na requisição: ${response.statusText || 'Erro de comunicação'}`,
             statusCode: response.status,
             error: response.statusText,
-        }
+        };
 
         throw new ApiError(genericError);
     }

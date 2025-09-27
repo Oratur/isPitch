@@ -52,7 +52,7 @@ export function TranscriptionCard({ transcription, fillerWords }: TranscriptionC
     }
 
     return parts;
-  }
+  };
 
   const hasFillerWords = fillerWords && fillerWords.total > 0;
 
