@@ -1,48 +1,42 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createAudioAnalysis } from '@/services/analysisService';
+import { useInitiateAnalysis } from './mutations/useInitiateAnalysis';
 
 export function useAudioUpload() {
     const [audioFile, setAudioFile] = useState<File | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const router = useRouter();
+    const [validationError, setValidationError] = useState<string | null>(null);
+    const { mutate: uploadAudio, isPending, error: mutationError } = useInitiateAnalysis();
+
+    const error = validationError || mutationError?.message || null;
+
+    const handleValidationError = (message: string) => {
+        setValidationError(message);
+    };
 
     const handleFileAccepted = (file: File) => {
-        setError(null);
+        setValidationError(null);
         setAudioFile(file);
     };
 
     const handleUpload = async () => {
         if (!audioFile) return;
 
-        setIsLoading(true);
-        setError(null);
-
-        try {
-            const analysisId = await createAudioAnalysis(audioFile);
-            router.push(`/analysis/${analysisId}`);
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Ocorreu um erro desconhecido durante o upload.';
-            setError(errorMessage);
-            setIsLoading(false);
-        }
+        uploadAudio(audioFile);
     };
 
     const handleCancel = () => {
         setAudioFile(null);
-        setError(null);
+        setValidationError(null);
     };
 
     return {
         audioFile,
-        isLoading,
+        isLoading: isPending,
         error,
         handleFileAccepted,
         handleUpload,
         handleCancel,
-        setError,
+        handleValidationError,
     };
 }

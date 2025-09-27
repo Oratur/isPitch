@@ -13,7 +13,7 @@ export default function HomePage() {
     handleFileAccepted,
     handleUpload,
     handleCancel,
-    setError,
+    handleValidationError,
   } = useAudioUpload();
 
   return (
@@ -29,7 +29,7 @@ export default function HomePage() {
         ) : (
           <AudioDropzone 
             onFileAccepted={handleFileAccepted} 
-            onError={setError}
+            onValidationError={handleValidationError}
           />
         )}
 
