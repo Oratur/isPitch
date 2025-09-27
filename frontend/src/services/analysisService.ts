@@ -5,7 +5,7 @@ import type { Analysis } from '@/types/analysis';
  * Uploads an audio file to start a new analysis.
  * Now it just creates the FormData and delegates the call to the apiClient.
  */
-export const createAudioAnalysis = async (audioFile: File): Promise<string> => {
+export const initiateAnalysis = async (audioFile: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', audioFile);
 

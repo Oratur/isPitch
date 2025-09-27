@@ -7,7 +7,7 @@ import { UploadCloud } from 'lucide-react';
 
 interface AudioDropzoneProps {
   onFileAccepted: (file: File) => void;
-  onError: (message: string) => void;
+  onValidationError: (message: string) => void;
 }
 
 const audioValidator = (file: File) => {
@@ -29,14 +29,14 @@ const audioValidator = (file: File) => {
 };
 
 
-export function AudioDropzone({ onFileAccepted, onError }: AudioDropzoneProps) {
+export function AudioDropzone({ onFileAccepted, onValidationError }: AudioDropzoneProps) {
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      onError(''); 
+      onValidationError(''); 
 
       if (fileRejections.length > 0) {
         const errorMessage = fileRejections[0].errors[0].message;
-        onError(errorMessage);
+        onValidationError(errorMessage);
         return;
       }
 
@@ -44,7 +44,7 @@ export function AudioDropzone({ onFileAccepted, onError }: AudioDropzoneProps) {
         onFileAccepted(acceptedFiles[0]);
       }
     },
-    [onFileAccepted, onError],
+    [onFileAccepted, onValidationError],
   );
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
