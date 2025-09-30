@@ -1,0 +1,2 @@
+api: poetry run task run
+worker: poetry run task worker
