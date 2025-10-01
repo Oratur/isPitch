@@ -11,17 +11,26 @@ from ...domain.ports.output import (
     AnalysisRepositoryPort,
     AudioPort,
     FillerWordsAnalysisPort,
+    NotificationPort,
     StoragePort,
+    TaskQueuePort,
     TranscriptionPort,
 )
 from ...domain.services.analysis_orchestrator_service import (
+    AnalysisOrchestratorDependencies,
     AnalysisOrchestratorService,
 )
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
 from ...infrastructure.adapters.audio.audio_adapter import AudioAdapter
+from ...infrastructure.adapters.notification.redis_adapter import (
+    RedisNotificationAdapter,
+)
 from ...infrastructure.adapters.speech.fillerwords_analysis_adapter import (
     FillerWordsAnalysisAdapter,
+)
+from ...infrastructure.adapters.task_queue.celery_adapter import (
+    CeleryTaskQueueAdapter,
 )
 from ...infrastructure.adapters.transcription.whisper_adapter import (
     WhisperAdapter,
@@ -32,16 +41,19 @@ from ...infrastructure.persistance.adapters.analysis_repository_adapter import (
 from ...infrastructure.persistance.adapters.storage_adapter import (
     StorageAdapter,
 )
+from ..adapters.sse_adapter import RedisSSEAdapter
 
 
 def get_analysis_orchestrator() -> AnalysisOrchestratorPort:
-    return AnalysisOrchestratorService(
-        get_transcription_port(),
-        get_storage_port(),
-        get_speech_analysis_port(),
-        get_audio_analysis_port(),
-        get_analysis_repository(),
+    deps = AnalysisOrchestratorDependencies(
+        transcription_port=get_transcription_port(),
+        storage_port=get_storage_port(),
+        speech_analysis_port=get_speech_analysis_port(),
+        audio_analysis_port=get_audio_analysis_port(),
+        analysis_repository_port=get_analysis_repository(),
+        task_queue_port=get_task_queue_port(),
     )
+    return AnalysisOrchestratorService(deps)
 
 
 def get_transcription_port() -> TranscriptionPort:
@@ -70,3 +82,15 @@ def get_audio_port() -> AudioPort:
 
 def get_analysis_repository() -> AnalysisRepositoryPort:
     return AnalysisRepositoryAdapter()
+
+
+def get_notification_port() -> NotificationPort:
+    return RedisNotificationAdapter()
+
+
+def get_task_queue_port() -> TaskQueuePort:
+    return CeleryTaskQueueAdapter()
+
+
+def get_sse_adapter() -> RedisSSEAdapter:
+    return RedisSSEAdapter()

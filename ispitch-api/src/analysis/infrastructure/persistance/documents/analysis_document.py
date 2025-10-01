@@ -3,6 +3,8 @@ from typing import Optional
 from beanie import Document
 from pydantic import BaseModel
 
+from ....domain.models.analysis import AnalysisStatus
+
 
 class Word(BaseModel):
     word: str
@@ -56,7 +58,7 @@ class AudioAnalysis(BaseModel):
 
 
 class AnalysisDocument(Document):
-    status: str
+    status: AnalysisStatus
     filename: str
     transcription: Optional[Transcription] = None
     speech_analysis: Optional[SpeechAnalysis] = None

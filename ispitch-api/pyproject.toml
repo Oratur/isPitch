@@ -18,7 +18,8 @@ dependencies = [
     "beanie (>=2.0.0,<3.0.0)",
     "motor (>=3.7.1,<4.0.0)",
     "celery (>=5.5.3,<6.0.0)",
-    "redis (>=6.4.0,<7.0.0)"
+    "redis (>=6.4.0,<7.0.0)",
+    "sse-starlette (>=3.0.2,<4.0.0)"
 ]
 
 [tool.poetry]
@@ -56,7 +57,7 @@ lint = "ruff check"
 pre_format = "ruff check --fix"
 format = "ruff format"
 run = "fastapi dev src/main.py"
-worker = "celery -A src.core.celery_config.celery_app worker --loglevel=info"
+worker = "celery -A src.core.celery_config.celery_app worker --pool=solo --loglevel=info"
 dev = "honcho start"
 pre_test = "task lint"
 test = "pytest -s -x --cov=src -vv"

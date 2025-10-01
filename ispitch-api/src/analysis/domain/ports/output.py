@@ -52,3 +52,17 @@ class AnalysisRepositoryPort(ABC):
     @abstractmethod
     def delete_by_id(self, analysis_id: str):
         pass
+
+
+class NotificationPort(ABC):
+    @abstractmethod
+    def publish_status(self, analysis_id: str, status: str) -> None:
+        pass
+
+
+class TaskQueuePort(ABC):
+    @abstractmethod
+    def enqueue_analysis(
+        self, analysis_id: str, audio_path: str, filename: str
+    ) -> None:
+        pass
