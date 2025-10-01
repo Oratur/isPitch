@@ -16,6 +16,10 @@ class AnalysisOrchestratorPort(ABC):
         pass
 
     @abstractmethod
+    def initiate_analysis(self, file: UploadFile) -> str:
+        pass
+
+    @abstractmethod
     def get_by_id(self, analysis_id: str) -> Analysis:
         pass
 

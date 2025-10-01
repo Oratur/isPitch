@@ -1,37 +1,73 @@
 import logging
+from dataclasses import dataclass
 
-from ..models.analysis import Analysis, AudioAnalysis, SpeechAnalysis
+from ..models.analysis import (
+    Analysis,
+    AnalysisStatus,
+    AudioAnalysis,
+    SpeechAnalysis,
+)
 from ..models.transcription import Transcription
 from ..ports.input import (
     AnalysisOrchestratorPort,
     AudioAnalysisPort,
     SpeechAnalysisPort,
 )
-from ..ports.output import AnalysisRepositoryPort, StoragePort, TranscriptionPort
+from ..ports.output import (
+    AnalysisRepositoryPort,
+    StoragePort,
+    TaskQueuePort,
+    TranscriptionPort,
+)
 
 logger = logging.getLogger(__name__)
 
 
+@dataclass
+class AnalysisOrchestratorDependencies:
+    transcription_port: TranscriptionPort
+    storage_port: StoragePort
+    speech_analysis_port: SpeechAnalysisPort
+    audio_analysis_port: AudioAnalysisPort
+    analysis_repository_port: AnalysisRepositoryPort
+    task_queue_port: TaskQueuePort
+
+
 class AnalysisOrchestratorService(AnalysisOrchestratorPort):
-    def __init__(
-        self,
-        transcription_port: TranscriptionPort,
-        storage_port: StoragePort,
-        speech_analysis_port: SpeechAnalysisPort,
-        audio_analysis_port: AudioAnalysisPort,
-        analysis_repository_port: AnalysisRepositoryPort,
-    ):
-        self.transcription_port = transcription_port
-        self.storage_port = storage_port
-        self.speech_analysis_port = speech_analysis_port
-        self.audio_analysis_port = audio_analysis_port
-        self.analysis_repository_port = analysis_repository_port
+    def __init__(self, deps: AnalysisOrchestratorDependencies):
+        self.transcription_port = deps.transcription_port
+        self.storage_port = deps.storage_port
+        self.speech_analysis_port = deps.speech_analysis_port
+        self.audio_analysis_port = deps.audio_analysis_port
+        self.analysis_repository_port = deps.analysis_repository_port
+        self.task_queue_port = deps.task_queue_port
+
+    async def initiate_analysis(self, file) -> str:
+        analysis = Analysis(
+            id=None,
+            status=AnalysisStatus.PENDING,
+            filename=file.filename,
+            transcription=None,
+            speech_analysis=None,
+            audio_analysis=None,
+        )
+        new_analysis = await self.analysis_repository_port.save(analysis)
+
+        temp_audio_path = self.storage_port.save_temporary_audio(file)
+
+        self.task_queue_port.enqueue_analysis(
+            analysis_id=new_analysis.id,
+            audio_path=temp_audio_path,
+            filename=file.filename,
+        )
+
+        return new_analysis.id
 
     async def initiate(self, file, background_tasks) -> str:
         analysis = await self.analysis_repository_port.save(
             Analysis(
                 id=None,
-                status='PENDING',
+                status=AnalysisStatus.PENDING,
                 filename=file.filename,
                 transcription=None,
                 speech_analysis=None,
@@ -66,7 +102,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
             logger.error(f'Analysis result not found for ID: {analysis_id}')
             return Analysis(
                 id=analysis_id,
-                status='PENDING',
+                status=AnalysisStatus.PENDING,
                 filename='',
                 transcription='',
                 speech_analysis=None,
@@ -94,7 +130,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
 
             result = Analysis(
                 id=analysis_id,
-                status='COMPLETED',
+                status=AnalysisStatus.COMPLETED,
                 filename=filename,
                 transcription=transcription,
                 speech_analysis=speech_analysis,
