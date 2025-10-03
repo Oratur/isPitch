@@ -1,3 +1,7 @@
+import redis.asyncio as aioredis
+
+from src.core.config import settings
+
 from ...application.dependencies.models import (
     get_spacy_model,
     get_whisper_model,
@@ -85,7 +89,8 @@ def get_analysis_repository() -> AnalysisRepositoryPort:
 
 
 def get_notification_port() -> NotificationPort:
-    return RedisNotificationAdapter()
+    redis_client = aioredis.from_url(settings.redis_url)
+    return RedisNotificationAdapter(redis_client)
 
 
 def get_task_queue_port() -> TaskQueuePort:
@@ -93,4 +98,5 @@ def get_task_queue_port() -> TaskQueuePort:
 
 
 def get_sse_adapter() -> RedisSSEAdapter:
-    return RedisSSEAdapter()
+    redis_client = aioredis.from_url(settings.redis_url, decode_responses=True)
+    return RedisSSEAdapter(redis_client)
