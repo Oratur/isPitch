@@ -10,7 +10,7 @@ export const initiateAnalysis = async (audioFile: File): Promise<string> => {
     formData.append('file', audioFile);
 
     return apiRequest<string>({
-        url: '/v1/analysis/initiate',
+        url: '/v2/analysis/initiate',
         options: {
             method: 'POST',
             body: formData

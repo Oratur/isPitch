@@ -34,7 +34,7 @@ export interface AudioAnalysis {
 
 export interface Analysis {
     id: string;
-    status: 'PENDING' | 'COMPLETED' | 'FAILED';
+    status: 'pending' | 'completed' | 'failed';
     filename: string;
     transcription: string;
     speechAnalysis: SpeechAnalysis;
