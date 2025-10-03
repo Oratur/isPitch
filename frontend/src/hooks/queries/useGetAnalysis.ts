@@ -8,10 +8,6 @@ export const useGetAnalysis = (id: string) => {
         queryKey: ['analysis', id],
         queryFn: () => getAnalysis(id),
         enabled: !!id,
-        refetchInterval: (query) => {
-            const data = query.state.data;
-            return data?.status === 'PENDING' ? 3000 : false;
-        },
         retry: false,
     });
 };

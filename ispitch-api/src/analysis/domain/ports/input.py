@@ -24,6 +24,12 @@ class AnalysisOrchestratorPort(ABC):
         pass
 
 
+class AsyncAnalysisOrchestratorPort(ABC):
+    @abstractmethod
+    async def execute(self) -> Analysis:
+        pass
+
+
 class SpeechAnalysisPort(ABC):
     @abstractmethod
     def detect_silences(

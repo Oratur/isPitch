@@ -31,7 +31,7 @@ class RedisSSEAdapter:
 
                         yield {'event': event_name, 'data': event_data}
 
-                        if event_data == AnalysisStatus.DONE:
+                        if event_data == AnalysisStatus.COMPLETED.value:
                             break
                     await asyncio.sleep(0.1)
             finally:

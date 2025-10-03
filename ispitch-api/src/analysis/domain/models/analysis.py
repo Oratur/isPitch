@@ -27,8 +27,6 @@ class AnalysisStatus(str, Enum):
     ANALYZING_SPEECH = 'analyzing_speech'
     ANALYZING_AUDIO = 'analyzing_audio'
 
-    DONE = 'done'
-
 
 @dataclass
 class Analysis:

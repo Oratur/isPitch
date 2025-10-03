@@ -1,0 +1,110 @@
+import logging
+from dataclasses import dataclass
+
+from ..models.analysis import (
+    Analysis,
+    AnalysisStatus,
+    AudioAnalysis,
+    SpeechAnalysis,
+)
+from ..models.events import SseEvent
+from ..ports.input import (
+    AsyncAnalysisOrchestratorPort,
+    AudioAnalysisPort,
+    SpeechAnalysisPort,
+)
+from ..ports.output import NotificationPort, TranscriptionPort
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class AnalysisConfig:
+    analysis_id: str
+    audio_path: str
+    filename: str
+
+
+class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
+    def __init__(
+        self,
+        config: AnalysisConfig,
+        transcription_port: TranscriptionPort,
+        speech_analysis_port: SpeechAnalysisPort,
+        audio_analysis_port: AudioAnalysisPort,
+        notification_port: NotificationPort,
+    ):
+        self.analysis_id = config.analysis_id
+        self.audio_path = config.audio_path
+        self.filename = config.filename
+        self._transcription_port = transcription_port
+        self._speech_analysis_port = speech_analysis_port
+        self._audio_analysis_port = audio_analysis_port
+        self._notification_port = notification_port
+
+    async def execute(self) -> Analysis:
+        transcription = await self._transcribe_audio()
+        speech_analysis = await self._analyze_speech(transcription=transcription)
+        audio_analysis = await self._analyze_audio(
+            transcription=transcription, speech_analysis=speech_analysis
+        )
+
+        return self._build_result(
+            transcription=transcription,
+            speech_analysis=speech_analysis,
+            audio_analysis=audio_analysis,
+        )
+
+    async def _transcribe_audio(self):
+        await self._publish_status(AnalysisStatus.TRANSCRIBING)
+        transcription = self._transcription_port.transcribe(self.audio_path)
+        logger.info(f'[{self.analysis_id}] Transcription completed')
+        return transcription
+
+    async def _analyze_speech(self, transcription) -> SpeechAnalysis:
+        await self._publish_status(AnalysisStatus.ANALYZING_SPEECH)
+
+        silence = self._speech_analysis_port.detect_silences(transcription)
+        filler = self._speech_analysis_port.detect_fillerwords(transcription)
+
+        logger.info(f'[{self.analysis_id}] Speech analysis completed')
+        return SpeechAnalysis(
+            silence_analysis=silence,
+            fillerwords_analysis=filler,
+        )
+
+    async def _analyze_audio(
+        self, transcription, speech_analysis: SpeechAnalysis
+    ) -> AudioAnalysis:
+        await self._publish_status(AnalysisStatus.ANALYZING_AUDIO)
+
+        speech_rate = self._audio_analysis_port.get_speech_rate(
+            audio_path=self.audio_path,
+            transcription=transcription.text,
+            silence_duration=speech_analysis.silence_analysis.duration,
+        )
+
+        logger.info(f'[{self.analysis_id}] Audio analysis completed')
+        return AudioAnalysis(speech_rate=speech_rate)
+
+    def _build_result(
+        self,
+        transcription,
+        speech_analysis: SpeechAnalysis,
+        audio_analysis: AudioAnalysis,
+    ) -> Analysis:
+        return Analysis(
+            id=self.analysis_id,
+            status=AnalysisStatus.COMPLETED,
+            filename=self.filename,
+            transcription=transcription,
+            speech_analysis=speech_analysis,
+            audio_analysis=audio_analysis,
+        )
+
+    async def _publish_status(self, status: AnalysisStatus) -> None:
+        await self._notification_port.publish(
+            analysis_id=self.analysis_id,
+            event=SseEvent.STATUS_UPDATE,
+            data=status.value,
+        )
