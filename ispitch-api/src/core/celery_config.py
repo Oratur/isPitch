@@ -1,4 +1,3 @@
-import redis.asyncio as aioredis
 from celery import Celery
 
 from src.core.config import settings
@@ -20,6 +19,3 @@ celery_app.conf.update(
     broker_connection_retry_on_startup=True,
     worker_force_execv=True,
 )
-
-
-redis_client = aioredis.from_url(settings.redis_url)

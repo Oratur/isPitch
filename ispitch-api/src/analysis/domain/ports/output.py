@@ -4,6 +4,7 @@ from fastapi import UploadFile
 
 from src.analysis.domain.models.analysis import Analysis
 
+from ..models.events import SseEvent
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.transcription import Transcription
 
@@ -56,7 +57,7 @@ class AnalysisRepositoryPort(ABC):
 
 class NotificationPort(ABC):
     @abstractmethod
-    def publish_status(self, analysis_id: str, status: str) -> None:
+    def publish(self, analysis_id: str, event: SseEvent, data: str) -> None:
         pass
 
 
