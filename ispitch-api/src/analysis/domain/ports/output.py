@@ -57,7 +57,9 @@ class AnalysisRepositoryPort(ABC):
 
 class NotificationPort(ABC):
     @abstractmethod
-    def publish(self, analysis_id: str, event: SseEvent, data: str) -> None:
+    async def publish(
+        self, analysis_id: str, event: SseEvent, data: str
+    ) -> None:
         pass
 
 

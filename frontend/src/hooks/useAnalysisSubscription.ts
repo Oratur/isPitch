@@ -48,7 +48,6 @@ export function useAnalysisSubscription({ analysisId, enabled }: UseAnalysisSubs
 
         eventSource.onerror = () => {
             setStatusMessage('Erro na conexão. Tentando reconectar...');
-            eventSource.close();
         };
 
         return () => {
