@@ -9,6 +9,8 @@ import SilenceAnalysisCard from '@/components/features/SilenceAnalysisCard';
 import { FillerWordAnalysisCard } from '@/components/features/FillerWordAnalysisCard';
 import SpeechRateCard from '@/components/features/SpeechRateCard';
 import { useGetAnalysis } from '@/hooks/queries/useGetAnalysis';
+import { useAnalysisSubscription } from '@/hooks/useAnalysisSubscription';
+
 
 export default function AnalysisPage() {
   const params = useParams();
@@ -17,7 +19,16 @@ export default function AnalysisPage() {
   const id = params.id as string;
   const currentView = searchParams.get('view') || 'transcription';
 
-  const {data: analysis, error, isLoading } = useGetAnalysis(id); 
+  const {data: analysis, error, isLoading } = useGetAnalysis(id);
+
+  const processingStates = ['pending', 'transcribing', 'analyzing_speech', 'analyzing_audio'];
+  
+  const isSubscriptionEnabled = !!analysis && processingStates.includes(analysis.status ?? 'pending');
+
+  const { statusMessage } = useAnalysisSubscription({
+    analysisId: id, 
+    enabled: isSubscriptionEnabled
+  });
 
   if (error) {
     return (
@@ -27,8 +38,8 @@ export default function AnalysisPage() {
     );
   }
 
+  const isProcessing = isLoading || isSubscriptionEnabled || !analysis;
 
-  const isProcessing = isLoading || !analysis || analysis?.status === 'PENDING';
   if (isProcessing) {
     return (
       <Box
@@ -42,7 +53,7 @@ export default function AnalysisPage() {
         }}
       >
         <CircularProgress />
-        <Typography>Processando sua análise, por favor aguarde...</Typography>
+        <Typography>{statusMessage}</Typography>
       </Box>
     );
   }

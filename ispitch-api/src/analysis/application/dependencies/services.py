@@ -1,3 +1,5 @@
+from typing import AsyncIterator
+
 from ...application.dependencies.models import (
     get_spacy_model,
     get_whisper_model,
@@ -11,7 +13,6 @@ from ...domain.ports.output import (
     AnalysisRepositoryPort,
     AudioPort,
     FillerWordsAnalysisPort,
-    NotificationPort,
     StoragePort,
     TaskQueuePort,
     TranscriptionPort,
@@ -23,9 +24,6 @@ from ...domain.services.analysis_orchestrator_service import (
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
 from ...infrastructure.adapters.audio.audio_adapter import AudioAdapter
-from ...infrastructure.adapters.notification.redis_adapter import (
-    RedisNotificationAdapter,
-)
 from ...infrastructure.adapters.speech.fillerwords_analysis_adapter import (
     FillerWordsAnalysisAdapter,
 )
@@ -35,6 +33,7 @@ from ...infrastructure.adapters.task_queue.celery_adapter import (
 from ...infrastructure.adapters.transcription.whisper_adapter import (
     WhisperAdapter,
 )
+from ...infrastructure.context.resource_manager import ResourceManager
 from ...infrastructure.persistance.adapters.analysis_repository_adapter import (
     AnalysisRepositoryAdapter,
 )
@@ -84,13 +83,10 @@ def get_analysis_repository() -> AnalysisRepositoryPort:
     return AnalysisRepositoryAdapter()
 
 
-def get_notification_port() -> NotificationPort:
-    return RedisNotificationAdapter()
-
-
 def get_task_queue_port() -> TaskQueuePort:
     return CeleryTaskQueueAdapter()
 
 
-def get_sse_adapter() -> RedisSSEAdapter:
-    return RedisSSEAdapter()
+async def get_sse_adapter() -> AsyncIterator[RedisSSEAdapter]:
+    async with ResourceManager.sse_adapter_context() as sse_adapter:
+        yield sse_adapter
