@@ -1,9 +1,11 @@
 from passlib.context import CryptContext
+
 from ...domain.ports.output import PasswordManagerPort
+
 
 class PasswordManagerAdapter(PasswordManagerPort):
     def __init__(self):
-        self.pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+        self.pwd_context = CryptContext(schemes=['argon2'], deprecated='auto')
 
     async def hash(self, password: str) -> str:
         return self.pwd_context.hash(password)

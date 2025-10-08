@@ -1,4 +1,5 @@
-from fastapi import (APIRouter, Depends, status)
+from fastapi import APIRouter, Depends, status
+
 from ....domain.ports.input import AuthPort
 from ...dependencies.services import get_auth_service
 from ..schemas.auth import UserLoginSchema, UserRegisterSchema
@@ -17,7 +18,9 @@ async def register(
     user: UserRegisterSchema,
     auth_service: AuthPort = Depends(get_auth_service),
 ):
-    response_user = await auth_service.register(user.email, user.name, user.password)
+    response_user = await auth_service.register(
+        user.email, user.name, user.password
+    )
     return str(response_user.id)
 
 
@@ -33,4 +36,3 @@ async def login(
 ):
     token = await auth_service.login(user.email, user.password)
     return token
-

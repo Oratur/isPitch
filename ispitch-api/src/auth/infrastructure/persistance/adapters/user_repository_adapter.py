@@ -3,6 +3,7 @@ from ....domain.ports.output import UserRepositoryPort
 from ...mappers.user_document_mapper import UserDocumentMapper
 from ..documents.user_document import UserDocument
 
+
 class UserRepositoryAdapter(UserRepositoryPort):
     async def save(self, user: User) -> User:
         user_document = UserDocumentMapper.from_entity(user)
