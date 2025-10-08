@@ -7,6 +7,9 @@ venv/
 .env
 *.env
 
+# Allow .env.example
+!.env.example
+
 # Poetry
 poetry.lock
 
