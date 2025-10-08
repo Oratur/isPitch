@@ -25,7 +25,7 @@ class UserDocument(Document):
 
     @before_event(Update)
     async def update_timestamp(self):
-        """Atualiza o campo updated_at antes de qualquer atualização."""
+        """Updates the updated_at field before any update."""
         self.updated_at = datetime.now(timezone.utc)
 
     class Settings:
