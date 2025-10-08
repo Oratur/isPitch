@@ -6,6 +6,8 @@ from src.analysis.application.rest.endpoints import analysis
 from src.analysis.infrastructure.persistance.documents.analysis_document import (
     AnalysisDocument,
 )
+from src.auth.application.rest.endpoints import auth
+from src.auth.infrastructure.persistance.documents.user_document import UserDocument
 from src.core.database import db
 from src.core.exception_handlers import add_exception_handlers
 from src.core.middlewares import configure_cors
@@ -15,6 +17,7 @@ from src.core.middlewares import configure_cors
 async def lifespan(app: FastAPI):
     models_to_init = [
         AnalysisDocument,
+        UserDocument,
     ]
 
     await db.connect(document_models=models_to_init)
@@ -36,6 +39,8 @@ add_exception_handlers(app)
 
 app.include_router(analysis.router_v1)
 app.include_router(analysis.router_v2)
+
+app.include_router(auth.router)
 
 
 @app.get('/', tags=['Root'])
