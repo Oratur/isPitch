@@ -15,22 +15,22 @@ class User:
     last_login: Optional[datetime] = None
 
     # TODO: Verificar se esses métodos devem estar aqui 
-    def mark_as_logged_in(self) -> None:
-        """Atualiza o campo last_login para o horário atual."""
-        self.last_login = datetime.now(timezone.utc)
+    def mark_as_logged_in(self) -> None:  
+        """Updates the last_login field to the current time."""  
+        self.last_login = datetime.now(timezone.utc)  
     
-    def deactivate(self) -> None:
-        """Marca a conta do usuário como inativa."""
-        if not self.active:
-            raise ValueError("Usuário já está inativo.")
+    def deactivate(self) -> None:  
+        """Marks the user's account as inactive."""  
+        if not self.active:  
+            raise ValueError("User is already inactive.")  
         
-        self.active = False
-        self.updated_at = datetime.now(timezone.utc)
+        self.active = False  
+        self.updated_at = datetime.now(timezone.utc)  
     
-    def activate(self) -> None:
-        """Marca a conta do usuário como ativa."""
-        if self.active:
-            raise ValueError("Usuário já está ativo.")
+    def activate(self) -> None:  
+        """Marks the user's account as active."""  
+        if self.active:  
+            raise ValueError("User is already active.")  
         
         self.active = True
         self.updated_at = datetime.now(timezone.utc)
