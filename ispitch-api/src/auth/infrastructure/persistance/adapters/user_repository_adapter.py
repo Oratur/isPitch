@@ -4,7 +4,6 @@ from ...mappers.user_document_mapper import UserDocumentMapper
 from ..documents.user_document import UserDocument
 
 class UserRepositoryAdapter(UserRepositoryPort):
-    @classmethod
     async def save(self, user: User) -> User:
         user_document = UserDocumentMapper.from_entity(user)
         await user_document.save()

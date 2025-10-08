@@ -21,8 +21,8 @@ class TokenManagerAdapter(TokenManagerPort):
             user_id: str = payload.get("sub")
 
             if user_id is None:
-                raise JWTError("Token inválido")
+                raise JWTError("Invalid token")
             
             return user_id
         except JWTError as e:
-            raise JWTError("Token inválido") from e
+            raise JWTError("Invalid token") from e

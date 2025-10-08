@@ -6,11 +6,12 @@ from ..schemas.auth import UserLoginSchema, UserRegisterSchema
 router = APIRouter(prefix='/auth', tags=['Authentication'])
 
 
-@router.post('/register',
+@router.post(
+    '/register',
     response_model=str,
     status_code=status.HTTP_201_CREATED,
     summary='User Registration',
-    description='Cadastrar novo usuário.',
+    description='Register a new user.',
 )
 async def register(
     user: UserRegisterSchema,

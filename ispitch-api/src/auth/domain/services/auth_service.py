@@ -22,7 +22,7 @@ class AuthService(AuthPort):
         existing_user = await self.user_repository.find_by_email(email)
         if existing_user:
             # TODO: Verificar tratamento de status code posteriormente
-            raise DomainException(409, "Email já está em uso")
+            raise DomainException(409, "Email is already in use")
 
         hashed_password = await self.password_manager.hash(password)
         user = User(id=None, email=email, name=name, hashed_password=hashed_password)
@@ -34,7 +34,7 @@ class AuthService(AuthPort):
 
         if not user or not await self.password_manager.verify(password, user.hashed_password):
             # TODO: Verificar tratamento de status code posteriormente
-            raise DomainException(401, "Usuario ou senha inválidos")
+            raise DomainException(401, "Invalid username or password")
 
         token = self.token_manager.create_access_token(data={"sub": str(user.id), "name": user.name})
 
