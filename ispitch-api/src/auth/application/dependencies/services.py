@@ -6,10 +6,7 @@ from ....auth.infrastructure.adapters.password_manager_adapter import (
 from ....auth.infrastructure.adapters.token_manager_adapter import (
     TokenManagerAdapter,
 )
-from ....auth.infrastructure.persistance\
-    .adapters.user_repository_adapter import (
-    UserRepositoryAdapter,
-)
+from ....auth.infrastructure.persistance.adapters import UserRepositoryAdapter
 
 
 def get_auth_service() -> AuthPort:
