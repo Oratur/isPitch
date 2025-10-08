@@ -7,6 +7,7 @@ from ..ports.output import (
     UserRepositoryPort,
 )
 
+
 class AuthService(AuthPort):
     def __init__(
         self,
@@ -22,20 +23,26 @@ class AuthService(AuthPort):
         existing_user = await self.user_repository.find_by_email(email)
         if existing_user:
             # TODO: Verificar tratamento de status code posteriormente
-            raise DomainException(409, "Email is already in use")
+            raise DomainException(409, 'Email is already in use')
 
         hashed_password = await self.password_manager.hash(password)
-        user = User(id=None, email=email, name=name, hashed_password=hashed_password)
+        user = User(
+            id=None, email=email, name=name, hashed_password=hashed_password
+        )
 
         return await self.user_repository.save(user)
 
     async def login(self, email: str, password: str) -> User:
         user = await self.user_repository.find_by_email(email)
 
-        if not user or not await self.password_manager.verify(password, user.hashed_password):
+        if not user or not await self.password_manager.verify(
+            password, user.hashed_password
+        ):
             # TODO: Verificar tratamento de status code posteriormente
-            raise DomainException(401, "Invalid username or password")
+            raise DomainException(401, 'Invalid username or password')
 
-        token = self.token_manager.create_access_token(data={"sub": str(user.id), "name": user.name})
+        token = self.token_manager.create_access_token(
+            data={'sub': str(user.id), 'name': user.name}
+        )
 
         return token

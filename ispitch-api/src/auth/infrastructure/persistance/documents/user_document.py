@@ -14,12 +14,16 @@ class UserDocument(Document):
         populate_by_name=True,
     )
 
-    id: UUID = Field(default_factory=uuid4, alias="_id")
+    id: UUID = Field(default_factory=uuid4, alias='_id')
     email: EmailStr
     name: str = Field(min_length=3, max_length=255)
     hashed_password: str = Field(exclude=True)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
     active: bool = True
     last_login: Optional[datetime] = None
 
@@ -29,11 +33,7 @@ class UserDocument(Document):
         self.updated_at = datetime.now(timezone.utc)
 
     class Settings:
-        name = "users"
+        name = 'users'
         indexes = [
-            IndexModel(
-                [("email", ASCENDING)],
-                name="email_index",
-                unique=True
-            )
+            IndexModel([('email', ASCENDING)], name='email_index', unique=True)
         ]

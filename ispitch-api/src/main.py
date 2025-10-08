@@ -7,7 +7,9 @@ from src.analysis.infrastructure.persistance.documents.analysis_document import 
     AnalysisDocument,
 )
 from src.auth.application.rest.endpoints import auth
-from src.auth.infrastructure.persistance.documents.user_document import UserDocument
+from src.auth.infrastructure.persistance.documents.user_document import (
+    UserDocument,
+)
 from src.core.database import db
 from src.core.exception_handlers import add_exception_handlers
 from src.core.middlewares import configure_cors

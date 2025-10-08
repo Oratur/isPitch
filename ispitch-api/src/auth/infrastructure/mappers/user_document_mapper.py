@@ -1,12 +1,13 @@
 from ...domain.models.user import User
 from ..persistance.documents.user_document import UserDocument
 
+
 class UserDocumentMapper:
     @staticmethod
     def from_document(document: UserDocument) -> User:
         if document is None:
             return None
-        
+
         return User(
             id=str(document.id),
             email=document.email,
@@ -22,7 +23,7 @@ class UserDocumentMapper:
     def from_entity(entity: User) -> UserDocument:
         if entity is None:
             return None
-        
+
         return UserDocument(
             email=entity.email,
             name=entity.name,
