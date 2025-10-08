@@ -7,6 +7,7 @@ from ...domain.ports.output import TokenManagerPort
 
 
 class TokenManagerAdapter(TokenManagerPort):
+    @classmethod
     def create_access_token(self, data: dict) -> str:
         to_encode = data.copy()
 
@@ -22,6 +23,7 @@ class TokenManagerAdapter(TokenManagerPort):
 
         return encoded_jwt
 
+    @classmethod
     def verify_access_token(self, token: str) -> str:
         try:
             payload = jwt.decode(
