@@ -70,3 +70,20 @@ jobs:
         run: poetry install
       - name: Run lint (ruff)
         run: poetry run task lint
+        
+  ci-status:
+    needs: [frontend, backend]
+    if: always()
+    
+    name: CI Status
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check status of previous jobs
+        run: |
+          if [[ "${{ needs.frontend.result }}" == "failure" || "${{ needs.backend.result }}" == "failure" ]]; then
+            echo "Um ou mais jobs falharam. O status final é de falha."
+            exit 1
+          else
+            echo "Todos os jobs necessários passaram ou foram ignorados corretamente."
+            exit 0
+          fi
