@@ -1,3 +1,4 @@
+from fastapi import status
 from ....core.exceptions import DomainException
 from ..models.user import User
 from ..ports.input import AuthPort
@@ -23,7 +24,9 @@ class AuthService(AuthPort):
         existing_user = await self.user_repository.find_by_email(email)
         if existing_user:
             # TODO: Verificar tratamento de status code posteriormente
-            raise DomainException(409, 'Email is already in use')
+            raise DomainException(
+                status.HTTP_409_CONFLICT, 'Email is already in use'
+            )
 
         hashed_password = await self.password_manager.hash(password)
         user = User(
@@ -39,7 +42,9 @@ class AuthService(AuthPort):
             password, user.hashed_password
         ):
             # TODO: Verificar tratamento de status code posteriormente
-            raise DomainException(401, 'Invalid username or password')
+            raise DomainException(
+                status.HTTP_401_UNAUTHORIZED, 'Invalid username or password'
+            )
 
         token = self.token_manager.create_access_token(
             data={'sub': str(user.id), 'name': user.name}

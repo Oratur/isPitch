@@ -4,7 +4,7 @@ from ....domain.ports.input import AuthPort
 from ...dependencies.services import get_auth_service
 from ..schemas.auth import UserLoginSchema, UserRegisterSchema
 
-router = APIRouter(prefix='/auth', tags=['Authentication'])
+router = APIRouter(prefix='/v2/auth', tags=['Authentication'])
 
 
 @router.post(

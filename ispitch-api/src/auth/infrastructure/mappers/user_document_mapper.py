@@ -25,6 +25,7 @@ class UserDocumentMapper:
             return None
 
         return UserDocument(
+            id=entity.id,
             email=entity.email,
             name=entity.name,
             hashed_password=entity.hashed_password,
