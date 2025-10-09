@@ -1,4 +1,5 @@
 from fastapi import status
+
 from ....core.exceptions import DomainException
 from ..models.user import User
 from ..ports.input import AuthPort
