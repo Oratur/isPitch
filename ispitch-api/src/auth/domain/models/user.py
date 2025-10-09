@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
+from ....core.exceptions import DomainException
 
 
 @dataclass
@@ -26,7 +27,7 @@ class User:
     def deactivate(self) -> None:
         """Marks the user's account as inactive."""
         if not self.active:
-            raise ValueError('User is already inactive.')
+            raise DomainException('User is already inactive.')
 
         self.active = False
         self.updated_at = datetime.now(timezone.utc)
@@ -34,7 +35,7 @@ class User:
     def activate(self) -> None:
         """Marks the user's account as active."""
         if self.active:
-            raise ValueError('User is already active.')
+            raise DomainException('User is already active.')
 
         self.active = True
         self.updated_at = datetime.now(timezone.utc)
