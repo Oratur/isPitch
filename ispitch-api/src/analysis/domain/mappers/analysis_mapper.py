@@ -32,9 +32,7 @@ class AnalysisModelMapper:
 
         # SilenceAnalysis
         speech_analysis_data = data.get('speech_analysis', {})
-        silence_analysis_data = speech_analysis_data.get(
-            'silence_analysis', {}
-        )
+        silence_analysis_data = speech_analysis_data.get('silence_analysis', {})
         silences = [
             Silence(**s) for s in silence_analysis_data.get('silences', [])
         ]
