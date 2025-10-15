@@ -1,9 +1,10 @@
 # ispitch-api/src/analysis/domain/services/sentiment_analysis_service.py
 
-from ..models.sentiment import SentimentAnalysis
+from ..models.sentiment import SentimentAnalysis, SentimentSegment
 from ..models.transcription import Transcription
 from ..ports.input import SentimentAnalysisPort as SentimentAnalysisInputPort
 from ..ports.output import SentimentAnalysisPort as SentimentAnalysisOutputPort
+from ..utils.text_segmenter import segment_transcription
 
 
 class SentimentAnalysisService(SentimentAnalysisInputPort):
@@ -16,24 +17,38 @@ class SentimentAnalysisService(SentimentAnalysisInputPort):
         self, transcription: Transcription
     ) -> SentimentAnalysis:
         """
-        Orquestra a análise de sentimento da transcrição.
+        Orquestra a análise de sentimento da transcrição, segmentando o texto
+        e analisando cada segmento individualmente.
         """
-        # Aqui entrará a lógica da [TASK-41] para segmentar o texto.
-        # Por enquanto, vamos analisar o texto completo como um único segmento.
+        all_words = [word for segment in transcription.segments for word in segment.words]
 
-        full_text = transcription.text
-        if not full_text.strip():
+        if not all_words:
             return SentimentAnalysis(timeline=[])
 
-        # Delega a análise para o adaptador através da porta de saída
-        sentiment_analysis = self.sentiment_analysis_port.analyze(full_text)
+        timeline: list[SentimentSegment] = []
 
-        # Simula o timestamp para o texto completo (provisório)
-        if transcription.segments:
-            start_time = transcription.segments[0].start
-            end_time = transcription.segments[-1].words[-1].end if transcription.segments[-1].words else start_time
-            for segment in sentiment_analysis.timeline:
-                segment.start_time = round(start_time, 2)
-                segment.end_time = round(end_time, 2)
+        # Itera sobre os segmentos gerados pela nossa nova função
+        for segment in segment_transcription(all_words):
+            text_to_analyze = str(segment['text'])
 
-        return sentiment_analysis
+            # Pula segmentos vazios
+            if not text_to_analyze.strip():
+                continue
+
+            # Delega a análise do texto do segmento para o adaptador
+            # A implementação real disso será feita na TASK #42
+            # Por enquanto, estamos apenas estruturando o fluxo
+            analysis_result = self.sentiment_analysis_port.analyze(text_to_analyze)
+
+            # Adiciona os resultados à timeline, combinando com os timestamps do segmento
+            for result_segment in analysis_result.timeline:
+                timeline.append(
+                    SentimentSegment(
+                        start_time=round(float(segment['start_time']), 2),
+                        end_time=round(float(segment['end_time']), 2),
+                        sentiment=result_segment.sentiment,
+                        score=result_segment.score,
+                    )
+                )
+
+        return SentimentAnalysis(timeline=timeline)
