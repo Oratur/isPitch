@@ -62,7 +62,20 @@ from ...infrastructure.persistance.adapters.storage_adapter import (
     StorageAdapter,
 )
 from ..adapters.sse_adapter import RedisSSEAdapter
-
+from ...domain.ports.input import (
+    # ...
+    SentimentAnalysisPort as SentimentAnalysisInputPort, # Adicione
+)
+from ...domain.ports.output import (
+    # ...
+    SentimentAnalysisPort as SentimentAnalysisOutputPort, # Adicione
+)
+# ...
+from ...domain.services.sentiment_analysis_service import SentimentAnalysisService # Adicione
+# ...
+from ...infrastructure.adapters.speech.sentiment_analysis_adapter import (
+    SentimentAnalysisAdapter, # Adicione
+)
 
 def get_analysis_orchestrator() -> AnalysisOrchestratorPort:
     deps = AnalysisOrchestratorDependencies(
@@ -112,7 +125,6 @@ async def get_sse_adapter() -> AsyncIterator[RedisSSEAdapter]:
     async with ResourceManager.sse_adapter_context() as sse_adapter:
         yield sse_adapter
 
-
 @lru_cache(maxsize=1)
 def get_synonym_provider() -> SynonymProviderPort:
     load_nltk_synonym_resources()
@@ -140,3 +152,17 @@ def get_topic_model_port() -> TopicModelPort:
 def get_topic_analysis_port() -> TopicAnalysisPort:
     load_nltk_tokenizer()
     return TopicAnalysisService(get_topic_model_port())
+
+def get_sentiment_analysis_port() -> SentimentAnalysisInputPort: 
+    return SentimentAnalysisService(get_sentiment_analysis_adapter())
+
+
+def get_sentiment_analysis_adapter() -> SentimentAnalysisOutputPort: 
+    return SentimentAnalysisAdapter()
+
+def get_speech_analysis_port() -> SpeechAnalysisPort:
+    return SpeechAnalysisService(
+        fillerwords_analysis_port=get_fillerwords_analysis_port(),
+        sentiment_analysis_port=get_sentiment_analysis_port(), 
+    )
+
