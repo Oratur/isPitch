@@ -18,6 +18,9 @@ from ...domain.ports.input import (
     TopicAnalysisPort,
     VocabularyAnalysisPort,
 )
+from ...domain.ports.input import (
+    SentimentAnalysisPort as SentimentAnalysisInputPort,
+)
 from ...domain.ports.output import (
     AnalysisRepositoryPort,
     AudioPort,
@@ -28,6 +31,9 @@ from ...domain.ports.output import (
     TopicModelPort,
     TranscriptionPort,
 )
+from ...domain.ports.output import (
+    SentimentAnalysisPort as SentimentAnalysisOutputPort,
+)
 from ...domain.services.analysis_orchestrator_service import (
     AnalysisOrchestratorDependencies,
     AnalysisOrchestratorService,
@@ -35,6 +41,9 @@ from ...domain.services.analysis_orchestrator_service import (
 from ...domain.services.analysis_stats_service import AnalysisStatsService
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.lexical_richness_service import LexicalRichnessService
+from ...domain.services.sentiment_analysis_service import (
+    SentimentAnalysisService,
+)
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
 from ...domain.services.topic_analysis_service import TopicAnalysisService
 from ...domain.services.vocabulary_analysis_service import (
@@ -47,6 +56,9 @@ from ...infrastructure.adapters import (
     HuggingFaceTopicAdapter,
     NltkSynonymProviderAdapter,
     WhisperAdapter,
+)
+from ...infrastructure.adapters.speech.sentiment_analysis_adapter import (
+    SentimentAnalysisAdapter,
 )
 from ...infrastructure.context.resource_manager import ResourceManager
 from ...infrastructure.persistance.adapters import (
@@ -139,3 +151,18 @@ def get_topic_analysis_port() -> TopicAnalysisPort:
 def get_analysis_stats_service() -> AnalysisStatsPort:
     stats_repository = AnalysisStatsRepositoryAdapter()
     return AnalysisStatsService(stats_repository)
+
+
+def get_sentiment_analysis_port() -> SentimentAnalysisInputPort:
+    return SentimentAnalysisService(get_sentiment_analysis_adapter())
+
+
+def get_sentiment_analysis_adapter() -> SentimentAnalysisOutputPort:
+    return SentimentAnalysisAdapter()
+
+
+def get_speech_analysis_port() -> SpeechAnalysisPort:
+    return SpeechAnalysisService(
+        fillerwords_analysis_port=get_fillerwords_analysis_port(),
+        sentiment_analysis_port=get_sentiment_analysis_port(),
+    )

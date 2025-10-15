@@ -22,10 +22,21 @@ export interface FillerwordAnalysis {
     occurrences: FillerwordOccurrence[];
 }
 
+export interface SentimentSegment {
+  startTime: number; 
+  endTime: number; 
+  sentiment: 'positivo' | 'negativo' | 'neutro';
+  score: number;
+}
+
+export interface SentimentAnalysis {
+  timeline: SentimentSegment[];
+}
 
 export interface SpeechAnalysis {
     silenceAnalysis: SilenceAnalysis;
     fillerwordsAnalysis: FillerwordAnalysis;
+    sentimentAnalysis?: SentimentAnalysis;
 }
 
 export interface AudioAnalysis {
