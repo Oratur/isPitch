@@ -8,6 +8,7 @@ from ..models.events import SseEvent
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
+from ..models.sentiment import SentimentAnalysis
 
 
 class TranscriptionPort(ABC):
@@ -71,7 +72,6 @@ class TaskQueuePort(ABC):
     ) -> None:
         pass
 
-
 class SynonymProviderPort(ABC):
     @abstractmethod
     def get_synonyms(self, word: str) -> list[str]:
@@ -82,3 +82,8 @@ class TopicModelPort(ABC):
     @abstractmethod
     def extract_topics(self, text: str) -> TopicAnalysis:
         pass
+
+class SentimentAnalysisPort(ABC):
+    @abstractmethod
+    def analyze(self, text: str) -> SentimentAnalysis:
+        pass   

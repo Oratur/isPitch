@@ -9,6 +9,7 @@ from ..models.silence import SilenceAnalysis
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
 from ..models.vocabulary import VocabularyAnalysis
+from ..models.sentiment import SentimentAnalysis
 
 
 class AnalysisOrchestratorPort(ABC):
@@ -57,7 +58,6 @@ class AudioAnalysisPort(ABC):
     ) -> float:
         pass
 
-
 class VocabularyAnalysisPort(ABC):
     @abstractmethod
     def analyze(self, transcription: Transcription) -> VocabularyAnalysis:
@@ -69,8 +69,14 @@ class LexicalRichnessPort(ABC):
     def analyze(self, transcription: Transcription) -> LexicalRichnessAnalysis:
         pass
 
-
 class TopicAnalysisPort(ABC):
     @abstractmethod
     def analyze(self, transcription: Transcription) -> TopicAnalysis:
+        pass
+    
+class SentimentAnalysisPort(ABC):
+    @abstractmethod
+    def analyze_sentiment(
+        self, transcription: Transcription
+    ) -> SentimentAnalysis:
         pass
