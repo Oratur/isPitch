@@ -47,12 +47,24 @@ export interface TopicAnalysis {
     topics: Topic[];
 }
 
+export interface SentimentSegment {
+  startTime: number; 
+  endTime: number; 
+  sentiment: 'positivo' | 'negativo' | 'neutro';
+  score: number;
+}
+
+export interface SentimentAnalysis {
+  timeline: SentimentSegment[];
+}
+
 export interface SpeechAnalysis {
     silenceAnalysis: SilenceAnalysis;
     fillerwordsAnalysis: FillerwordAnalysis;
     vocabularyAnalysis: VocabularyAnalysis;
     lexicalRichnessAnalysis: LexicalRichnessAnalysis;
     topicAnalysis: TopicAnalysis;
+    sentimentAnalysis?: SentimentAnalysis;
 }
 
 export interface ContourPoint {
