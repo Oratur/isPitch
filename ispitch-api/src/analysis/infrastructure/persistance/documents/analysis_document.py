@@ -75,12 +75,24 @@ class TopicAnalysisDocument(BaseModel):
     topics: list[TopicDocument]
 
 
+class SentimentSegment(BaseModel):
+    start_time: float
+    end_time: float
+    sentiment: str
+    score: float
+
+
+class SentimentAnalysis(BaseModel):
+    timeline: list[SentimentSegment]
+
+
 class SpeechAnalysis(BaseModel):
     silence_analysis: SilenceAnalysis
     fillerwords_analysis: FillerWordsAnalysis
     vocabulary_analysis: Optional[VocabularyAnalysisDocument] = None
     lexical_richness_analysis: Optional[LexicalRichnessAnalysisDocument] = None
     topic_analysis: Optional[TopicAnalysisDocument] = None
+    sentiment_analysis: Optional[SentimentAnalysis] = None
 
 
 class PitchContour(BaseModel):

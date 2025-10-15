@@ -1,13 +1,15 @@
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.silence import Silence, SilenceAnalysis
 from ..models.transcription import Transcription
+from ..ports.input import SentimentAnalysisPort as SentimentAnalysisInputPort
 from ..ports.input import SpeechAnalysisPort
 from ..ports.output import FillerWordsAnalysisPort
 
 
 class SpeechAnalysisService(SpeechAnalysisPort):
-    def __init__(self, fillerwords_analysis_port: FillerWordsAnalysisPort):
+    def __init__(self, fillerwords_analysis_port: FillerWordsAnalysisPort, sentiment_analysis_port: SentimentAnalysisInputPort):
         self.fillerwords_analysis_port = fillerwords_analysis_port
+        self.sentiment_analysis_port = sentiment_analysis_port
 
     @classmethod
     def detect_silences(
@@ -54,3 +56,6 @@ class SpeechAnalysisService(SpeechAnalysisPort):
 
     def detect_fillerwords(self, transcription) -> FillerWordsAnalysis:
         return self.fillerwords_analysis_port.detect(transcription)
+
+    def analyze_sentiment(self, transcription: Transcription):
+        return self.sentiment_analysis_port.analyze_sentiment(transcription)
