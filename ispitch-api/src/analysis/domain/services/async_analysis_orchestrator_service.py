@@ -76,6 +76,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         filler = self._speech_analysis_port.detect_fillerwords(transcription)
         vocabulary = self._analyze_vocabulary(transcription)
         lexical_richness = self._lexical_richness_port.analyze(transcription)
+        sentiment = self._speech_analysis_port.analyze_sentiment(transcription)
 
         logger.info(f'[{self.analysis_id}] Speech analysis completed')
         return SpeechAnalysis(
@@ -83,6 +84,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
             fillerwords_analysis=filler,
             vocabulary_analysis=vocabulary,
             lexical_richness_analysis=lexical_richness,
+            sentiment_analysis=sentiment,
         )
 
     def _analyze_vocabulary(self, transcription):
