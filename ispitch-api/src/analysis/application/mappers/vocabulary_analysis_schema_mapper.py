@@ -10,7 +10,7 @@ class VocabularyAnalysisSchemaMapper:
         vocabulary_analysis: VocabularyAnalysis,
     ) -> VocabularyAnalysisSchema:
         if not vocabulary_analysis:
-            return None
+            return VocabularyAnalysisSchema(suggestions=[])
         return VocabularyAnalysisSchema(
             suggestions=[asdict(s) for s in vocabulary_analysis.suggestions]
         )
