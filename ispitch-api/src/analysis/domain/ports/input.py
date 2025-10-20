@@ -6,6 +6,7 @@ from ..models.analysis import Analysis
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.silence import SilenceAnalysis
 from ..models.transcription import Transcription
+from ..models.vocabulary import VocabularyAnalysis
 
 
 class AnalysisOrchestratorPort(ABC):
@@ -52,4 +53,10 @@ class AudioAnalysisPort(ABC):
         transcription: str,
         silence_duration: float,
     ) -> float:
+        pass
+
+
+class VocabularyAnalysisPort(ABC):
+    @abstractmethod
+    def analyze(self, transcription: Transcription) -> VocabularyAnalysis:
         pass

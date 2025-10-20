@@ -5,12 +5,14 @@ from typing import Optional
 from .fillerwords import FillerWordsAnalysis
 from .silence import SilenceAnalysis
 from .transcription import Transcription
+from .vocabulary import VocabularyAnalysis
 
 
 @dataclass
 class SpeechAnalysis:
     silence_analysis: SilenceAnalysis
     fillerwords_analysis: FillerWordsAnalysis
+    vocabulary_analysis: Optional[VocabularyAnalysis] = None
 
 
 @dataclass

@@ -1,6 +1,7 @@
 from ...domain.ports.output import NotificationPort
 from ...domain.services.async_analysis_orchestrator_service import (
     AnalysisConfig,
+    AnalysisPort,
     AsyncAnalysisOrchestratorService,
 )
 from ..dependencies import services as deps
@@ -20,6 +21,7 @@ class AsyncAnalysisFactory:
         transcription_port = deps.get_transcription_port()
         speech_analysis_port = deps.get_speech_analysis_port()
         audio_analysis_port = deps.get_audio_analysis_port()
+        vocabulary_analysis_port = deps.get_vocabulary_analysis_port()
         analysis_repository = deps.get_analysis_repository()
         storage_port = deps.get_storage_port()
 
@@ -27,10 +29,13 @@ class AsyncAnalysisFactory:
             config=AnalysisConfig(
                 analysis_id=analysis_id, audio_path=audio_path, filename=filename
             ),
-            transcription_port=transcription_port,
-            speech_analysis_port=speech_analysis_port,
-            audio_analysis_port=audio_analysis_port,
-            notification_port=notification_port,
+            ports=AnalysisPort(
+                transcription_port=transcription_port,
+                speech_analysis_port=speech_analysis_port,
+                audio_analysis_port=audio_analysis_port,
+                vocabulary_analysis_port=vocabulary_analysis_port,
+                notification_port=notification_port,
+            ),
         )
 
         return AsyncAnalysisWorkflowService(
