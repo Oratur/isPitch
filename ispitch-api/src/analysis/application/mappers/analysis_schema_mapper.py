@@ -2,6 +2,9 @@ from ...domain.models.analysis import Analysis
 from ..mappers.fillerwords_analysis_schema_mapper import (
     FillerWordsAnalysisSchemaMapper,
 )
+from ..mappers.lexical_richness_analysis_schema_mapper import (
+    LexicalRichnessAnalysisSchemaMapper,
+)
 from ..mappers.silence_analysis_schema_mapper import (
     SilenceAnalysisSchemaMapper,
 )
@@ -41,6 +44,12 @@ class AnalysisSchemaMapper:
                 )
                 if analysis.speech_analysis
                 and analysis.speech_analysis.vocabulary_analysis
+                else None,
+                lexical_richness_analysis=LexicalRichnessAnalysisSchemaMapper.from_model(
+                    analysis.speech_analysis.lexical_richness_analysis
+                )
+                if analysis.speech_analysis
+                and analysis.speech_analysis.lexical_richness_analysis
                 else None,
             ),
             audio_analysis=AudioAnalysisSchema(

@@ -58,10 +58,17 @@ class VocabularyAnalysisDocument(BaseModel):
     suggestions: list[VocabularySuggestionDocument]
 
 
+class LexicalRichnessAnalysisDocument(BaseModel):
+    type_token_ratio: float
+    unique_words: int
+    total_words: int
+
+
 class SpeechAnalysis(BaseModel):
     silence_analysis: SilenceAnalysis
     fillerwords_analysis: FillerWordsAnalysis
     vocabulary_analysis: Optional[VocabularyAnalysisDocument] = None
+    lexical_richness_analysis: Optional[LexicalRichnessAnalysisDocument] = None
 
 
 class AudioAnalysis(BaseModel):
