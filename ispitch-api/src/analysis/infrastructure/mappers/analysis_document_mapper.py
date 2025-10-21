@@ -6,6 +6,7 @@ from ...domain.models.analysis import (
 from ...domain.models.fillerwords import FillerWordPosition, FillerWordsAnalysis
 from ...domain.models.silence import Silence, SilenceAnalysis
 from ...domain.models.transcription import Segment, Transcription, Word
+from ...domain.models.vocabulary import VocabularyAnalysis, VocabularySuggestion
 from ..persistance.documents import analysis_document
 from ..persistance.documents.analysis_document import AnalysisDocument
 
@@ -144,6 +145,9 @@ class SpeechAnalysisDocumentMapper:
             fillerwords_analysis=SpeechAnalysisDocumentMapper._map_fillerwords_analysis(
                 getattr(entity, 'fillerwords_analysis', None)
             ),
+            vocabulary_analysis=SpeechAnalysisDocumentMapper._map_vocabulary_analysis(
+                getattr(entity, 'vocabulary_analysis', None)
+            ),
         )
 
     @staticmethod
@@ -189,6 +193,26 @@ class SpeechAnalysisDocumentMapper:
         )
 
     @staticmethod
+    def _map_vocabulary_analysis(va: VocabularyAnalysis):
+        if va is None:
+            return None
+
+        return analysis_document.VocabularyAnalysisDocument(
+            suggestions=map_list(
+                getattr(va, 'suggestions', []),
+                SpeechAnalysisDocumentMapper._map_vocabulary_suggestion,
+            )
+        )
+
+    @staticmethod
+    def _map_vocabulary_suggestion(vs: VocabularySuggestion):
+        return analysis_document.VocabularySuggestionDocument(
+            word=getattr(vs, 'word', ''),
+            count=getattr(vs, 'count', 0),
+            alternatives=getattr(vs, 'alternatives', []),
+        )
+
+    @staticmethod
     def from_document(document):
         if document is None:
             return None
@@ -198,6 +222,9 @@ class SpeechAnalysisDocumentMapper:
             ),
             fillerwords_analysis=SpeechAnalysisDocumentMapper._map_fillerwords_analysis_from_document(
                 getattr(document, 'fillerwords_analysis', None)
+            ),
+            vocabulary_analysis=SpeechAnalysisDocumentMapper._map_vocabulary_analysis_from_document(
+                getattr(document, 'vocabulary_analysis', None)
             ),
         )
 
@@ -241,6 +268,29 @@ class SpeechAnalysisDocumentMapper:
             start=getattr(fwp, 'start', 0),
             end=getattr(fwp, 'end', 0),
             word=getattr(fwp, 'word', ''),
+        )
+
+    @staticmethod
+    def _map_vocabulary_analysis_from_document(
+        va_doc: analysis_document.VocabularyAnalysisDocument,
+    ):
+        if va_doc is None:
+            return None
+        return VocabularyAnalysis(
+            suggestions=map_list(
+                getattr(va_doc, 'suggestions', []),
+                SpeechAnalysisDocumentMapper._map_vocabulary_suggestion_from_document,
+            )
+        )
+
+    @staticmethod
+    def _map_vocabulary_suggestion_from_document(
+        vs_doc: analysis_document.VocabularySuggestionDocument,
+    ):
+        return VocabularySuggestion(
+            word=getattr(vs_doc, 'word', ''),
+            count=getattr(vs_doc, 'count', 0),
+            alternatives=getattr(vs_doc, 'alternatives', []),
         )
 
 

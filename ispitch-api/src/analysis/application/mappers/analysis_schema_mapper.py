@@ -5,6 +5,9 @@ from ..mappers.fillerwords_analysis_schema_mapper import (
 from ..mappers.silence_analysis_schema_mapper import (
     SilenceAnalysisSchemaMapper,
 )
+from ..mappers.vocabulary_analysis_schema_mapper import (
+    VocabularyAnalysisSchemaMapper,
+)
 from ..rest.schemas.analysis import (
     AnalysisSchema,
     AudioAnalysisSchema,
@@ -32,6 +35,12 @@ class AnalysisSchemaMapper:
                     analysis.speech_analysis.fillerwords_analysis
                 )
                 if analysis.speech_analysis
+                else None,
+                vocabulary_analysis=VocabularyAnalysisSchemaMapper.from_model(
+                    analysis.speech_analysis.vocabulary_analysis
+                )
+                if analysis.speech_analysis
+                and analysis.speech_analysis.vocabulary_analysis
                 else None,
             ),
             audio_analysis=AudioAnalysisSchema(

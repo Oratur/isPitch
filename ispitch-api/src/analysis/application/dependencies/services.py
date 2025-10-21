@@ -1,19 +1,23 @@
+from functools import lru_cache
 from typing import AsyncIterator
 
 from ...application.dependencies.models import (
     get_spacy_model,
     get_whisper_model,
+    load_nltk_resources,
 )
 from ...domain.ports.input import (
     AnalysisOrchestratorPort,
     AudioAnalysisPort,
     SpeechAnalysisPort,
+    VocabularyAnalysisPort,
 )
 from ...domain.ports.output import (
     AnalysisRepositoryPort,
     AudioPort,
     FillerWordsAnalysisPort,
     StoragePort,
+    SynonymProviderPort,
     TaskQueuePort,
     TranscriptionPort,
 )
@@ -23,6 +27,9 @@ from ...domain.services.analysis_orchestrator_service import (
 )
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
+from ...domain.services.vocabulary_analysis_service import (
+    VocabularyAnalysisService,
+)
 from ...infrastructure.adapters.audio.audio_adapter import AudioAdapter
 from ...infrastructure.adapters.speech.fillerwords_analysis_adapter import (
     FillerWordsAnalysisAdapter,
@@ -32,6 +39,9 @@ from ...infrastructure.adapters.task_queue.celery_adapter import (
 )
 from ...infrastructure.adapters.transcription.whisper_adapter import (
     WhisperAdapter,
+)
+from ...infrastructure.adapters.vocabulary.nltk_adapter import (
+    NltkSynonymProviderAdapter,
 )
 from ...infrastructure.context.resource_manager import ResourceManager
 from ...infrastructure.persistance.adapters.analysis_repository_adapter import (
@@ -90,3 +100,14 @@ def get_task_queue_port() -> TaskQueuePort:
 async def get_sse_adapter() -> AsyncIterator[RedisSSEAdapter]:
     async with ResourceManager.sse_adapter_context() as sse_adapter:
         yield sse_adapter
+
+
+@lru_cache(maxsize=1)
+def get_synonym_provider() -> SynonymProviderPort:
+    load_nltk_resources()
+    return NltkSynonymProviderAdapter()
+
+
+@lru_cache(maxsize=1)
+def get_vocabulary_analysis_port() -> VocabularyAnalysisPort:
+    return VocabularyAnalysisService(get_synonym_provider())

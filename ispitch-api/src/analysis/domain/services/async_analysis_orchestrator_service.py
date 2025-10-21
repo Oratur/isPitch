@@ -12,6 +12,7 @@ from ..ports.input import (
     AsyncAnalysisOrchestratorPort,
     AudioAnalysisPort,
     SpeechAnalysisPort,
+    VocabularyAnalysisPort,
 )
 from ..ports.output import NotificationPort, TranscriptionPort
 
@@ -25,22 +26,26 @@ class AnalysisConfig:
     filename: str
 
 
+@dataclass
+class AnalysisPort:
+    transcription_port: TranscriptionPort
+    speech_analysis_port: SpeechAnalysisPort
+    audio_analysis_port: AudioAnalysisPort
+    vocabulary_analysis_port: VocabularyAnalysisPort
+    notification_port: NotificationPort
+
+
+@dataclass
 class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
-    def __init__(
-        self,
-        config: AnalysisConfig,
-        transcription_port: TranscriptionPort,
-        speech_analysis_port: SpeechAnalysisPort,
-        audio_analysis_port: AudioAnalysisPort,
-        notification_port: NotificationPort,
-    ):
+    def __init__(self, config: AnalysisConfig, ports: AnalysisPort):
         self.analysis_id = config.analysis_id
         self.audio_path = config.audio_path
         self.filename = config.filename
-        self._transcription_port = transcription_port
-        self._speech_analysis_port = speech_analysis_port
-        self._audio_analysis_port = audio_analysis_port
-        self._notification_port = notification_port
+        self._transcription_port = ports.transcription_port
+        self._speech_analysis_port = ports.speech_analysis_port
+        self._audio_analysis_port = ports.audio_analysis_port
+        self._vocabulary_analysis_port = ports.vocabulary_analysis_port
+        self._notification_port = ports.notification_port
 
     async def execute(self) -> Analysis:
         transcription = await self._transcribe_audio()
@@ -66,12 +71,18 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
 
         silence = self._speech_analysis_port.detect_silences(transcription)
         filler = self._speech_analysis_port.detect_fillerwords(transcription)
+        vocabulary = self._analyze_vocabulary(transcription)
 
         logger.info(f'[{self.analysis_id}] Speech analysis completed')
         return SpeechAnalysis(
             silence_analysis=silence,
             fillerwords_analysis=filler,
+            vocabulary_analysis=vocabulary,
         )
+
+    def _analyze_vocabulary(self, transcription):
+        vocabulary = self._vocabulary_analysis_port.analyze(transcription)
+        return vocabulary
 
     async def _analyze_audio(
         self, transcription, speech_analysis: SpeechAnalysis

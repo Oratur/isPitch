@@ -69,3 +69,9 @@ class TaskQueuePort(ABC):
         self, analysis_id: str, audio_path: str, filename: str
     ) -> None:
         pass
+
+
+class SynonymProviderPort(ABC):
+    @abstractmethod
+    def get_synonyms(self, word: str) -> list[str]:
+        pass

@@ -48,9 +48,20 @@ class FillerWordsAnalysis(BaseModel):
     occurrences: list[FillerWordPosition]
 
 
+class VocabularySuggestionDocument(BaseModel):
+    word: str
+    count: int
+    alternatives: list[str]
+
+
+class VocabularyAnalysisDocument(BaseModel):
+    suggestions: list[VocabularySuggestionDocument]
+
+
 class SpeechAnalysis(BaseModel):
     silence_analysis: SilenceAnalysis
     fillerwords_analysis: FillerWordsAnalysis
+    vocabulary_analysis: Optional[VocabularyAnalysisDocument] = None
 
 
 class AudioAnalysis(BaseModel):
