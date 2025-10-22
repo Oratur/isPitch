@@ -4,6 +4,7 @@ from ...domain.models.analysis import (
     SpeechAnalysis,
 )
 from ...domain.models.fillerwords import FillerWordPosition, FillerWordsAnalysis
+from ...domain.models.lexical_richness import LexicalRichnessAnalysis
 from ...domain.models.silence import Silence, SilenceAnalysis
 from ...domain.models.transcription import Segment, Transcription, Word
 from ...domain.models.vocabulary import VocabularyAnalysis, VocabularySuggestion
@@ -148,6 +149,9 @@ class SpeechAnalysisDocumentMapper:
             vocabulary_analysis=SpeechAnalysisDocumentMapper._map_vocabulary_analysis(
                 getattr(entity, 'vocabulary_analysis', None)
             ),
+            lexical_richness_analysis=SpeechAnalysisDocumentMapper._map_lexical_richness_analysis(
+                getattr(entity, 'lexical_richness_analysis', None)
+            ),
         )
 
     @staticmethod
@@ -213,6 +217,16 @@ class SpeechAnalysisDocumentMapper:
         )
 
     @staticmethod
+    def _map_lexical_richness_analysis(lra: LexicalRichnessAnalysis):
+        if lra is None:
+            return None
+        return analysis_document.LexicalRichnessAnalysisDocument(
+            type_token_ratio=getattr(lra, 'type_token_ratio', 0.0),
+            unique_words=getattr(lra, 'unique_words', 0),
+            total_words=getattr(lra, 'total_words', 0),
+        )
+
+    @staticmethod
     def from_document(document):
         if document is None:
             return None
@@ -225,6 +239,9 @@ class SpeechAnalysisDocumentMapper:
             ),
             vocabulary_analysis=SpeechAnalysisDocumentMapper._map_vocabulary_analysis_from_document(
                 getattr(document, 'vocabulary_analysis', None)
+            ),
+            lexical_richness_analysis=SpeechAnalysisDocumentMapper._map_lexical_richness_analysis_from_document(
+                getattr(document, 'lexical_richness_analysis', None)
             ),
         )
 
@@ -291,6 +308,18 @@ class SpeechAnalysisDocumentMapper:
             word=getattr(vs_doc, 'word', ''),
             count=getattr(vs_doc, 'count', 0),
             alternatives=getattr(vs_doc, 'alternatives', []),
+        )
+
+    @staticmethod
+    def _map_lexical_richness_analysis_from_document(
+        lra_doc: analysis_document.LexicalRichnessAnalysisDocument,
+    ):
+        if lra_doc is None:
+            return None
+        return LexicalRichnessAnalysis(
+            type_token_ratio=getattr(lra_doc, 'type_token_ratio', 0.0),
+            unique_words=getattr(lra_doc, 'unique_words', 0),
+            total_words=getattr(lra_doc, 'total_words', 0),
         )
 
 

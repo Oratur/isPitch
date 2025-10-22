@@ -9,6 +9,7 @@ from ...application.dependencies.models import (
 from ...domain.ports.input import (
     AnalysisOrchestratorPort,
     AudioAnalysisPort,
+    LexicalRichnessPort,
     SpeechAnalysisPort,
     VocabularyAnalysisPort,
 )
@@ -26,6 +27,7 @@ from ...domain.services.analysis_orchestrator_service import (
     AnalysisOrchestratorService,
 )
 from ...domain.services.audio_analysis_service import AudioAnalysisService
+from ...domain.services.lexical_richness_service import LexicalRichnessService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
 from ...domain.services.vocabulary_analysis_service import (
     VocabularyAnalysisService,
@@ -111,3 +113,8 @@ def get_synonym_provider() -> SynonymProviderPort:
 @lru_cache(maxsize=1)
 def get_vocabulary_analysis_port() -> VocabularyAnalysisPort:
     return VocabularyAnalysisService(get_synonym_provider())
+
+
+@lru_cache(maxsize=1)
+def get_lexical_richness_port() -> LexicalRichnessPort:
+    return LexicalRichnessService()

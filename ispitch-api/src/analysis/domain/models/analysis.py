@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Optional
 
 from .fillerwords import FillerWordsAnalysis
+from .lexical_richness import LexicalRichnessAnalysis
 from .silence import SilenceAnalysis
 from .transcription import Transcription
 from .vocabulary import VocabularyAnalysis
@@ -13,6 +14,7 @@ class SpeechAnalysis:
     silence_analysis: SilenceAnalysis
     fillerwords_analysis: FillerWordsAnalysis
     vocabulary_analysis: Optional[VocabularyAnalysis] = None
+    lexical_richness_analysis: Optional[LexicalRichnessAnalysis] = None
 
 
 @dataclass

@@ -11,6 +11,7 @@ from ..models.events import SseEvent
 from ..ports.input import (
     AsyncAnalysisOrchestratorPort,
     AudioAnalysisPort,
+    LexicalRichnessPort,
     SpeechAnalysisPort,
     VocabularyAnalysisPort,
 )
@@ -32,6 +33,7 @@ class AnalysisPort:
     speech_analysis_port: SpeechAnalysisPort
     audio_analysis_port: AudioAnalysisPort
     vocabulary_analysis_port: VocabularyAnalysisPort
+    lexical_richness_port: LexicalRichnessPort
     notification_port: NotificationPort
 
 
@@ -45,6 +47,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         self._speech_analysis_port = ports.speech_analysis_port
         self._audio_analysis_port = ports.audio_analysis_port
         self._vocabulary_analysis_port = ports.vocabulary_analysis_port
+        self._lexical_richness_port = ports.lexical_richness_port
         self._notification_port = ports.notification_port
 
     async def execute(self) -> Analysis:
@@ -72,12 +75,14 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         silence = self._speech_analysis_port.detect_silences(transcription)
         filler = self._speech_analysis_port.detect_fillerwords(transcription)
         vocabulary = self._analyze_vocabulary(transcription)
+        lexical_richness = self._lexical_richness_port.analyze(transcription)
 
         logger.info(f'[{self.analysis_id}] Speech analysis completed')
         return SpeechAnalysis(
             silence_analysis=silence,
             fillerwords_analysis=filler,
             vocabulary_analysis=vocabulary,
+            lexical_richness_analysis=lexical_richness,
         )
 
     def _analyze_vocabulary(self, transcription):
