@@ -240,7 +240,7 @@ class SpeechAnalysisDocumentMapper:
             vocabulary_analysis=SpeechAnalysisDocumentMapper._map_vocabulary_analysis_from_document(
                 getattr(document, 'vocabulary_analysis', None)
             ),
-            lexical_richness_analysis=SpeechAnalysisDocumentMapper._map_lexical_richness_analysis(
+            lexical_richness_analysis=SpeechAnalysisDocumentMapper._map_lexical_richness_analysis_from_document(
                 getattr(document, 'lexical_richness_analysis', None)
             ),
         )
