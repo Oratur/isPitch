@@ -28,7 +28,6 @@ const audioValidator = (file: File) => {
   return null;
 };
 
-
 export function AudioDropzone({ onFileAccepted, onValidationError }: AudioDropzoneProps) {
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -57,50 +56,49 @@ export function AudioDropzone({ onFileAccepted, onValidationError }: AudioDropzo
     validator: audioValidator,
   });
 
-  const getBorderColor = () => {
-    if (isDragReject) return 'error.main';
-    if (isDragActive) return 'primary.main';
-    return 'grey.400';
-  };
-
   return (
-    <Box className="text-center">
+    <Box sx={{ textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Análise de Áudio
       </Typography>
-      <Typography variant="body1" color="text.secondary">
-        Faça upload de um arquivo de áudio nos formatos <b>.mp3</b> ou <b>.wav</b> para análise. 
-        Você pode selecionar um arquivo do seu computador ou arrastar e soltar aqui.
+      
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+        Faça upload de um arquivo de áudio nos formatos{' '}
+        <Typography component="span" fontWeight={600} color="text.primary">
+          .mp3
+        </Typography>
+        {' '}ou{' '}
+        <Typography component="span" fontWeight={600} color="text.primary">
+          .wav
+        </Typography>
+        {' '}para análise. Você pode selecionar um arquivo do seu computador ou arrastar e soltar aqui.
       </Typography>
 
       <Paper
         {...getRootProps()}
-        variant="outlined"
-        sx={{
-          borderStyle: 'dashed',
-          borderWidth: 2,
-          borderColor: getBorderColor(),
-          backgroundColor: isDragActive ? 'action.hover' : 'transparent',
-          cursor: 'pointer',
-          p: { xs: 4, sm: 6 },
-          mt: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          transition: 'border-color 0.2s, background-color 0.2s',
-        }}
+        variant="dropzone"
+        data-active={isDragActive}
+        data-reject={isDragReject}
       >
         <input {...getInputProps({ name: 'file' })} />
+        
         <UploadCloud
           size={48}
-          className={`mb-4 transition-colors ${
-            isDragActive ? 'text-blue-500' : 'text-gray-400'
-          }`}
+          style={{
+            marginBottom: '1rem',
+            color: isDragActive ? 'var(--mui-palette-primary-main)' : 'var(--mui-palette-text-secondary)',
+            transition: 'color 0.3s ease',
+          }}
         />
-        <Button variant="contained" size="large" component="span">
+        
+        <Button
+          variant="button1"
+          size="large"
+          component="span"
+        >
           Selecionar Arquivo de Áudio
         </Button>
+        
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
           ou arraste e solte aqui
         </Typography>

@@ -4,6 +4,9 @@ import { useState } from 'react';
 import { Box, Card, CardContent, CardHeader, IconButton, Tooltip, Typography } from '@mui/material';
 import { Check, Copy, Highlighter } from 'lucide-react';
 import { FillerwordAnalysis } from '@/types/analysis';
+import theme from '@/styles/theme';
+import React from 'react';
+import { FileText } from 'lucide-react';
 
 interface TranscriptionCardProps {
   transcription: string;
@@ -57,44 +60,49 @@ export function TranscriptionCard({ transcription, fillerWords }: TranscriptionC
   const hasFillerWords = fillerWords && fillerWords.total > 0;
 
   return (
-    <Card elevation={2} sx={{ borderRadius: 3 }}>
+    <Card elevation={2} variant="card1"
+    sx={{
+      borderColor: theme.palette.purple.light2
+    }}
+    >
       <CardHeader
-        title={<Typography variant="h6">Transcrição</Typography>}
+        title={<
+          Typography variant="h1">
+            Transcrição
+          </Typography>}
+          avatar={<FileText size={24} color={theme.palette.purple.light1}/>}
        
         action={
-          <Box>
+          <Box >
             {hasFillerWords && (
               <Tooltip title={highlight ? 'Remover Destaque' : 'Destacar Vícios de Linguagem'} placement="top">
                 <IconButton onClick={toggleHighlight} size="small" sx={{ mr: 1}}>
-                  <Highlighter size={20} color={highlight ? 'blue' : 'gray'} />
+                  <Highlighter size={25} color={highlight ? '#7F13EC' : 'gray'} />
                 </IconButton>
               </Tooltip>
             )}
             <Tooltip title={copied ? 'Copiado!' : 'Copiar'} placement="top">
               <IconButton onClick={handleCopy} size="small">
-                {copied ? <Check size={20} className="text-green-500" /> : <Copy size={20} />}
+                {copied ? <Check size={25} className="text-green-500" /> : <Copy size={25} />}
               </IconButton>
             </Tooltip>
           </Box>
         }
-        sx={{ bgcolor: 'grey.100' }}
       />
       <CardContent>
-        <Box
+        {<Box
           sx={{
-            bgcolor: 'grey.50',
-            border: 1,
-            borderColor: 'grey.200',
+            bgcolor: theme.palette.purple.light2,
             borderRadius: 2,
             p: 2,
             maxHeight: 400, 
             overflowY: 'auto',
             whiteSpace: 'pre-wrap',
-            typography: 'body2',
-            color: 'text.secondary',
+            typography: 'body1',
+            color: theme.palette.background.paper,
             '& mark': {
-              backgroundColor: 'yellow',
-              color: 'black',
+              backgroundColor: theme.palette.purple.main,
+              color: 'white',
               padding: '0.2em',
               borderRadius: '0.2em',
             },
@@ -102,6 +110,7 @@ export function TranscriptionCard({ transcription, fillerWords }: TranscriptionC
         >
           {getHighlightedText()}
         </Box>
+        }
       </CardContent>
     </Card>
   );

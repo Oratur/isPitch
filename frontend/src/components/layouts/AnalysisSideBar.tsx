@@ -69,62 +69,100 @@
 //     </Drawer>
 //   );
 // }
-
 'use client';
 
 import { Box, Typography, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { FileText, BarChart2 } from 'lucide-react';
+import MyBox from './MyBox';
+import theme from '@/styles/theme';
 
 interface AnalysisSidebarProps {
   fileName: string;
   basePath: string; // Ex: /analysis/some-id
 }
 
-const navItems = [
-  { text: 'Transcrição', href: 'transcription', icon: <FileText size={20} /> },
-  { text: 'Métricas', href: 'analytics', icon: <BarChart2 size={20} /> },
-];
-
 export function AnalysisSidebar({ fileName, basePath }: AnalysisSidebarProps) {
   const searchParams = useSearchParams();
   const currentView = searchParams.get('view') || 'transcription';
 
+  const navItems = [
+    { text: 'Transcrição', href: 'transcription', icon: <FileText size={20} color={theme.palette.purple.light1} /> },
+    { text: 'Métricas', href: 'analytics', icon: <BarChart2 size={20} color={theme.palette.purple.light1}/> },
+  ];
+
+
   return (
-    <Box
+    <MyBox
+      variant="sideBar"
       component="aside"
       sx={{
-        width: 280,
-        borderRight: '1px solid',
-        borderColor: 'divider',
-        p: 2,
-        backgroundColor: 'background.paper',
         display: { xs: 'none', md: 'flex' }, // Esconde em telas pequenas
-        flexDirection: 'column',
+        borderColor: theme.palette.purple.light1 // borda direita da Sidebar
       }}
     >
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h6" noWrap>Análise de Áudio</Typography>
-        <Typography variant="body2" color="text.secondary" noWrap>
+        <Typography variant="h5" noWrap>
+          Análise de Áudio
+        </Typography>
+        <Typography variant="body2" noWrap>
           Arquivo: <strong>{fileName}</strong>
         </Typography>
       </Box>
 
-      <List component="nav">
+      <List component="nav" sx={{ width: '100%' }}>
         {navItems.map((item) => (
-          <ListItem key={item.text} disablePadding>
+          <ListItem key={item.text} disablePadding sx={{ mb: 1 }}>
             <ListItemButton
               component={Link}
               href={`${basePath}?view=${item.href}`}
               selected={currentView === item.href}
+              sx={{
+                borderRadius: '8px',
+                transition: 'all 0.3s ease',
+
+                // Texto padrão
+                '& .MuiListItemText-primary': {
+                  fontSize: '0.95rem',
+                  fontWeight: 500,
+                  color: theme.palette.purple.light1,
+                },
+
+                // Quando selecionado
+                '&.Mui-selected': {
+                  backgroundColor: 'rgba(127, 19, 236, 0.15)', // Roxo com transparência
+                  borderLeft: '4px solid #7F13EC',
+                  paddingLeft: 'calc(16px - 4px)', // Ajusta padding para a borda não deslocar
+
+                  '& .MuiListItemText-primary': {
+                    fontWeight: 700,
+                    color: theme.palette.purple.contrastText,
+                  },
+
+                  '& .MuiListItemIcon-root': {
+                    color: '#7F13EC',
+                  },
+
+                  '&:hover': {
+                    backgroundColor: 'rgba(127, 19, 236, 0.25)',
+                  },
+                },
+
+                // Hover quando não selecionado
+                '&:hover:not(.Mui-selected)': {
+                  backgroundColor: 'rgba(127, 19, 236, 0.08)',
+                },
+              }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemIcon sx={{ minWidth: '40px' }}>
+                {item.icon}
+              </ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-    </Box>
+    </MyBox>
   );
 }

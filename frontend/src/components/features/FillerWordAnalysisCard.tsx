@@ -12,8 +12,9 @@ import {
   Divider,
 } from '@mui/material';
 import { FillerwordAnalysis } from '@/types/analysis';
-import { BarChart3 } from 'lucide-react';
+import { Mic } from 'lucide-react';
 import React, { useState } from 'react';
+import theme from '@/styles/theme';
 
 interface FillerWordAnalysisCardProps {
   analysis: FillerwordAnalysis;
@@ -32,15 +33,18 @@ export function FillerWordAnalysisCard({ analysis }: FillerWordAnalysisCardProps
   };
 
   return (
-    <Card elevation={2} sx={{ borderRadius: 3, height: '100%' }}>
+    <Card elevation={2} variant='card1' >
       <CardHeader
-        title={<Typography variant="h6">Vícios de Linguagem</Typography>}
-        avatar={<BarChart3 size={24} className="text-gray-500" />}
-        sx={{ bgcolor: 'grey.100' }}
+        sx={{ bgcolor: theme.palette.purple.light2 }}
+
+        title={<Typography variant="h1">
+          Vícios de Linguagem
+        </Typography>}
+        avatar={<Mic size={24} color={theme.palette.purple.light1}/>}
       />
       <CardContent>
         <Box sx={{ textAlign: 'center', mb: 2 }}>
-          <Typography variant="h3" fontWeight="bold" color="primary">
+          <Typography variant="h3" fontWeight="bold" color={theme.palette.purple.main}>
             {analysis.total}
             <Typography variant="h6" component='span' color="text.secondary" sx={{ ml: 1 }}>
               Total Encontrado
@@ -53,21 +57,21 @@ export function FillerWordAnalysisCard({ analysis }: FillerWordAnalysisCardProps
         <Box sx={{ maxWidth: 280, mx: 'auto' }}>
           {sortedFillerWords.length > 0 ? (
             <>
-              <List dense sx={{ width: '100%', p: 0 }}>
-                {itemsToShow.map(([word, count]) => (
+              <List dense sx={{ width: '100%', p: 0 }}> 
+                {itemsToShow.map(([word, count]) => (   //verificar para aumentar fonte dos fillerwords
                   <ListItem
                     key={word}
                     disableGutters
-                    secondaryAction={<Chip label={count} size="small" />}
+                    secondaryAction={<Chip label={count} size="medium" />}
                   >
                     <ListItemText primary={word} />
                   </ListItem>
                 ))}
               </List>
-              
+
               {sortedFillerWords.length > 3 && (
                 <Box sx={{ textAlign: 'center', mt: 1 }}>
-                  <Button size="small" onClick={toggleExpansion}>
+                  <Button variant="button1" onClick={toggleExpansion}>
                     {isExpanded ? 'Ver menos' : 'Ver todos'}
                   </Button>
                 </Box>

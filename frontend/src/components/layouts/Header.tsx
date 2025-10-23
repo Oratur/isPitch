@@ -1,17 +1,20 @@
-// src/components/layouts/Header.tsx
 import { AppBar, Toolbar } from '@mui/material';
 import { Logo } from './Logo';
+import theme from '@/styles/theme';
+
 
 export function Header() {
   return (
     <AppBar
       position="static"
-      color="default"
       elevation={0}
-      sx={{ borderBottom: 1, borderColor: 'divider' }}
+      sx={{ 
+        borderBottom: 1, 
+        borderColor: '#BA9BDA',
+      }}
     >
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Logo/>
+      <Toolbar variant="toolbar1" sx={{ bgcolor: theme.palette.purple.dark}}>
+        <Logo />
       </Toolbar>
     </AppBar>
   );
