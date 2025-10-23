@@ -46,7 +46,7 @@ const MyBox = styled(Box, {
     borderRight: '1px solid',
     borderColor: 'divider',
     p: 2,
-    backgroundColor: theme.palette.purple.light,
+    backgroundColor: theme.palette.purple.light2,
     flexDirection: 'column',
     padding: theme.spacing(3),
   }),

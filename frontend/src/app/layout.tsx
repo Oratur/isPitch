@@ -26,7 +26,6 @@ const brunoAce = Bruno_Ace_SC({
   weight: '400',
 });
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,12 +49,12 @@ export default function RootLayout({
       <head>
         <title>isPitch</title>
       </head>
-      <body 
+      <body
         className={`${geistSans.variable} ${geistMono.variable} ${brunoAce.variable}`}>
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={muiTheme}>
-            <Toaster 
-              position='bottom-left' 
+            <Toaster
+              position='bottom-left'
               toastOptions={{
                 duration: 5000
               }}
@@ -63,11 +62,11 @@ export default function RootLayout({
             <QueryProvider>
               <CssBaseline />
               <div className='flex flex-col min-h-screen'>
-                <Header/>
+                <Header />
                 <main className='flex-grow flex flex-col'>
                   {children}
                 </main>
-                <Footer/>
+                <Footer />
               </div>
             </QueryProvider>
           </ThemeProvider>
