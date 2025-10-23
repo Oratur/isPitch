@@ -77,7 +77,7 @@ export default function AnalysisPage() {
           </Grid>
         </Grid>
       ) : (
-        <TranscriptionCard
+        <TranscriptionCard 
           transcription={analysis.transcription ?? 'Transcrição não disponível.'}
           fillerWords={analysis.speechAnalysis.fillerwordsAnalysis}
         />
