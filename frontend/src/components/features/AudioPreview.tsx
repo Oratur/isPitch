@@ -12,6 +12,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { FileAudio, Send, Trash2 } from 'lucide-react';
+import MyBox from '../layouts/MyBox';
 
 interface AudioPreviewProps {
   audioFile: File;
@@ -47,35 +48,26 @@ export default function AudioPreview({
   isLoading,
 }: AudioPreviewProps) {
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: 3,
-        width: '100%',
-        maxWidth: '600px',
-        textAlign: 'center',
-      }}
+    <MyBox
     >
-      <Typography variant="h5" component="h2">
+      <Typography variant="subtitle1" component="h2">
         Pré-visualização do Áudio
       </Typography>
 
-      <Card variant="outlined" sx={{ width: '100%' }}>
+      <Card variant="card1">
         <CardContent>
           <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-            <FileAudio size={24} className="text-gray-600 flex-shrink-0" />
-            <Box sx={{ flexGrow: 1, textAlign: 'left', overflow: 'hidden' }}>
+            <FileAudio size={25} className="text-gray-600 flex-shrink-0" style={{ color: 'var(--color-text)'}}/>
+            <Box sx={{ flexGrow: 1, textAlign: 'left', overflow: 'hidden', color: 'var(--color-text)' }}>
               <Typography variant="body1" fontWeight="medium" noWrap>
                 {audioFile.name}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color='var(--color-text)'>
                 {(audioFile.size / (1024 * 1024)).toFixed(2)} MB
               </Typography>
             </Box>
             <IconButton size="small" onClick={onCancel} disabled={isLoading}>
-              <Trash2 size={18} />
+              <Trash2 size={25} color='var(--color-text)' />
             </IconButton>
           </Stack>
           <AudioPlayer audioFile={audioFile} />
@@ -83,15 +75,14 @@ export default function AudioPreview({
       </Card>
 
       <Button
-        variant="contained"
+        variant="button1"
         size="large"
         endIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <Send />}
         onClick={onSend}
         disabled={isLoading}
-        sx={{ minWidth: '200px' }}
       >
         {isLoading ? 'Analisando...' : 'Analisar Áudio'}
       </Button>
-    </Box>
+    </MyBox>
   );
 }

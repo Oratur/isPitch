@@ -11,14 +11,21 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="w-full border-t border-gray-200 py-4 mt-auto bg-gray-100">
+    <footer className="w-full border-t border-gray-200 py-4 mt-auto bg-gray-100"
+      style={{
+        backgroundColor: 'var(--color-bg)',
+        borderBottom: 1, 
+        borderColor: '#BA9BDA',
+        color: 'var(--color-bg)'
+      }}
+      >
       <Container
         maxWidth="lg"
         className="flex flex-col sm:flex-row items-center justify-between gap-4"
       >
         <Typography
           variant="body2"
-          color="text.secondary"
+          color="text.primary"
           sx={{ fontFamily: 'var(--font-bruno-ace)' }}
         >
           © isPitch 2025
@@ -26,7 +33,7 @@ export function Footer() {
         <Stack
           direction="row"
           spacing={2}
-          divider={<Divider orientation="vertical" flexItem />}
+          divider={<Divider orientation="vertical" flexItem sx={{ borderColor: 'var(--color-text)' }} />}        
         >
           {footerLinks.map((item) => (
             <MuiLink
@@ -36,7 +43,12 @@ export function Footer() {
               variant="body2"
               underline="none"
               className="hover:text-blue-500 transition-colors"
-              sx={{ color: 'text.secondary' }}
+              sx={{ 
+                color: 'var(--color-text)',
+                '&:hover': {
+                  color: 'var(--color-button-1)'
+                } 
+              }}
             >
               {item.label}
             </MuiLink>
