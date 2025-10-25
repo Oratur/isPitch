@@ -6,6 +6,7 @@ from ...domain.models.analysis import (
 from ...domain.models.fillerwords import FillerWordPosition, FillerWordsAnalysis
 from ...domain.models.lexical_richness import LexicalRichnessAnalysis
 from ...domain.models.silence import Silence, SilenceAnalysis
+from ...domain.models.topic import Topic, TopicAnalysis
 from ...domain.models.transcription import Segment, Transcription, Word
 from ...domain.models.vocabulary import VocabularyAnalysis, VocabularySuggestion
 from ..persistance.documents import analysis_document
@@ -152,6 +153,9 @@ class SpeechAnalysisDocumentMapper:
             lexical_richness_analysis=SpeechAnalysisDocumentMapper._map_lexical_richness_analysis(
                 getattr(entity, 'lexical_richness_analysis', None)
             ),
+            topic_analysis=SpeechAnalysisDocumentMapper._map_topic_analysis(
+                getattr(entity, 'topic_analysis', None)
+            ),
         )
 
     @staticmethod
@@ -227,6 +231,24 @@ class SpeechAnalysisDocumentMapper:
         )
 
     @staticmethod
+    def _map_topic_analysis(ta: TopicAnalysis):
+        if ta is None:
+            return None
+        return analysis_document.TopicAnalysisDocument(
+            topics=map_list(
+                getattr(ta, 'topics', []),
+                SpeechAnalysisDocumentMapper._map_topic,
+            )
+        )
+
+    @staticmethod
+    def _map_topic(topic: Topic):
+        return analysis_document.TopicDocument(
+            topic=getattr(topic, 'topic', ''),
+            summary=getattr(topic, 'summary', ''),
+        )
+
+    @staticmethod
     def from_document(document):
         if document is None:
             return None
@@ -242,6 +264,9 @@ class SpeechAnalysisDocumentMapper:
             ),
             lexical_richness_analysis=SpeechAnalysisDocumentMapper._map_lexical_richness_analysis_from_document(
                 getattr(document, 'lexical_richness_analysis', None)
+            ),
+            topic_analysis=SpeechAnalysisDocumentMapper._map_topic_analysis_from_document(
+                getattr(document, 'topic_analysis', None)
             ),
         )
 
@@ -320,6 +345,28 @@ class SpeechAnalysisDocumentMapper:
             type_token_ratio=getattr(lra_doc, 'type_token_ratio', 0.0),
             unique_words=getattr(lra_doc, 'unique_words', 0),
             total_words=getattr(lra_doc, 'total_words', 0),
+        )
+
+    @staticmethod
+    def _map_topic_analysis_from_document(
+        ta_doc: analysis_document.TopicAnalysisDocument,
+    ):
+        if ta_doc is None:
+            return None
+        return TopicAnalysis(
+            topics=map_list(
+                getattr(ta_doc, 'topics', []),
+                SpeechAnalysisDocumentMapper._map_topic_from_document,
+            )
+        )
+
+    @staticmethod
+    def _map_topic_from_document(
+        topic_doc: analysis_document.TopicDocument,
+    ):
+        return Topic(
+            topic=getattr(topic_doc, 'topic', ''),
+            summary=getattr(topic_doc, 'summary', ''),
         )
 
 

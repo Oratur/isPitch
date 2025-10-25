@@ -3,14 +3,18 @@ from typing import AsyncIterator
 
 from ...application.dependencies.models import (
     get_spacy_model,
+    get_summarizer_model,
+    get_summarizer_tokenizer,
     get_whisper_model,
-    load_nltk_resources,
+    load_nltk_synonym_resources,
+    load_nltk_tokenizer,
 )
 from ...domain.ports.input import (
     AnalysisOrchestratorPort,
     AudioAnalysisPort,
     LexicalRichnessPort,
     SpeechAnalysisPort,
+    TopicAnalysisPort,
     VocabularyAnalysisPort,
 )
 from ...domain.ports.output import (
@@ -20,6 +24,7 @@ from ...domain.ports.output import (
     StoragePort,
     SynonymProviderPort,
     TaskQueuePort,
+    TopicModelPort,
     TranscriptionPort,
 )
 from ...domain.services.analysis_orchestrator_service import (
@@ -29,6 +34,7 @@ from ...domain.services.analysis_orchestrator_service import (
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.lexical_richness_service import LexicalRichnessService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
+from ...domain.services.topic_analysis_service import TopicAnalysisService
 from ...domain.services.vocabulary_analysis_service import (
     VocabularyAnalysisService,
 )
@@ -38,6 +44,9 @@ from ...infrastructure.adapters.speech.fillerwords_analysis_adapter import (
 )
 from ...infrastructure.adapters.task_queue.celery_adapter import (
     CeleryTaskQueueAdapter,
+)
+from ...infrastructure.adapters.topics.huggingface_adapter import (
+    HuggingFaceTopicAdapter,
 )
 from ...infrastructure.adapters.transcription.whisper_adapter import (
     WhisperAdapter,
@@ -106,7 +115,7 @@ async def get_sse_adapter() -> AsyncIterator[RedisSSEAdapter]:
 
 @lru_cache(maxsize=1)
 def get_synonym_provider() -> SynonymProviderPort:
-    load_nltk_resources()
+    load_nltk_synonym_resources()
     return NltkSynonymProviderAdapter()
 
 
@@ -118,3 +127,16 @@ def get_vocabulary_analysis_port() -> VocabularyAnalysisPort:
 @lru_cache(maxsize=1)
 def get_lexical_richness_port() -> LexicalRichnessPort:
     return LexicalRichnessService()
+
+
+@lru_cache(maxsize=1)
+def get_topic_model_port() -> TopicModelPort:
+    return HuggingFaceTopicAdapter(
+        tokenizer=get_summarizer_tokenizer(), model=get_summarizer_model()
+    )
+
+
+@lru_cache(maxsize=1)
+def get_topic_analysis_port() -> TopicAnalysisPort:
+    load_nltk_tokenizer()
+    return TopicAnalysisService(get_topic_model_port())

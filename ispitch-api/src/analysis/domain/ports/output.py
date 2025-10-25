@@ -6,6 +6,7 @@ from src.analysis.domain.models.analysis import Analysis
 
 from ..models.events import SseEvent
 from ..models.fillerwords import FillerWordsAnalysis
+from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
 
 
@@ -74,4 +75,10 @@ class TaskQueuePort(ABC):
 class SynonymProviderPort(ABC):
     @abstractmethod
     def get_synonyms(self, word: str) -> list[str]:
+        pass
+
+
+class TopicModelPort(ABC):
+    @abstractmethod
+    def extract_topics(self, text: str) -> TopicAnalysis:
         pass

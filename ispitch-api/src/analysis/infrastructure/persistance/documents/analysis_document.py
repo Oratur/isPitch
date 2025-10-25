@@ -64,11 +64,21 @@ class LexicalRichnessAnalysisDocument(BaseModel):
     total_words: int
 
 
+class TopicDocument(BaseModel):
+    topic: str
+    summary: str
+
+
+class TopicAnalysisDocument(BaseModel):
+    topics: list[TopicDocument]
+
+
 class SpeechAnalysis(BaseModel):
     silence_analysis: SilenceAnalysis
     fillerwords_analysis: FillerWordsAnalysis
     vocabulary_analysis: Optional[VocabularyAnalysisDocument] = None
     lexical_richness_analysis: Optional[LexicalRichnessAnalysisDocument] = None
+    topic_analysis: Optional[TopicAnalysisDocument] = None
 
 
 class AudioAnalysis(BaseModel):

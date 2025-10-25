@@ -6,6 +6,7 @@ from ..models.analysis import Analysis
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.lexical_richness import LexicalRichnessAnalysis
 from ..models.silence import SilenceAnalysis
+from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
 from ..models.vocabulary import VocabularyAnalysis
 
@@ -66,4 +67,10 @@ class VocabularyAnalysisPort(ABC):
 class LexicalRichnessPort(ABC):
     @abstractmethod
     def analyze(self, transcription: Transcription) -> LexicalRichnessAnalysis:
+        pass
+
+
+class TopicAnalysisPort(ABC):
+    @abstractmethod
+    def analyze(self, transcription: Transcription) -> TopicAnalysis:
         pass
