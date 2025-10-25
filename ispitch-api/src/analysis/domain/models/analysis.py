@@ -6,6 +6,7 @@ from .fillerwords import FillerWordsAnalysis
 from .lexical_richness import LexicalRichnessAnalysis
 from .silence import SilenceAnalysis
 from .topic import TopicAnalysis
+from .sentiment import SentimentAnalysis
 from .transcription import Transcription
 from .vocabulary import VocabularyAnalysis
 
@@ -17,6 +18,7 @@ class SpeechAnalysis:
     vocabulary_analysis: Optional[VocabularyAnalysis] = None
     lexical_richness_analysis: Optional[LexicalRichnessAnalysis] = None
     topic_analysis: Optional[TopicAnalysis] = None
+    sentiment_analysis: Optional[SentimentAnalysis] = None
 
 
 @dataclass
