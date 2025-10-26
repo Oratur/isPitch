@@ -36,7 +36,7 @@ def WHITESPACE_HANDLER(k):
 
 class HuggingFaceTopicAdapter(TopicModelPort):
     """
-    Adapter that uses Hugging Face AutoTokenizer and AutoModelForSeq2SeqLM
+    Adapter that uses Hugging Face T5Tokenizer and T5ForConditionalGeneration
     to segment text, summarize segments, and generate titles.
     """
 
@@ -140,40 +140,36 @@ class HuggingFaceTopicAdapter(TopicModelPort):
 
         cleaned_text = WHITESPACE_HANDLER(prompt)
 
-        try:
-            input_ids = self.tokenizer(
-                [cleaned_text],
-                return_tensors='pt',
-                padding='max_length',
-                truncation=True,
-                max_length=512,
-            )['input_ids'].to(self.device)
+        input_ids = self.tokenizer(
+            [cleaned_text],
+            return_tensors='pt',
+            padding='max_length',
+            truncation=True,
+            max_length=512,
+        )['input_ids'].to(self.device)
 
-            output_ids = self.model.generate(
-                input_ids=input_ids,
-                max_length=max_tokens,
-                min_length=min_tokens,
-                do_sample=True,
-                temperature=0.8,
-                top_p=0.9,
-                no_repeat_ngram_size=3,
-            )[0]
+        output_ids = self.model.generate(
+            input_ids=input_ids,
+            max_length=max_tokens,
+            min_length=min_tokens,
+            do_sample=True,
+            temperature=0.8,
+            top_p=0.9,
+            no_repeat_ngram_size=3,
+        )[0]
 
-            summary = self.tokenizer.decode(
-                output_ids,
-                skip_special_tokens=True,
-                clean_up_tokenization_spaces=False,
-            )
+        summary = self.tokenizer.decode(
+            output_ids,
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False,
+        )
 
-            # Remove o prompt se ele aparecer no output
-            summary = (
-                summary.replace('summarize:', '').replace('Resumir:', '').strip()
-            )
+        # Remove o prompt se ele aparecer no output
+        summary = (
+            summary.replace('summarize:', '').replace('Resumir:', '').strip()
+        )
 
-            return summary
-
-        except Exception:
-            return ''
+        return summary
 
     @staticmethod
     def _build_summarization_prompt(text: str) -> str:
@@ -193,6 +189,9 @@ class HuggingFaceTopicAdapter(TopicModelPort):
 
         summary_words = set(summary.lower().split())
         original_words = set(original.lower().split())
+
+        if len(original_words) == 0:
+            return False
 
         overlap = len(summary_words & original_words) / len(original_words)
 
