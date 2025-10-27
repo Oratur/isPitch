@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import { AnalysisSidebar } from './AnalysisSideBar';
+import theme from '@/styles/theme';
 
 
 interface AnalysisLayoutProps {
@@ -15,7 +16,9 @@ export function AnalysisLayout({ children, analysisId, fileName }: AnalysisLayou
         fileName={fileName}
         basePath={`/analysis/${analysisId}`}
       />
-      <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-gray-50 overflow-y-auto">
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-gray-50 overflow-y-auto"
+      style={{ backgroundColor: theme.palette.purple.dark 
+      }}>
         {children}
       </main>
     </Box>

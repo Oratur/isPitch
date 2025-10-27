@@ -3,6 +3,8 @@
 import { SilenceAnalysis } from '@/types/analysis';
 import { Card, CardContent, Divider, Stack, Typography, Box, CardHeader } from '@mui/material';
 import { BarChart3, Hourglass, Timer } from 'lucide-react';
+import theme from '@/styles/theme';
+
 
 interface SilenceAnalysisCardProps {
   silences: SilenceAnalysis;
@@ -10,16 +12,19 @@ interface SilenceAnalysisCardProps {
 
 export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardProps) {
   return (
-    <Card elevation={2} sx={{ borderRadius: 3, height: '100%' }}>
+    <Card elevation={2} variant='card1'>
+
       <CardHeader
-        title={<Typography variant="h6">Análise de Pausas e Silêncios</Typography>}
-        avatar={<BarChart3 size={24} className="text-gray-500" />}
-        sx={{ bgcolor: 'grey.100' }}
+        title={<Typography variant="h1">
+          Análise de Pausas e Silêncios
+        </Typography>}
+
+        avatar={<BarChart3 size={24} color={theme.palette.purple.light1}/>}
       />
       <CardContent>
         <Stack direction="row" spacing={4} sx={{ mb: 2, justifyContent: 'space-around' }}>
           <Box sx={{ textAlign: 'center' }}>
-            <Hourglass size={28} className="text-blue-500" />
+            <Hourglass size={30} color={theme.palette.purple.main} />
             <Typography variant="h3" component="p" fontWeight="bold">
               {silences.pauses}
             </Typography>
@@ -29,9 +34,9 @@ export default function SilenceAnalysisCard({ silences }: SilenceAnalysisCardPro
           </Box>
 
           <Box sx={{ textAlign: 'center' }}>
-            <Timer size={28} className="text-green-500" />
+            <Timer size={30} color={theme.palette.purple.main} />
             <Typography variant="h3" component="p" fontWeight="bold">
-                {silences.duration.toFixed(2)}
+              {silences.duration.toFixed(2)}
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Tempo Total em Pausa

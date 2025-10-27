@@ -11,7 +11,7 @@ export function Logo() {
         color: 'text.primary',
         textDecoration: 'none',
         transition: 'color 0.2s',
-        '&:hover': { color: 'primary.main' },
+        '&:hover': { color: 'var(--color-button-1)' },
         fontFamily: 'var(--font-bruno-ace)',
       }}
     >

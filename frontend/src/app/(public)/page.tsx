@@ -18,7 +18,7 @@ export default function HomePage() {
 
   return (
     <Container component="main" maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--color-text)' }}>
         {audioFile ? (
           <AudioPreview
             audioFile={audioFile}
