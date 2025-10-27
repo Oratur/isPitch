@@ -22,7 +22,7 @@ export default function SpeechRateCard({ speechRate }: SpeechRateCardProps) {
     return (
         <Card elevation={2} variant='card1'
             sx={{
-                height: '98%'
+                height: '99%'
             }}
         >
             <CardHeader
