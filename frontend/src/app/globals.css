@@ -20,20 +20,6 @@
   --color-button-1: #7F13EC;
 }
 
-/* dark theme overrides (activated when `html` has class "dark") */
-/* .dark {
-  --color-bg: #0b0a0d;
-  --color-surface: #111827;
-  --color-text: #F3F4F6;
-  --color-primary: #60a5fa;
-  --color-secondary: #c084fc;
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-error: #fb7185;
-  --color-accent: #2dd4bf;
-  --color-button-1: #7F13EC;
-} */
-
 body {
   background-color: var(--color-bg);
   color: var(--color-text);

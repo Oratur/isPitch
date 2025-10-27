@@ -2,10 +2,6 @@
 import { createTheme, Theme } from '@mui/material/styles';
 import './utils';
 
-/**
- * Cria o tema da aplicação com base no modo (light/dark)
- */
-
 declare module '@mui/material/styles' {
   interface Palette {
     purple: Palette['primary'] & {
@@ -23,11 +19,6 @@ declare module '@mui/material/styles' {
     brand?: PaletteOptions['primary'];
   }
 }
-
-  // interface CardHeaderProps {
-  //   variant?: 'cardHeader1' | 'primary' | 'secondary' | 'subtle' | 'dark';
-  // }
-
 
 export function getAppTheme(mode: 'light' | 'dark'): Theme {
   return createTheme({
@@ -301,7 +292,7 @@ export function getAppTheme(mode: 'light' | 'dark'): Theme {
           {
             props: { variant: 'toolbar1' },
             style: ({ theme }) => ({
-              backgroundColor: theme.palette.background.default,
+              backgroundColor: theme.palette.purple.dark,
               color: theme.palette.primary.contrastText,
               borderRadius: theme.shape.borderRadius,
               padding: theme.spacing(1.5, 3),
@@ -316,6 +307,7 @@ export function getAppTheme(mode: 'light' | 'dark'): Theme {
       MuiTypography: {
         styleOverrides: {
           root: {
+            
           },
 
           h4: {

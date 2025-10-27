@@ -14,7 +14,7 @@ export function Header() {
         borderColor: '#BA9BDA',
       }}
     >
-      <Toolbar variant="toolbar1" sx={{ bgcolor: theme.palette.purple.dark}}>
+      <Toolbar variant="toolbar1">
         <Logo />
       </Toolbar>
     </AppBar>

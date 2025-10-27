@@ -23,7 +23,7 @@ const MyBox = styled(Box, {
   }),
 
   ...(variant === 'cardTranscription' && {
-    backgroundColor: '#fff',
+    backgroundColor: theme.palette.background.paper,
     border: 1,
     borderRadius: 2,
     p: 2,
