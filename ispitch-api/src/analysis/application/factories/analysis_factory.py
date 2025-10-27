@@ -23,6 +23,7 @@ class AsyncAnalysisFactory:
         audio_analysis_port = deps.get_audio_analysis_port()
         vocabulary_analysis_port = deps.get_vocabulary_analysis_port()
         lexical_richness_port = deps.get_lexical_richness_port()
+        topic_analysis_port = deps.get_topic_analysis_port()
         analysis_repository = deps.get_analysis_repository()
         storage_port = deps.get_storage_port()
 
@@ -36,6 +37,7 @@ class AsyncAnalysisFactory:
                 audio_analysis_port=audio_analysis_port,
                 vocabulary_analysis_port=vocabulary_analysis_port,
                 lexical_richness_port=lexical_richness_port,
+                topic_analysis_port=topic_analysis_port,
                 notification_port=notification_port,
             ),
         )

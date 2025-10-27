@@ -8,6 +8,7 @@ from ..mappers.lexical_richness_analysis_schema_mapper import (
 from ..mappers.silence_analysis_schema_mapper import (
     SilenceAnalysisSchemaMapper,
 )
+from ..mappers.topic_analysis_schema_mapper import TopicAnalysisSchemaMapper
 from ..mappers.vocabulary_analysis_schema_mapper import (
     VocabularyAnalysisSchemaMapper,
 )
@@ -50,6 +51,12 @@ class AnalysisSchemaMapper:
                 )
                 if analysis.speech_analysis
                 and analysis.speech_analysis.lexical_richness_analysis
+                else None,
+                topic_analysis=TopicAnalysisSchemaMapper.from_model(
+                    analysis.speech_analysis.topic_analysis
+                )
+                if analysis.speech_analysis
+                and analysis.speech_analysis.topic_analysis
                 else None,
             ),
             audio_analysis=AudioAnalysisSchema(

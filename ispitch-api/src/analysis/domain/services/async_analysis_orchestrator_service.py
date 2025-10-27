@@ -13,6 +13,7 @@ from ..ports.input import (
     AudioAnalysisPort,
     LexicalRichnessPort,
     SpeechAnalysisPort,
+    TopicAnalysisPort,
     VocabularyAnalysisPort,
 )
 from ..ports.output import NotificationPort, TranscriptionPort
@@ -34,6 +35,7 @@ class AnalysisPort:
     audio_analysis_port: AudioAnalysisPort
     vocabulary_analysis_port: VocabularyAnalysisPort
     lexical_richness_port: LexicalRichnessPort
+    topic_analysis_port: TopicAnalysisPort
     notification_port: NotificationPort
 
 
@@ -48,6 +50,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         self._audio_analysis_port = ports.audio_analysis_port
         self._vocabulary_analysis_port = ports.vocabulary_analysis_port
         self._lexical_richness_port = ports.lexical_richness_port
+        self._topic_analysis_port = ports.topic_analysis_port
         self._notification_port = ports.notification_port
 
     async def execute(self) -> Analysis:
@@ -74,8 +77,9 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
 
         silence = self._speech_analysis_port.detect_silences(transcription)
         filler = self._speech_analysis_port.detect_fillerwords(transcription)
-        vocabulary = self._analyze_vocabulary(transcription)
+        vocabulary = self._vocabulary_analysis_port.analyze(transcription)
         lexical_richness = self._lexical_richness_port.analyze(transcription)
+        topics = self._topic_analysis_port.analyze(transcription)
 
         logger.info(f'[{self.analysis_id}] Speech analysis completed')
         return SpeechAnalysis(
@@ -83,11 +87,8 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
             fillerwords_analysis=filler,
             vocabulary_analysis=vocabulary,
             lexical_richness_analysis=lexical_richness,
+            topic_analysis=topics,
         )
-
-    def _analyze_vocabulary(self, transcription):
-        vocabulary = self._vocabulary_analysis_port.analyze(transcription)
-        return vocabulary
 
     async def _analyze_audio(
         self, transcription, speech_analysis: SpeechAnalysis
