@@ -14,6 +14,7 @@ class AsyncAnalysisFactory:
     @staticmethod
     def create_workflow_service(
         analysis_id: str,
+        user_id: str,
         audio_path: str,
         filename: str,
         notification_port: NotificationPort,
@@ -29,7 +30,7 @@ class AsyncAnalysisFactory:
 
         orchestrator = AsyncAnalysisOrchestratorService(
             config=AnalysisConfig(
-                analysis_id=analysis_id, audio_path=audio_path, filename=filename
+                analysis_id=analysis_id, user_id=user_id, audio_path=audio_path, filename=filename
             ),
             ports=AnalysisPort(
                 transcription_port=transcription_port,

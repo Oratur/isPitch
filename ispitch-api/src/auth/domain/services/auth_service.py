@@ -46,7 +46,12 @@ class AuthService(AuthPort):
             raise DomainException(
                 status.HTTP_401_UNAUTHORIZED, 'Invalid username or password'
             )
-
+        
+        if not user.active:
+            raise DomainException(
+                status.HTTP_403_FORBIDDEN, 'User account is inactive'
+            )
+        
         token = self.token_manager.create_access_token(
             data={'sub': str(user.id), 'name': user.name}
         )
