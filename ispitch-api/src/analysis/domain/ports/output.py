@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from fastapi import UploadFile
 
@@ -48,6 +49,10 @@ class AnalysisRepositoryPort(ABC):
         pass
 
     @abstractmethod
+    async def find_by_user_id(self, user_id: str) -> List[Analysis]:
+        pass
+
+    @abstractmethod
     def find_all(self) -> list[Analysis]:
         pass
 
@@ -67,7 +72,7 @@ class NotificationPort(ABC):
 class TaskQueuePort(ABC):
     @abstractmethod
     def enqueue_analysis(
-        self, analysis_id: str, audio_path: str, filename: str
+        self, analysis_id: str, user_id: str, audio_path: str, filename: str
     ) -> None:
         pass
 

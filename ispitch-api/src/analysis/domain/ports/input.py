@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from fastapi import BackgroundTasks, UploadFile
 
@@ -19,11 +20,15 @@ class AnalysisOrchestratorPort(ABC):
         pass
 
     @abstractmethod
-    def initiate_analysis(self, file: UploadFile) -> str:
+    def initiate_analysis(self, file: UploadFile, user_id: str) -> str:
         pass
 
     @abstractmethod
     def get_by_id(self, analysis_id: str) -> Analysis:
+        pass
+
+    @abstractmethod
+    async def get_by_user_id(self, user_id: str) -> List[Analysis]:
         pass
 
 

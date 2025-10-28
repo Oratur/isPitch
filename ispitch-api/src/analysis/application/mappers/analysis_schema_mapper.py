@@ -24,6 +24,7 @@ class AnalysisSchemaMapper:
     def from_model(analysis: Analysis) -> AnalysisSchema:
         return AnalysisSchema(
             id=analysis.id,
+            user_id=analysis.user_id,
             status=analysis.status,
             filename=analysis.filename,
             transcription=analysis.transcription.text

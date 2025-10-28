@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from typing import List
 
 from ..models.analysis import (
     Analysis,
@@ -42,9 +43,10 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
         self.analysis_repository_port = deps.analysis_repository_port
         self.task_queue_port = deps.task_queue_port
 
-    async def initiate_analysis(self, file) -> str:
+    async def initiate_analysis(self, file, user_id: str) -> str:
         analysis = Analysis(
             id=None,
+            user_id=user_id,
             status=AnalysisStatus.PENDING,
             filename=file.filename,
             transcription=None,
@@ -57,6 +59,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
 
         self.task_queue_port.enqueue_analysis(
             analysis_id=new_analysis.id,
+            user_id=user_id,
             audio_path=temp_audio_path,
             filename=file.filename,
         )
@@ -108,6 +111,23 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
                 speech_analysis=None,
                 audio_analysis=None,
             )
+
+    async def get_by_user_id(self, user_id: str) -> List[Analysis]:
+        """
+        Retrieves all analyses for a specific user by their user ID.
+        Args:
+            user_id (str): The unique ID of the user.
+        Returns:
+            List[Analysis]: A list of analyses associated with the user.
+        """
+        try:
+            analyses = await self.analysis_repository_port.find_by_user_id(
+                user_id
+            )
+            return analyses
+        except Exception as e:
+            logger.error(f'Error retrieving analyses {user_id}: {str(e)}')
+            raise
 
     async def _run_analysis(
         self, analysis_id: str, audio_path: str, filename: str

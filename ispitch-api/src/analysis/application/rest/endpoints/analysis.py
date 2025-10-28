@@ -9,6 +9,7 @@ from fastapi import (
     status,
 )
 
+from .....auth.application.dependencies.security import authentication
 from ....application.dependencies.services import (
     get_analysis_orchestrator,
     get_sse_adapter,
@@ -79,8 +80,9 @@ async def get_by_id(
 async def initiate(
     file: Annotated[UploadFile, Depends(validate_audio_file)] = File(...),
     orchestrator: AnalysisOrchestratorPort = Depends(get_analysis_orchestrator),
+    user_id: str = Depends(authentication),
 ):
-    analysis_id = await orchestrator.initiate_analysis(file)
+    analysis_id = await orchestrator.initiate_analysis(file, user_id)
     return analysis_id
 
 
@@ -91,5 +93,20 @@ async def initiate(
 async def stream_status(
     analysis_id: str,
     sse_adapter: RedisSSEAdapter = Depends(get_sse_adapter),
+    _: str = Depends(authentication),
 ):
     return sse_adapter.stream_events(analysis_id)
+
+
+@router_v2.get(
+    '/',
+    response_model=list[AnalysisSchema],
+    summary='Get all user analyses',
+    description='Retrieves all analyses created by the authenticated user',
+)
+async def get_user_analyses(
+    orchestrator: AnalysisOrchestratorPort = Depends(get_analysis_orchestrator),
+    user_id: str = Depends(authentication),
+):
+    analyses = await orchestrator.get_by_user_id(user_id)
+    return [AnalysisSchemaMapper.from_model(a) for a in analyses]
