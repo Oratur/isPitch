@@ -6,6 +6,7 @@ from ..schemas.auth import UserLoginSchema, UserRegisterSchema
 
 router_v2 = APIRouter(prefix='/v2/auth', tags=['Authentication'])
 
+
 @router_v2.post(
     '/register',
     response_model=str,

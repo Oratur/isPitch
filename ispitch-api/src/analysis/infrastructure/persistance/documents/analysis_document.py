@@ -1,8 +1,8 @@
 from typing import Optional
 
 from beanie import Document
-from pymongo import ASCENDING, IndexModel
 from pydantic import BaseModel, Field
+from pymongo import ASCENDING, IndexModel
 
 from ....domain.models.analysis import AnalysisStatus
 
@@ -96,6 +96,4 @@ class AnalysisDocument(Document):
 
     class Settings:
         name = 'analysis'
-        indexes = [
-            IndexModel([('user_id', ASCENDING)], name='user_id_index')
-        ]
+        indexes = [IndexModel([('user_id', ASCENDING)], name='user_id_index')]

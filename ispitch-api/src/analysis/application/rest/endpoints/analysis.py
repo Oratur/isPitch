@@ -9,6 +9,7 @@ from fastapi import (
     status,
 )
 
+from .....auth.application.dependencies.security import authentication
 from ....application.dependencies.services import (
     get_analysis_orchestrator,
     get_sse_adapter,
@@ -22,7 +23,6 @@ from ....domain.ports.input import (
 from ...adapters.sse_adapter import RedisSSEAdapter
 from ...mappers.analysis_schema_mapper import AnalysisSchemaMapper
 from ..schemas.analysis import AnalysisSchema
-from .....auth.application.dependencies.security import authentication
 
 router_v1 = APIRouter(prefix='/v1/analysis', tags=['Analysis'])
 router_v2 = APIRouter(prefix='/v2/analysis', tags=['Analysis'])
@@ -96,6 +96,7 @@ async def stream_status(
     _: str = Depends(authentication),
 ):
     return sse_adapter.stream_events(analysis_id)
+
 
 @router_v2.get(
     '/',
