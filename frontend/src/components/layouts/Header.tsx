@@ -1,7 +1,9 @@
-import { AppBar, Toolbar } from '@mui/material';
-
+import { AppBar, Toolbar, Button, Box } from '@mui/material';
+import { Logo } from './Logo';
 import theme from '@/styles/theme';
-import { Logo } from '../ui';
+import Link from 'next/link';
+
+//import { Box } from 'lucide-react';
 
 
 export function Header() {
@@ -9,13 +11,48 @@ export function Header() {
     <AppBar
       position="static"
       elevation={0}
-      sx={{ 
-        borderBottom: 1, 
+      sx={{
+        borderBottom: 1,
         borderColor: '#BA9BDA',
       }}
     >
-      <Toolbar variant="toolbar1">
+      <Toolbar variant="toolbar1"
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between', // separa o logo e o grupo de botões
+          alignItems: 'center',
+        }}
+      >
         <Logo />
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+          }}
+        >
+          <Button
+            variant="button1"
+            component={Link}
+            href='/login'
+            sx={{
+              bgcolor: theme.palette.purple.select1
+            }}
+            size="small"
+            
+          >
+            Entrar
+          </Button>
+
+          <Button
+            variant="button1"
+            component={Link}
+            href='/register'
+            size="small"
+          >
+            Criar conta
+          </Button>
+        </Box>
+
       </Toolbar>
     </AppBar>
   );
