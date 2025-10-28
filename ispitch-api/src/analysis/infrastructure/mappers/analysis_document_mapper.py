@@ -24,6 +24,7 @@ class AnalysisDocumentMapper:
             return None
         return Analysis(
             id=str(document.id),
+            user_id=document.user_id,
             status=document.status,
             filename=document.filename,
             transcription=TranscriptionDocumentMapper.from_document(
@@ -49,6 +50,7 @@ class AnalysisDocumentMapper:
             return None
         return AnalysisDocument(
             id=entity.id,
+            user_id=entity.user_id,
             status=entity.status,
             filename=entity.filename,
             transcription=TranscriptionDocumentMapper.from_entity(

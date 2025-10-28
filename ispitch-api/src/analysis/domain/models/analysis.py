@@ -39,6 +39,7 @@ class Analysis:
     id: str
     status: AnalysisStatus
     filename: str
+    user_id: Optional[str] = None
     transcription: Optional[Transcription] = None
     speech_analysis: Optional[SpeechAnalysis] = None
     audio_analysis: Optional[AudioAnalysis] = None

@@ -1,7 +1,8 @@
 from typing import Optional
 
 from beanie import Document
-from pydantic import BaseModel
+from pymongo import ASCENDING, IndexModel
+from pydantic import BaseModel, Field
 
 from ....domain.models.analysis import AnalysisStatus
 
@@ -86,6 +87,7 @@ class AudioAnalysis(BaseModel):
 
 
 class AnalysisDocument(Document):
+    user_id: str = Field(default=None, index=True)
     status: AnalysisStatus
     filename: str
     transcription: Optional[Transcription] = None
@@ -94,3 +96,6 @@ class AnalysisDocument(Document):
 
     class Settings:
         name = 'analysis'
+        indexes = [
+            IndexModel([('user_id', ASCENDING)], name='user_id_index')
+        ]
