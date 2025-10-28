@@ -8,6 +8,7 @@ import {TranscriptionCard} from '@/components/features/TranscriptionCard';
 import SilenceAnalysisCard from '@/components/features/SilenceAnalysisCard';
 import { FillerWordAnalysisCard } from '@/components/features/FillerWordAnalysisCard';
 import SpeechRateCard from '@/components/features/SpeechRateCard';
+import { SentimentTimelineChart } from '@/components/features/SentimentTimelineChart';
 import { useGetAnalysis } from '@/hooks/queries/useGetAnalysis';
 import { useAnalysisSubscription } from '@/hooks/useAnalysisSubscription';
 
@@ -74,6 +75,9 @@ export default function AnalysisPage() {
           </Grid>  
           <Grid size={{xs: 12, lg: 6, xl: 4}}>
             <SpeechRateCard speechRate={analysis.audioAnalysis.speechRate} />
+          </Grid>
+          <Grid size={{xs: 12, lg: 6, xl: 4}}>
+            <SentimentTimelineChart sentimentAnalysis={analysis.speechAnalysis.sentimentAnalysis} />
           </Grid>
         </Grid>
       ) : (
