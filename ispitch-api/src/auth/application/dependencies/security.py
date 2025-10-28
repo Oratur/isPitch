@@ -1,5 +1,5 @@
-from fastapi import HTTPException, status, Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError
 
 from ....auth.infrastructure.adapters.token_manager_adapter import (
@@ -8,9 +8,11 @@ from ....auth.infrastructure.adapters.token_manager_adapter import (
 
 bearer_scheme = HTTPBearer(description='Bearer token authentication')
 
+
 async def authentication(
-        auth_credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
-        token_manager: TokenManagerAdapter = Depends()) -> str:
+    auth_credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+    token_manager: TokenManagerAdapter = Depends(),
+) -> str:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail='Could not validate credentials',

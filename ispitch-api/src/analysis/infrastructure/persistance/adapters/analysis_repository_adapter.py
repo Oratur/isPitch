@@ -1,4 +1,5 @@
 from typing import List
+
 from ....domain.models.analysis import Analysis
 from ....domain.ports.output import AnalysisRepositoryPort
 from ...mappers.analysis_document_mapper import AnalysisDocumentMapper
@@ -19,15 +20,19 @@ class AnalysisRepositoryAdapter(AnalysisRepositoryPort):
 
     @classmethod
     async def find_by_user_id(self, user_id: str) -> List[Analysis]:
-        analysis_documents = await AnalysisDocument.find(
-            {"user_id": user_id}).sort(-AnalysisDocument.id).to_list()
+        analysis_documents = (
+            await AnalysisDocument.find({'user_id': user_id})
+            .sort(-AnalysisDocument.id)
+            .to_list()
+        )
         if analysis_documents is None:
             analysis_documents = []
 
         return [
             analysis
             for document in analysis_documents
-            if (analysis := AnalysisDocumentMapper.from_document(document)) is not None
+            if (analysis := AnalysisDocumentMapper.from_document(document))
+            is not None
         ]
 
     @classmethod

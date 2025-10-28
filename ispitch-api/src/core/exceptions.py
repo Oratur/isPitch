@@ -37,6 +37,7 @@ class AuthException(DomainException):
             headers={'WWW-Authenticate': 'Bearer'},
         )
 
+
 class InvalidCredentialsException(AuthException):
     def __init__(self, details: Optional[list[str]] = None):
         super().__init__(message='Invalid credentials', details=details)

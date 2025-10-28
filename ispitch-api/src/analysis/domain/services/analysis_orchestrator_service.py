@@ -111,7 +111,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
                 speech_analysis=None,
                 audio_analysis=None,
             )
-        
+
     async def get_by_user_id(self, user_id: str) -> List[Analysis]:
         """
         Retrieves all analyses for a specific user by their user ID.
@@ -121,10 +121,12 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
             List[Analysis]: A list of analyses associated with the user.
         """
         try:
-            analyses = await self.analysis_repository_port.find_by_user_id(user_id)
+            analyses = await self.analysis_repository_port.find_by_user_id(
+                user_id
+            )
             return analyses
         except Exception as e:
-            logger.error(f'Error retrieving analyses for user {user_id}: {str(e)}')
+            logger.error(f'Error retrieving analyses {user_id}: {str(e)}')
             raise
 
     async def _run_analysis(

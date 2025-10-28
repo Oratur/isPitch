@@ -30,7 +30,10 @@ class AsyncAnalysisFactory:
 
         orchestrator = AsyncAnalysisOrchestratorService(
             config=AnalysisConfig(
-                analysis_id=analysis_id, user_id=user_id, audio_path=audio_path, filename=filename
+                analysis_id=analysis_id,
+                user_id=user_id,
+                audio_path=audio_path,
+                filename=filename,
             ),
             ports=AnalysisPort(
                 transcription_port=transcription_port,
