@@ -3,9 +3,6 @@ import { Logo } from './Logo';
 import theme from '@/styles/theme';
 import Link from 'next/link';
 
-//import { Box } from 'lucide-react';
-
-
 export function Header() {
   return (
     <AppBar
