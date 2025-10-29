@@ -131,7 +131,8 @@ export function AnalysisSidebar({ fileName, basePath }: AnalysisSidebarProps) {
 
                 // Quando selecionado
                 '&.Mui-selected': {
-                  backgroundColor: 'rgba(127, 19, 236, 0.15)', // Roxo com transparência
+                  backgroundColor: theme.palette.purple.select1, // Roxo com transparência
+                  
                   borderLeft: '4px solid #7F13EC',
                   paddingLeft: 'calc(16px - 4px)', // Ajusta padding para a borda não deslocar
 
@@ -145,13 +146,14 @@ export function AnalysisSidebar({ fileName, basePath }: AnalysisSidebarProps) {
                   },
 
                   '&:hover': {
-                    backgroundColor: 'rgba(127, 19, 236, 0.25)',
+                    backgroundColor: theme.palette.purple.hover1,
                   },
                 },
 
                 // Hover quando não selecionado
                 '&:hover:not(.Mui-selected)': {
-                  backgroundColor: 'rgba(127, 19, 236, 0.08)',
+                  backgroundColor: theme.palette.purple.hover1,
+                  opacity: 0.9,
                 },
               }}
             >

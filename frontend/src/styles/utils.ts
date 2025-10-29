@@ -47,6 +47,7 @@ export const PALETTE_COLORS = [
     'info', 
     'success',
     'purple',
+    'brand'
 ] as const;
 
 export type PaletteColor = typeof PALETTE_COLORS[number];
