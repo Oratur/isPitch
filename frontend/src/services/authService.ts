@@ -4,7 +4,7 @@ import { setClientSideToken } from './tokenService';
 
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   const response = await apiRequest<AuthResponse>({
-    url: '/auth/login',
+    url: '/v2/auth/login',
     options: {
       method: 'POST',
       body: JSON.stringify(credentials),
@@ -17,7 +17,7 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
 
 export const register = async (credentials: RegisterCredentials): Promise<AuthResponse> => {
   const response = await apiRequest<AuthResponse>({
-    url: '/auth/register',
+    url: '/v2/auth/register',
     options: {
       method: 'POST',
       body: JSON.stringify(credentials),
