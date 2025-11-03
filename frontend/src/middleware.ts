@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { getTokenFromRequest } from './services/tokenService';
+import { getTokenFromRequest } from './domain/auth/services/tokenService';
 import { isAuthRoute, isPrivateRoute, PRIVATE_ROUTE_REDIRECT, PUBLIC_ROUTE_REDIRECT } from './lib/config/routes';
 
 export default function middleware(request: NextRequest) {
