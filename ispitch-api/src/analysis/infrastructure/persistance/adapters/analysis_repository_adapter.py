@@ -25,8 +25,6 @@ class AnalysisRepositoryAdapter(AnalysisRepositoryPort):
             .sort(-AnalysisDocument.id)
             .to_list()
         )
-        if analysis_documents is None:
-            analysis_documents = []
 
         return [
             analysis

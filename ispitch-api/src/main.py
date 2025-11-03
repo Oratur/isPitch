@@ -52,7 +52,7 @@ def read_root():
 
 
 @app.get('/health', tags=['Health Check'])
-async def health_check(user_id: str = Depends(authentication)):
+async def health_check():
     try:
         client = db.get_client()
         await client.admin.command('ping')
