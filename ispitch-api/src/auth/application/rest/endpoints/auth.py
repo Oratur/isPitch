@@ -4,10 +4,10 @@ from ....domain.ports.input import AuthPort
 from ...dependencies.services import get_auth_service
 from ..schemas.auth import UserLoginSchema, UserRegisterSchema
 
-router = APIRouter(prefix='/v2/auth', tags=['Authentication'])
+router_v2 = APIRouter(prefix='/v2/auth', tags=['Authentication'])
 
 
-@router.post(
+@router_v2.post(
     '/register',
     response_model=str,
     status_code=status.HTTP_201_CREATED,
@@ -24,7 +24,7 @@ async def register(
     return str(response_user.id)
 
 
-@router.post(
+@router_v2.post(
     '/login',
     response_model=str,
     summary='User login',

@@ -26,3 +26,27 @@ class ValidationException(DomainException):
             message=message,
             details=details,
         )
+
+
+class AuthException(DomainException):
+    def __init__(
+        self,
+        message: str,
+        details: Optional[list[str]] = None,
+        headers: Optional[dict] = None,
+    ):
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            message=message,
+            details=details,
+            headers={'WWW-Authenticate': 'Bearer'},
+        )
+
+
+class InvalidCredentialsException(AuthException):
+    def __init__(
+        self,
+        message: str = 'Invalid credentials',
+        details: Optional[list[str]] = None,
+    ):
+        super().__init__(message=message, details=details)

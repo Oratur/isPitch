@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 from typing import Optional
-from uuid import UUID, uuid4
 
 from beanie import Document, Update, before_event
 from pydantic import ConfigDict, EmailStr, Field
@@ -14,7 +13,6 @@ class UserDocument(Document):
         populate_by_name=True,
     )
 
-    id: UUID = Field(default_factory=uuid4, alias='_id')
     email: EmailStr
     name: str = Field(min_length=3, max_length=255)
     hashed_password: str = Field(exclude=True)

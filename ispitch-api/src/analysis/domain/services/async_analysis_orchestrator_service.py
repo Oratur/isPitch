@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class AnalysisConfig:
     analysis_id: str
+    user_id: str
     audio_path: str
     filename: str
 
@@ -45,6 +46,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         self.analysis_id = config.analysis_id
         self.audio_path = config.audio_path
         self.filename = config.filename
+        self.user_id = config.user_id
         self._transcription_port = ports.transcription_port
         self._speech_analysis_port = ports.speech_analysis_port
         self._audio_analysis_port = ports.audio_analysis_port
@@ -112,6 +114,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
     ) -> Analysis:
         return Analysis(
             id=self.analysis_id,
+            user_id=self.user_id,
             status=AnalysisStatus.COMPLETED,
             filename=self.filename,
             transcription=transcription,

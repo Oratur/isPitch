@@ -42,7 +42,7 @@ add_exception_handlers(app)
 app.include_router(analysis.router_v1)
 app.include_router(analysis.router_v2)
 
-app.include_router(auth.router)
+app.include_router(auth.router_v2)
 
 
 @app.get('/', tags=['Root'])

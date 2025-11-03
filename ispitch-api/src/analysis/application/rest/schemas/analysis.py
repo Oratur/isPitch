@@ -22,6 +22,7 @@ class AudioAnalysisSchema(CamelCaseModel):
 
 class AnalysisSchema(CamelCaseModel):
     id: str
+    user_id: Optional[str] = None
     status: str
     filename: str
     transcription: Optional[str] = None
