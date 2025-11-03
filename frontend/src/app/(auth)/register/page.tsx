@@ -28,7 +28,7 @@ export default function RegisterPage() {
       return;
     }
 
-    register({ name, email, password, confirmPassword });
+    register({ name, email, password });
   };
 
   return (
