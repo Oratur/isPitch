@@ -1,4 +1,3 @@
-// src/components/layouts/Footer.tsx
 import { Container, Link as MuiLink, Typography, Stack, Divider } from '@mui/material';
 import Link from 'next/link';
 

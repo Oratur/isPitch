@@ -3,7 +3,7 @@
 import { Grid } from '@mui/material';
 import { useParams, useSearchParams } from 'next/navigation';
 import { Box, CircularProgress, Typography, Alert } from '@mui/material';
-import {AnalysisLayout} from '@/components/layouts/AnalysisLayout';
+import {AnalysisLayout} from '@/components/layouts/AnalysisLayout/AnalysisLayout';
 import {TranscriptionCard} from '@/components/features/TranscriptionCard';
 import SilenceAnalysisCard from '@/components/features/SilenceAnalysisCard';
 import { FillerWordAnalysisCard } from '@/components/features/FillerWordAnalysisCard';
