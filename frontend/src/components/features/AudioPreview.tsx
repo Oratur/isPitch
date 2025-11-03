@@ -12,7 +12,8 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { FileAudio, Send, Trash2 } from 'lucide-react';
-import MyBox from '../layouts/MyBox';
+import MyBox from '../ui/MyBox';
+
 
 interface AudioPreviewProps {
   audioFile: File;
