@@ -1,6 +1,7 @@
 import { AppBar, Toolbar } from '@mui/material';
-import { Logo } from './Logo';
+
 import theme from '@/styles/theme';
+import { Logo } from '../ui';
 
 
 export function Header() {

@@ -1,5 +1,5 @@
-import { getAnalysis } from '@/services/analysisService';
-import { Analysis } from '@/types/analysis';
+import { getAnalysis } from '@/domain/analysis/services/analysisService';
+import { Analysis } from '@/domain/analysis/types/analysis';
 import { useQuery } from '@tanstack/react-query';
 
 

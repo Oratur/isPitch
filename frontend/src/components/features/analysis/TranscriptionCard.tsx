@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Box, Card, CardContent, CardHeader, IconButton, Tooltip, Typography } from '@mui/material';
 import { Check, Copy, Highlighter } from 'lucide-react';
-import { FillerwordAnalysis } from '@/types/analysis';
+import { FillerwordAnalysis } from '@/domain/analysis/types/analysis';
 import theme from '@/styles/theme';
 import React from 'react';
 import { FileText } from 'lucide-react';

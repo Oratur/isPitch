@@ -1,6 +1,6 @@
 'use client';
 
-import { SilenceAnalysis } from '@/types/analysis';
+import { SilenceAnalysis } from '@/domain/analysis/types/analysis';
 import { Card, CardContent, Divider, Stack, Typography, Box, CardHeader } from '@mui/material';
 import { BarChart3, Hourglass, Timer } from 'lucide-react';
 import theme from '@/styles/theme';

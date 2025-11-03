@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { API_BASE_URL } from '@/lib/env';
-import { Analysis } from '@/types/analysis';
+import { API_BASE_URL } from '@/lib/config/env';
+import { Analysis } from '@/domain/analysis/types/analysis';
 
 const statusMessages: Record<string, string> = {
     pending: 'Aguardando início...',

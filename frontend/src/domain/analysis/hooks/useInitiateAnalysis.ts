@@ -1,4 +1,4 @@
-import { initiateAnalysis } from '@/services/analysisService';
+import { initiateAnalysis } from '@/domain/analysis/services/analysisService';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 

@@ -1,5 +1,5 @@
 'use client';
-import { ApiError } from '@/lib/apiErrorHandler';
+import { ApiError } from '@/lib/api/apiErrorHandler';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import { useState } from 'react';

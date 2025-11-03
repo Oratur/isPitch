@@ -3,13 +3,9 @@
 import { Grid } from '@mui/material';
 import { useParams, useSearchParams } from 'next/navigation';
 import { Box, CircularProgress, Typography, Alert } from '@mui/material';
-import {AnalysisLayout} from '@/components/layouts/AnalysisLayout';
-import {TranscriptionCard} from '@/components/features/TranscriptionCard';
-import SilenceAnalysisCard from '@/components/features/SilenceAnalysisCard';
-import { FillerWordAnalysisCard } from '@/components/features/FillerWordAnalysisCard';
-import SpeechRateCard from '@/components/features/SpeechRateCard';
-import { useGetAnalysis } from '@/hooks/queries/useGetAnalysis';
-import { useAnalysisSubscription } from '@/hooks/useAnalysisSubscription';
+import {AnalysisLayout} from '@/components/layouts/AnalysisLayout/AnalysisLayout';
+import { FillerWordAnalysisCard, SilenceAnalysisCard, SpeechRateCard, TranscriptionCard } from '@/components/features/analysis';
+import { useAnalysisSubscription, useGetAnalysis } from '@/domain/analysis/hooks';
 
 
 export default function AnalysisPage() {

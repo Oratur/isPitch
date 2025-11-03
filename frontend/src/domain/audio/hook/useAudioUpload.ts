@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useInitiateAnalysis } from './mutations/useInitiateAnalysis';
+import { useInitiateAnalysis } from '../../analysis/hooks/useInitiateAnalysis';
 
 export function useAudioUpload() {
     const [audioFile, setAudioFile] = useState<File | null>(null);

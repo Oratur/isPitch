@@ -1,5 +1,6 @@
-import { apiRequest } from '@/lib/apiClient';
-import type { Analysis } from '@/types/analysis';
+
+import { apiRequest } from '@/lib/api';
+import type { Analysis } from '@/domain/analysis/types/analysis';
 
 /**
  * Uploads an audio file to start a new analysis.

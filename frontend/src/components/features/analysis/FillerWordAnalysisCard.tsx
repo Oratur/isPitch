@@ -11,7 +11,7 @@ import {
   Button,
   Divider,
 } from '@mui/material';
-import { FillerwordAnalysis } from '@/types/analysis';
+import { FillerwordAnalysis } from '@/domain/analysis/types/analysis';
 import { Mic } from 'lucide-react';
 import React, { useState } from 'react';
 import theme from '@/styles/theme';
