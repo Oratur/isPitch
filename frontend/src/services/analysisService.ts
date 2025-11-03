@@ -1,4 +1,5 @@
-import { apiRequest } from '@/lib/apiClient';
+
+import { apiRequest } from '@/lib/api';
 import type { Analysis } from '@/types/analysis';
 
 /**
