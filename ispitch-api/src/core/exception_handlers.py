@@ -56,6 +56,7 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         ).model_dump(by_alias=True),
     )
 
+
 async def authentication_exception_handler(request: Request, exc: AuthException):
     return JSONResponse(
         status_code=exc.status_code,
@@ -65,6 +66,7 @@ async def authentication_exception_handler(request: Request, exc: AuthException)
             error=HTTPStatus(exc.status_code).phrase,
         ).model_dump(by_alias=True),
     )
+
 
 async def jwt_exception_handler(request: Request, exc: JWTError):
     return JSONResponse(
@@ -77,6 +79,7 @@ async def jwt_exception_handler(request: Request, exc: JWTError):
         headers={'WWW-Authenticate': 'Bearer'},
     )
 
+
 async def attribute_exception_handler(request: Request, exc: AttributeError):
     return JSONResponse(
         status_code=HTTPStatus.UNAUTHORIZED,
@@ -87,6 +90,7 @@ async def attribute_exception_handler(request: Request, exc: AttributeError):
         ).model_dump(by_alias=True),
         headers={'WWW-Authenticate': 'Bearer'},
     )
+
 
 async def generic_exception_handler(request: Request, exc: Exception):
     status_code = HTTPStatus.INTERNAL_SERVER_ERROR

@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status
 from fastapi.concurrency import asynccontextmanager
 from pymongo.errors import ConnectionFailure
 
@@ -6,7 +6,6 @@ from src.analysis.application.rest.endpoints import analysis
 from src.analysis.infrastructure.persistance.documents.analysis_document import (
     AnalysisDocument,
 )
-from src.auth.application.dependencies.security import authentication
 from src.auth.application.rest.endpoints import auth
 from src.auth.infrastructure.persistance.documents.user_document import (
     UserDocument,
