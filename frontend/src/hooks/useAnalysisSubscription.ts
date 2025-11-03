@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { API_BASE_URL } from '@/lib/env';
+import { API_BASE_URL } from '@/lib/config/env';
 import { Analysis } from '@/types/analysis';
 
 const statusMessages: Record<string, string> = {

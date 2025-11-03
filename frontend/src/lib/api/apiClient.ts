@@ -1,5 +1,6 @@
+import { API_BASE_URL } from '../config';
 import { handleApiErrorResponse } from './apiErrorHandler';
-import { API_BASE_URL } from '../env';
+
 
 
 type ApiRequestOptions = Omit<RequestInit, 'headers'> & {
