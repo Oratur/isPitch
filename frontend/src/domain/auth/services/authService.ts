@@ -1,6 +1,6 @@
-import { apiRequest } from '@/lib/apiClient';
 import type { AuthResponse, LoginCredentials, RegisterCredentials } from '@/types/auth';
 import { setClientSideToken } from './tokenService';
+import { apiRequest } from '@/lib/api';
 
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   const response = await apiRequest<AuthResponse>({
@@ -24,6 +24,5 @@ export const register = async (credentials: RegisterCredentials): Promise<AuthRe
     }
   });
 
-  setClientSideToken(response.token);
   return response;
 };

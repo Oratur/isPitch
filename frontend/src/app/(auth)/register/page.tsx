@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { Box, TextField, Button, Typography, CircularProgress, Link as MuiLink } from '@mui/material';
 import Link from 'next/link';
-import { useRegister } from '@/hooks/mutations/useRegister';
-import MyBox from '@/components/layouts/MyBox';
 import theme from '@/styles/theme';
 import { toast } from 'react-hot-toast';
+import { useRegister } from '@/domain/auth/hooks';
+import MyBox from '@/components/ui/MyBox';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');

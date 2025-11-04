@@ -14,6 +14,7 @@ export const handleGlobalError = (error: unknown) => {
         toast.error(error.message);
     } else {
         toast.error('Ocorreu um erro inesperado.');
+        console.log(error);
     }
 };
 

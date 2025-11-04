@@ -1,4 +1,4 @@
-import { login } from '@/services/authService';
+import { login } from '@/domain/auth/services/authService';
 import { LoginCredentials } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

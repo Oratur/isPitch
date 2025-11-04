@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Button, Box } from '@mui/material';
-import { Logo } from './Logo';
 import theme from '@/styles/theme';
 import Link from 'next/link';
+import { Logo } from '../ui';
 
 export function Header() {
   return (
