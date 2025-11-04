@@ -12,3 +12,14 @@ class UserRegisterSchema(CamelCaseModel):
 class UserLoginSchema(CamelCaseModel):
     email: EmailStr
     password: str
+
+
+class UserSchema(CamelCaseModel):
+    id: str
+    name: str
+    email: EmailStr
+
+
+class UserLoginResponseSchema(CamelCaseModel):
+    token: str
+    user: UserSchema

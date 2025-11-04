@@ -1,6 +1,7 @@
 from fastapi import status
 
 from ....core.exceptions import DomainException
+from ..models.login_response import LoginResponse
 from ..models.user import User
 from ..ports.input import AuthPort
 from ..ports.output import (
@@ -36,7 +37,7 @@ class AuthService(AuthPort):
 
         return await self.user_repository.save(user)
 
-    async def login(self, email: str, password: str) -> User:
+    async def login(self, email: str, password: str) -> LoginResponse:
         user = await self.user_repository.find_by_email(email)
 
         if not user or not await self.password_manager.verify(
@@ -56,4 +57,7 @@ class AuthService(AuthPort):
             data={'sub': str(user.id), 'name': user.name}
         )
 
-        return token
+        return LoginResponse(
+            token=token,
+            user=user,
+        )
