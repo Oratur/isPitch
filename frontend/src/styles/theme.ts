@@ -2,15 +2,13 @@
 import { createTheme, Theme } from '@mui/material/styles';
 import './utils';
 
-/**
- * Cria o tema da aplicação com base no modo (light/dark)
- */
-
 declare module '@mui/material/styles' {
   interface Palette {
     purple: Palette['primary'] & {
       light1?: string;
       light2?: string;
+      select1?: string;
+      hover1?: string;
     };
     brand: Palette['primary'];
   }
@@ -19,15 +17,12 @@ declare module '@mui/material/styles' {
     purple?: PaletteOptions['primary'] & {
       light1?: string;
       light2?: string;
+      select1?: string;
+      hover1?: string;
     };
     brand?: PaletteOptions['primary'];
   }
 }
-
-  // interface CardHeaderProps {
-  //   variant?: 'cardHeader1' | 'primary' | 'secondary' | 'subtle' | 'dark';
-  // }
-
 
 export function getAppTheme(mode: 'light' | 'dark'): Theme {
   return createTheme({
@@ -47,6 +42,8 @@ export function getAppTheme(mode: 'light' | 'dark'): Theme {
         light1: '#BA9BDA',     // background Roxo Acinzentado
         light2: '#1F132C',     // background Roxo Claro
         dark: '#120C18',      // background Roxo Escuro
+        select1: '#362348',   // cor de fundo de botões selecionados
+        hover1:'rgba(127, 19, 236, 0.25)',
         contrastText: '#fff',
       },
 
@@ -301,7 +298,7 @@ export function getAppTheme(mode: 'light' | 'dark'): Theme {
           {
             props: { variant: 'toolbar1' },
             style: ({ theme }) => ({
-              backgroundColor: theme.palette.background.default,
+              backgroundColor: theme.palette.purple.dark,
               color: theme.palette.primary.contrastText,
               borderRadius: theme.shape.borderRadius,
               padding: theme.spacing(1.5, 3),
@@ -316,6 +313,7 @@ export function getAppTheme(mode: 'light' | 'dark'): Theme {
       MuiTypography: {
         styleOverrides: {
           root: {
+            
           },
 
           h4: {

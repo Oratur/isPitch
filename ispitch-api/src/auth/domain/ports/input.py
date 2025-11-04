@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from ..models.login_response import LoginResponse
 from ..models.user import User
 
 
@@ -9,5 +10,5 @@ class AuthPort(ABC):
         pass
 
     @abstractmethod
-    def login(self, email: str, password: str) -> User:
+    def login(self, email: str, password: str) -> LoginResponse:
         pass
