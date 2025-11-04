@@ -18,13 +18,41 @@ export default function RegisterPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      toast.error('As senhas não coincidem!');
+    // Validação de campos vazios
+    if (!name.trim()) {
+      toast.error('O nome é obrigatório!');
+      return;
+    }
+
+    if (!email.trim()) {
+      toast.error('O email é obrigatório!');
+      return;
+    }
+
+    // Validação de formato de email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      toast.error('Email inválido! Verifique o formato.');
+      return;
+    }
+
+    if (!password) {
+      toast.error('A senha é obrigatória!');
+      return;
+    }
+
+    if (!confirmPassword) {
+      toast.error('A confirmação de senha é obrigatória!');
       return;
     }
 
     if (password.length < 6) {
       toast.error('A senha deve ter pelo menos 6 caracteres!');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error('As senhas não coincidem!');
       return;
     }
 
@@ -46,6 +74,7 @@ export default function RegisterPage() {
         variant="card"
         component="form"
         onSubmit={handleSubmit}
+        noValidate
         sx={{
           width: '100%',
           maxWidth: 450,

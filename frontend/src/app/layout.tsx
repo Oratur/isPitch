@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Geist, Geist_Mono, Bruno_Ace_SC } from 'next/font/google';
 import './globals.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { getAppTheme } from '@/styles/theme'; // ✅ Agora importa a função
+import { getAppTheme } from '@/styles/theme';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 import { Header } from '@/components/layouts/Header';
 import { Footer } from '@/components/layouts/Footer';
@@ -54,9 +54,13 @@ export default function RootLayout({
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={muiTheme}>
             <Toaster
-              position='bottom-left'
+              position="top-center"
               toastOptions={{
-                duration: 5000
+                duration: 4000,
+                style: {
+                  background: '#363636',
+                  color: '#fff',
+                },
               }}
             />
             <QueryProvider>

@@ -1,13 +1,15 @@
 import { styled } from '@mui/material/styles';
 import Box, { BoxProps } from '@mui/material/Box';
+import { ElementType } from 'react';
 
-interface MyBoxProps extends BoxProps {
+//props customizadas
+type MyBoxCustomProps = {
   variant?: 'card' | 'gradient' | 'sideBar' | 'cardTranscription';
-}
+};
 
-const MyBox = styled(Box, {
+const MyBoxRoot = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'variant',
-})<MyBoxProps>(({ theme, variant }) => ({
+})<MyBoxCustomProps>(({ theme, variant }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -27,7 +29,7 @@ const MyBox = styled(Box, {
     border: 1,
     borderRadius: 2,
     p: 2,
-    maxHeight: 1000, 
+    maxHeight: 1000,
     overflowY: 'auto',
     whiteSpace: 'pre-wrap',
     typography: 'body2',
@@ -50,7 +52,14 @@ const MyBox = styled(Box, {
     flexDirection: 'column',
     padding: theme.spacing(3),
   }),
-
 }));
+
+// props "público"
+export type MyBoxProps<T extends ElementType> = BoxProps<T, { component?: T } & MyBoxCustomProps>;
+
+//componente wrapper genérico
+const MyBox = <T extends ElementType = 'div'>(props: MyBoxProps<T>) => {
+  return <MyBoxRoot {...props} />;
+};
 
 export default MyBox;
