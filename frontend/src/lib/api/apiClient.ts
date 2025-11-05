@@ -1,3 +1,4 @@
+import { getClientSideToken } from '@/domain/auth/services/tokenService';
 import { API_BASE_URL } from '../config';
 import { handleApiErrorResponse } from './apiErrorHandler';
 
@@ -10,12 +11,20 @@ type ApiRequestOptions = Omit<RequestInit, 'headers'> & {
 interface ApiRequestParameters {
     url: string;
     options: ApiRequestOptions;
+    useAuth: boolean;
 }
 
 
-export async function apiRequest<T>({ url, options = {} }: ApiRequestParameters): Promise<T> {
+export async function apiRequest<T>({ url, options = {}, useAuth }: ApiRequestParameters): Promise<T> {
 
     const headers: Record<string, string> = {};
+
+    if (useAuth) {
+        const token = getClientSideToken();
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+    }
 
     const isFormData = options.body instanceof FormData;
 

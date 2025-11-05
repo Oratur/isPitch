@@ -1,7 +1,9 @@
+'use client';
+
 import { AppBar, Toolbar, Button, Box } from '@mui/material';
-import theme from '@/styles/theme';
 import Link from 'next/link';
 import { Logo } from '../ui';
+import theme from '@/styles/theme';
 
 export function Header() {
   return (

@@ -9,8 +9,9 @@ const AUTH_ROUTES = [
 
 const PRIVATE_ROUTES = [
     '/dashboard',
-    '/history',
-    '/settings'
+    '/analyses',
+    '/settings',
+    '/upload'
 ];
 
 

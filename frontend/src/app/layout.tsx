@@ -5,8 +5,6 @@ import './globals.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { getAppTheme } from '@/styles/theme';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
-import { Header } from '@/components/layouts/Header';
-import { Footer } from '@/components/layouts/Footer';
 import QueryProvider from '@/contexts/QueryProvider';
 import { Toaster } from 'react-hot-toast';
 
@@ -65,13 +63,7 @@ export default function RootLayout({
             />
             <QueryProvider>
               <CssBaseline />
-              <div className='flex flex-col min-h-screen'>
-                <Header />
-                <main className='flex-grow flex flex-col'>
-                  {children}
-                </main>
-                <Footer />
-              </div>
+              {children}
             </QueryProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
