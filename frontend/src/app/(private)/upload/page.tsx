@@ -1,9 +1,9 @@
 'use client';
 
+import { AudioDropzone, AudioPreview } from '@/components/features/audio';
+import { useAudioUpload } from '@/domain/audio/hook';
 import { Container, Box, Alert } from '@mui/material';
-import { AudioDropzone } from '@/components/features/AudioDropzone';
-import  AudioPreview  from '@/components/features/AudioPreview';
-import { useAudioUpload } from '@/hooks/useAudioUpload';
+
 
 export default function HomePage() {
   const {
