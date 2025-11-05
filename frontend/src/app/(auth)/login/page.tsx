@@ -31,6 +31,7 @@ export default function LoginPage() {
       <MyBox
         variant="card"
         component="form"
+        noValidate
         onSubmit={handleSubmit}
         sx={{
           width: '100%',
@@ -86,21 +87,6 @@ export default function LoginPage() {
             sx: { color: theme.palette.purple.light1 },
           }}
         />
-
-        <Box sx={{ textAlign: 'right', mb: 3 }}>
-          <MuiLink
-            component={Link}
-            href="/forgot-password"
-            underline="hover"
-            sx={{
-              color: theme.palette.purple.main,
-              fontSize: '0.875rem',
-              '&:hover': { color: theme.palette.purple.light1 },
-            }}
-          >
-            Esqueceu sua senha?
-          </MuiLink>
-        </Box>
 
         <Button
           type="submit"
