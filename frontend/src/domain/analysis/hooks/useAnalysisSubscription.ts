@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { API_BASE_URL } from '@/lib/config/env';
 import { Analysis } from '@/domain/analysis/types/analysis';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { getClientSideToken } from '@/domain/auth/services/tokenService';
 
 const statusMessages: Record<string, string> = {
     pending: 'Aguardando início...',
@@ -27,12 +29,15 @@ export function useAnalysisSubscription({ analysisId, enabled }: UseAnalysisSubs
             return;
         }
 
-        const eventSource = new EventSource(
-            `${API_BASE_URL}/v2/analysis/${analysisId}/stream`
-        );
+        const token = getClientSideToken();
+        const eventSource = new EventSourcePolyfill(`${API_BASE_URL}/v2/analysis/${analysisId}/stream`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
         eventSource.addEventListener('status_update', (event) => {
-            const newStatus = event.data;
+            const newStatus = (event as MessageEvent).data;
             setStatusMessage(statusMessages[newStatus.toLowerCase()] || 'Processando...');
 
             queryClient.setQueryData(['analysis', analysisId], (oldData) => {
@@ -42,7 +47,7 @@ export function useAnalysisSubscription({ analysisId, enabled }: UseAnalysisSubs
         });
 
         eventSource.addEventListener('analysis_result', (event) => {
-            const analysis: Analysis = JSON.parse(event.data);
+            const analysis: Analysis = JSON.parse((event as MessageEvent).data);
             queryClient.setQueryData(['analysis', analysisId], analysis);
         });
 

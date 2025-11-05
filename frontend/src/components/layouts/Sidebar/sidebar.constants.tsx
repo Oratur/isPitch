@@ -17,7 +17,7 @@ export const NAV_ITEMS: NavItem[] = [
 export const SETTINGS_NAV: NavItem = {
     text: 'Configurações',
     href: '/settings',
-    icon: <Settings size={ 20} />,
+    icon: <Settings size={20} />,
 };
 
 export const SIDEBAR_WIDTH = {

@@ -185,7 +185,7 @@ export function generateRandomAnalysis(): RecentAnalysis {
     randomDate.setDate(randomDate.getDate() - Math.floor(Math.random() * 30));
 
     return {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
         filename: randomFilename,
         createdAt: randomDate.toISOString(),
         fillerWordsCount: Math.floor(Math.random() * 30) + 1,
