@@ -8,7 +8,7 @@ export const useRegister = () => {
 
   return useMutation({
     mutationFn: (credentials: RegisterCredentials) => register(credentials),
-    onSuccess: (data) => {
+    onSuccess: () => {
       router.push('/login');
     },
   });
