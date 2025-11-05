@@ -15,7 +15,8 @@ export const initiateAnalysis = async (audioFile: File): Promise<string> => {
         options: {
             method: 'POST',
             body: formData
-        }
+        },
+        useAuth: true
     });
 };
 
@@ -28,6 +29,7 @@ export const getAnalysis = (id: string): Promise<Analysis> => {
         url: `/v1/analysis/${id}`,
         options: {
             method: 'GET',
-        }
+        },
+        useAuth: true
     });
 };

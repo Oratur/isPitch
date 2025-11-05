@@ -7,6 +7,10 @@ export function getTokenFromRequest(request: NextRequest): string | undefined {
     return request.cookies.get(AUTH_COOKIE_NAME)?.value;
 }
 
+export function getClientSideToken(): string | undefined {
+    return Cookies.get(AUTH_COOKIE_NAME);
+}
+
 export function setClientSideToken(token: string): void {
     Cookies.set(AUTH_COOKIE_NAME, token, {
         expires: 7,

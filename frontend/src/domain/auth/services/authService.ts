@@ -8,7 +8,8 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
     options: {
       method: 'POST',
       body: JSON.stringify(credentials),
-    }
+    },
+    useAuth: false
   });
 
   setClientSideToken(response.token);
@@ -21,7 +22,8 @@ export const register = async (credentials: RegisterCredentials): Promise<AuthRe
     options: {
       method: 'POST',
       body: JSON.stringify(credentials),
-    }
+    },
+    useAuth: false
   });
 
   return response;

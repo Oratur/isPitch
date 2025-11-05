@@ -11,10 +11,11 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
     }
 
     return apiRequest<DashboardStats>({
-        url: '/v1/dashboard/stats',
+        url: '/v2/dashboard/stats',
         options: {
             method: 'GET',
         },
+        useAuth: true
     });
 };
 
@@ -25,9 +26,10 @@ export const getRecentAnalyses = async (limit: number = 5): Promise<RecentAnalys
     }
 
     return apiRequest<RecentAnalysis[]>({
-        url: `/v1/dashboard/recent?limit=${limit}`,
+        url: `/v2/dashboard/recent?limit=${limit}`,
         options: {
             method: 'GET',
         },
+        useAuth: true
     });
 };

@@ -1,6 +1,7 @@
 import { createContext, useContext, PropsWithChildren } from 'react';
 import { useSidebarCollapse } from '../hooks/useSidebarCollapse';
-import type { SidebarContextValue } from '../types/sidebar.types';
+import { SidebarContextValue } from '@/components/layouts/Sidebar';
+
 
 const SidebarContext = createContext<SidebarContextValue | null>(null);
 
