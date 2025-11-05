@@ -31,6 +31,7 @@ export default function LoginPage() {
       <MyBox
         variant="card"
         component="form"
+        noValidate
         onSubmit={handleSubmit}
         sx={{
           width: '100%',
@@ -87,6 +88,9 @@ export default function LoginPage() {
           }}
         />
 
+        
+        {/* REMOVIDO BOTAO DE "ESQUECEU A SENHA". NAO SERA PRIORIZADO NO MOMENTO.
+        
         <Box sx={{ textAlign: 'right', mb: 3 }}>
           <MuiLink
             component={Link}
@@ -100,7 +104,7 @@ export default function LoginPage() {
           >
             Esqueceu sua senha?
           </MuiLink>
-        </Box>
+        </Box> */}
 
         <Button
           type="submit"
