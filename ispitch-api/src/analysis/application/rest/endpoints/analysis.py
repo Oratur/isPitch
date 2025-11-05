@@ -93,7 +93,6 @@ async def initiate(
 async def stream_status(
     analysis_id: str,
     sse_adapter: RedisSSEAdapter = Depends(get_sse_adapter),
-    _: str = Depends(authentication),
 ):
     return sse_adapter.stream_events(analysis_id)
 
