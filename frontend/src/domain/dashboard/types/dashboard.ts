@@ -7,7 +7,7 @@ export interface DashboardStats {
 
 export interface ChartData {
     name: string;
-    análises: number;
+    analyses: number;
 }
 
 export interface RecentAnalysis {

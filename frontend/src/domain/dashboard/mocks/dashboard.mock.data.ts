@@ -60,18 +60,18 @@ export const mockDashboardStats: DashboardStats = {
     totalFillerWords: 187,
     totalDuration: 92,
     chartData: [
-        { name: 'Jan', análises: 2 },
-        { name: 'Fev', análises: 5 },
-        { name: 'Mar', análises: 3 },
-        { name: 'Abr', análises: 8 },
-        { name: 'Mai', análises: 4 },
-        { name: 'Jun', análises: 7 },
-        { name: 'Jul', análises: 6 },
-        { name: 'Ago', análises: 9 },
-        { name: 'Set', análises: 5 },
-        { name: 'Out', análises: 10 },
-        { name: 'Nov', análises: 12 },
-        { name: 'Dez', análises: 8 }
+        { name: 'Jan', analyses: 2 },
+        { name: 'Fev', analyses: 5 },
+        { name: 'Mar', analyses: 3 },
+        { name: 'Abr', analyses: 8 },
+        { name: 'Mai', analyses: 4 },
+        { name: 'Jun', analyses: 7 },
+        { name: 'Jul', analyses: 6 },
+        { name: 'Ago', analyses: 9 },
+        { name: 'Set', analyses: 5 },
+        { name: 'Out', analyses: 10 },
+        { name: 'Nov', analyses: 12 },
+        { name: 'Dez', analyses: 8 }
     ]
 };
 
@@ -154,12 +154,12 @@ export const mockEmptyDashboard: DashboardStats = {
     totalFillerWords: 0,
     totalDuration: 0,
     chartData: [
-        { name: 'Jan', análises: 0 },
-        { name: 'Fev', análises: 0 },
-        { name: 'Mar', análises: 0 },
-        { name: 'Abr', análises: 0 },
-        { name: 'Mai', análises: 0 },
-        { name: 'Jun', análises: 0 }
+        { name: 'Jan', analyses: 0 },
+        { name: 'Fev', analyses: 0 },
+        { name: 'Mar', analyses: 0 },
+        { name: 'Abr', analyses: 0 },
+        { name: 'Mai', analyses: 0 },
+        { name: 'Jun', analyses: 0 }
     ]
 };
 

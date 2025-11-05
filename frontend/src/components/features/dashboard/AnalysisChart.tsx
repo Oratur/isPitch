@@ -3,11 +3,8 @@ import { BarChart2, TrendingUp, Calendar, Download } from 'lucide-react';
 import theme from '@/styles/theme';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { useState } from 'react';
+import { ChartData } from '@/domain/dashboard/types';
 
-interface ChartData {
-  name: string;
-  análises: number;
-}
 
 interface AnalysisChartProps {
   data?: ChartData[];
@@ -26,22 +23,24 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
 
   // Dados de exemplo caso não haja dados
   const defaultData: ChartData[] = [
-    { name: 'Jan', análises: 0 },
-    { name: 'Fev', análises: 0 },
-    { name: 'Mar', análises: 0 },
-    { name: 'Abr', análises: 0 },
-    { name: 'Mai', análises: 0 },
-    { name: 'Jun', análises: 0 },
+    { name: 'Jan', analyses: 0 },
+    { name: 'Fev', analyses: 0 },
+    { name: 'Mar', analyses: 0 },
+    { name: 'Abr', analyses: 0 },
+    { name: 'Mai', analyses: 0 },
+    { name: 'Jun', analyses: 0 },
   ];
 
   const chartData = data && data.length > 0 ? data : defaultData;
 
-  const totalAnalyses = chartData.reduce((sum, item) => sum + item.análises, 0);
+  const totalAnalyses = chartData.reduce((sum, item) => sum + item.analyses, 0);
   const avgAnalyses = totalAnalyses / chartData.length;
-  const maxMonth = chartData.reduce((max, item) => item.análises > max.análises ? item : max, chartData[0]);
+  const maxMonth = chartData.reduce((max, item) => item.analyses > max.analyses ? item : max, chartData[0]);
   const currentMonth = chartData[chartData.length - 1];
   const previousMonth = chartData[chartData.length - 2];
-  const growth = previousMonth ? ((currentMonth.análises - previousMonth.análises) / previousMonth.análises * 100) : 0;
+  const growth = previousMonth && previousMonth.analyses !== 0
+  ? ((currentMonth.analyses - previousMonth.analyses) / previousMonth.analyses * 100)
+  : 0;
 
   const CustomTooltip = ({ active, payload }: TooltipProps) => {
     if (active && payload && payload.length) {
