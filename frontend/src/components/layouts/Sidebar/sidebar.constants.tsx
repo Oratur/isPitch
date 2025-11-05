@@ -1,4 +1,4 @@
-import { Home, BarChart2, History, Settings } from 'lucide-react';
+import { Home, History, Settings } from 'lucide-react';
 import { NavItem } from './sidebar.types';
 
 export const NAV_ITEMS: NavItem[] = [
@@ -10,11 +10,6 @@ export const NAV_ITEMS: NavItem[] = [
   {
     text: 'Análises',
     href: '/analyses',
-    icon: <BarChart2 size={20} />,
-  },
-  {
-    text: 'Submissões',
-    href: '/submissions',
     icon: <History size={20} />,
   },
 ];
