@@ -60,6 +60,7 @@ class AudioAnalysisPort(ABC):
     ) -> float:
         pass
 
+    @classmethod
     @abstractmethod
     def get_speech_rate(
         cls,

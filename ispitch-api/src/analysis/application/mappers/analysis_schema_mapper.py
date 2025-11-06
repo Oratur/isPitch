@@ -78,6 +78,8 @@ class AnalysisSchemaMapper:
             user_id=analysis.user_id,
             status=analysis.status,
             filename=analysis.filename,
-            duration=analysis.audio_analysis.duration,
+            duration=analysis.audio_analysis.duration
+            if analysis.audio_analysis
+            else 0.0,
             created_at=analysis.created_at,
         )
