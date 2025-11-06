@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from enum import Enum
 from typing import Optional
 
@@ -21,6 +22,7 @@ class SpeechAnalysis:
 
 @dataclass
 class AudioAnalysis:
+    duration: float
     speech_rate: float
 
 
@@ -39,6 +41,8 @@ class Analysis:
     id: str
     status: AnalysisStatus
     filename: str
+    created_at: datetime
+    updated_at: datetime
     user_id: Optional[str] = None
     transcription: Optional[Transcription] = None
     speech_analysis: Optional[SpeechAnalysis] = None

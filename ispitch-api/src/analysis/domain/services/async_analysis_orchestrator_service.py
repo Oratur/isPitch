@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from datetime import datetime, timezone
 
 from ..models.analysis import (
     Analysis,
@@ -97,14 +98,17 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
     ) -> AudioAnalysis:
         await self._publish_status(AnalysisStatus.ANALYZING_AUDIO)
 
+        audio_duration = self._audio_analysis_port.get_audio_duration(
+            audio_path=self.audio_path
+        )
         speech_rate = self._audio_analysis_port.get_speech_rate(
-            audio_path=self.audio_path,
             transcription=transcription.text,
+            audio_duration=audio_duration,
             silence_duration=speech_analysis.silence_analysis.duration,
         )
 
         logger.info(f'[{self.analysis_id}] Audio analysis completed')
-        return AudioAnalysis(speech_rate=speech_rate)
+        return AudioAnalysis(duration=audio_duration, speech_rate=speech_rate)
 
     def _build_result(
         self,
@@ -116,6 +120,8 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
             id=self.analysis_id,
             user_id=self.user_id,
             status=AnalysisStatus.COMPLETED,
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
             filename=self.filename,
             transcription=transcription,
             speech_analysis=speech_analysis,

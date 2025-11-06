@@ -1,6 +1,7 @@
+from datetime import datetime, timezone
 from typing import Optional
 
-from beanie import Document
+from beanie import Document, Update, before_event
 from pydantic import BaseModel, Field
 from pymongo import ASCENDING, IndexModel
 
@@ -83,6 +84,7 @@ class SpeechAnalysis(BaseModel):
 
 
 class AudioAnalysis(BaseModel):
+    duration: Optional[float] = Field(default=0.0)
     speech_rate: float
 
 
@@ -93,6 +95,16 @@ class AnalysisDocument(Document):
     transcription: Optional[Transcription] = None
     speech_analysis: Optional[SpeechAnalysis] = None
     audio_analysis: Optional[AudioAnalysis] = None
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
+
+    @before_event(Update)
+    async def update_timestamp(self):
+        self.updated_at = datetime.now(timezone.utc)
 
     class Settings:
         name = 'analysis'

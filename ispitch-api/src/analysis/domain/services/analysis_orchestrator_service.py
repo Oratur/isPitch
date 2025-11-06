@@ -1,5 +1,6 @@
 import logging
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from typing import List
 
 from ..models.analysis import (
@@ -49,6 +50,8 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
             user_id=user_id,
             status=AnalysisStatus.PENDING,
             filename=file.filename,
+            created_at=datetime.now(timezone.utc),
+            updated_at=datetime.now(timezone.utc),
             transcription=None,
             speech_analysis=None,
             audio_analysis=None,

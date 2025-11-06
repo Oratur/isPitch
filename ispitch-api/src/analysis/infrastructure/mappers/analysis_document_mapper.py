@@ -27,6 +27,8 @@ class AnalysisDocumentMapper:
             user_id=document.user_id,
             status=document.status,
             filename=document.filename,
+            created_at=document.created_at,
+            updated_at=document.updated_at,
             transcription=TranscriptionDocumentMapper.from_document(
                 document.transcription
             )
@@ -53,6 +55,8 @@ class AnalysisDocumentMapper:
             user_id=entity.user_id,
             status=entity.status,
             filename=entity.filename,
+            created_at=entity.created_at,
+            updated_at=entity.updated_at,
             transcription=TranscriptionDocumentMapper.from_entity(
                 entity.transcription
             )
@@ -378,11 +382,15 @@ class AudioAnalysisDocumentMapper:
         if entity is None:
             return None
         return analysis_document.AudioAnalysis(
-            speech_rate=getattr(entity, 'speech_rate', 0.0)
+            duration=getattr(entity, 'duration', 0.0),
+            speech_rate=getattr(entity, 'speech_rate', 0.0),
         )
 
     @staticmethod
     def from_document(document: analysis_document.AudioAnalysis):
         if document is None:
             return None
-        return AudioAnalysis(speech_rate=getattr(document, 'speech_rate', 0.0))
+        return AudioAnalysis(
+            duration=getattr(document, 'duration', 0.0),
+            speech_rate=getattr(document, 'speech_rate', 0.0),
+        )

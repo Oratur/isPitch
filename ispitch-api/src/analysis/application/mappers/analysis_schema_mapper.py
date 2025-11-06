@@ -14,6 +14,7 @@ from ..mappers.vocabulary_analysis_schema_mapper import (
 )
 from ..rest.schemas.analysis import (
     AnalysisSchema,
+    AnalysisSummarySchema,
     AudioAnalysisSchema,
     SpeechAnalysisSchema,
 )
@@ -27,6 +28,8 @@ class AnalysisSchemaMapper:
             user_id=analysis.user_id,
             status=analysis.status,
             filename=analysis.filename,
+            created_at=analysis.created_at,
+            updated_at=analysis.updated_at,
             transcription=analysis.transcription.text
             if analysis.transcription
             else None,
@@ -61,8 +64,22 @@ class AnalysisSchemaMapper:
                 else None,
             ),
             audio_analysis=AudioAnalysisSchema(
-                speech_rate=analysis.audio_analysis.speech_rate
+                duration=analysis.audio_analysis.duration,
+                speech_rate=analysis.audio_analysis.speech_rate,
             )
             if analysis.audio_analysis
             else None,
+        )
+
+    @staticmethod
+    def to_summary(analysis: Analysis) -> AnalysisSummarySchema:
+        return AnalysisSummarySchema(
+            id=analysis.id,
+            user_id=analysis.user_id,
+            status=analysis.status,
+            filename=analysis.filename,
+            duration=analysis.audio_analysis.duration
+            if analysis.audio_analysis
+            else 0.0,
+            created_at=analysis.created_at,
         )

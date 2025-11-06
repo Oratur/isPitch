@@ -64,13 +64,16 @@ class AnalysisModelMapper:
         # AudioAnalysis
         audio_analysis_data = data.get('audio_analysis', {})
         audio_analysis = AudioAnalysis(
-            speech_rate=audio_analysis_data.get('speech_rate', 0.0)
+            duration=audio_analysis_data.get('duration', 0.0),
+            speech_rate=audio_analysis_data.get('speech_rate', 0.0),
         )
 
         return Analysis(
             id=data.get('id'),
             status=data.get('status'),
             filename=data.get('filename'),
+            created_at=data.get('created_at'),
+            updated_at=data.get('updated_at'),
             transcription=transcription,
             speech_analysis=speech_analysis,
             audio_analysis=audio_analysis,
