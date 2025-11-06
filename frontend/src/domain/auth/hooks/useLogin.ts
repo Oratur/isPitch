@@ -1,6 +1,4 @@
 import { login } from '@/domain/auth/services/authService';
-import { ApiError } from '@/lib/api';
-import { ApiErrorResponse } from '@/types/apiErrorResponse';
 import { LoginCredentials } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -17,8 +15,8 @@ export const useLogin = () => {
     },
 
     onError: () => {
-      toast.error('Falha ao fazer login. Verifique os dados enviados e tente novamente.')
+      toast.error('Falha ao fazer login. Verifique os dados enviados e tente novamente.');
     },
-    
+
   });
 };
