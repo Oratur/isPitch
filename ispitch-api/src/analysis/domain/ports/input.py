@@ -54,10 +54,17 @@ class SpeechAnalysisPort(ABC):
 
 class AudioAnalysisPort(ABC):
     @abstractmethod
-    def get_speech_rate(
+    def get_audio_duration(
         self,
         audio_path: str,
+    ) -> float:
+        pass
+
+    @abstractmethod
+    def get_speech_rate(
+        cls,
         transcription: str,
+        audio_duration: float,
         silence_duration: float,
     ) -> float:
         pass

@@ -22,7 +22,7 @@ from ....domain.ports.input import (
 )
 from ...adapters.sse_adapter import RedisSSEAdapter
 from ...mappers.analysis_schema_mapper import AnalysisSchemaMapper
-from ..schemas.analysis import AnalysisSchema
+from ..schemas.analysis import AnalysisSchema, AnalysisSummarySchema
 
 router_v1 = APIRouter(prefix='/v1/analysis', tags=['Analysis'])
 router_v2 = APIRouter(prefix='/v2/analysis', tags=['Analysis'])
@@ -100,7 +100,7 @@ async def stream_status(
 
 @router_v2.get(
     '/',
-    response_model=list[AnalysisSchema],
+    response_model=list[AnalysisSummarySchema],
     summary='Get all user analyses',
     description='Retrieves all analyses created by the authenticated user',
 )
@@ -109,4 +109,4 @@ async def get_user_analyses(
     user_id: str = Depends(authentication),
 ):
     analyses = await orchestrator.get_by_user_id(user_id)
-    return [AnalysisSchemaMapper.from_model(a) for a in analyses]
+    return [AnalysisSchemaMapper.to_summary(a) for a in analyses]
