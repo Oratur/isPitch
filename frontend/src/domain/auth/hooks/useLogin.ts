@@ -13,5 +13,10 @@ export const useLogin = () => {
       toast.success(`Bem-vindo, ${data.user.name}!`);
       router.push('/dashboard');
     },
+
+    onError: () => {
+      toast.error('Falha ao fazer login. Verifique os dados enviados e tente novamente.');
+    },
+
   });
 };
