@@ -1,4 +1,6 @@
 import { login } from '@/domain/auth/services/authService';
+import { ApiError } from '@/lib/api';
+import { ApiErrorResponse } from '@/types/apiErrorResponse';
 import { LoginCredentials } from '@/types/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -14,12 +16,9 @@ export const useLogin = () => {
       router.push('/dashboard');
     },
 
-    onError: (error: any) => {
-      const backendMessage =
-        error?.response?.data?.message ||
-        //error?.message ||
-        'Falha ao fazer login. Verifique os dados enviados e tente novamente.';
-      toast.error(backendMessage);
+    onError: () => {
+      toast.error('Falha ao fazer login. Verifique os dados enviados e tente novamente.')
     },
+    
   });
 };

@@ -269,7 +269,7 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
               <Tooltip content={<CustomTooltip />} />
               <Area 
                 type="monotone" 
-                dataKey="análises" 
+                dataKey="analyses" 
                 stroke={theme.palette.purple.main}
                 strokeWidth={3}
                 fillOpacity={1}
@@ -309,7 +309,7 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
               <Tooltip content={<CustomTooltip />} />
               <Line 
                 type="monotone" 
-                dataKey="análises" 
+                dataKey="analyses" 
                 stroke={theme.palette.purple.main}
                 strokeWidth={3}
                 dot={{ 
