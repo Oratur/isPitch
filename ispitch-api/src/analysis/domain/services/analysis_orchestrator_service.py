@@ -115,7 +115,9 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
                 audio_analysis=None,
             )
 
-    async def get_by_user_id(self, user_id: str) -> List[Analysis]:
+    async def get_by_user_id(
+        self, user_id: str, page: int, page_size: int
+    ) -> List[Analysis]:
         """
         Retrieves all analyses for a specific user by their user ID.
         Args:
@@ -125,7 +127,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
         """
         try:
             analyses = await self.analysis_repository_port.find_by_user_id(
-                user_id
+                user_id, page, page_size
             )
             return analyses
         except Exception as e:

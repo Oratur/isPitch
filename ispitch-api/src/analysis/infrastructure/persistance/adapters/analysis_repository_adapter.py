@@ -19,10 +19,16 @@ class AnalysisRepositoryAdapter(AnalysisRepositoryPort):
         return AnalysisDocumentMapper.from_document(analysis_document)
 
     @classmethod
-    async def find_by_user_id(self, user_id: str) -> List[Analysis]:
+    async def find_by_user_id(
+        self, user_id: str, page: int, page_size: int
+    ) -> List[Analysis]:
+        skip = (page - 1) * page_size
+
         analysis_documents = (
             await AnalysisDocument.find({'user_id': user_id})
-            .sort(-AnalysisDocument.id)
+            .sort(-AnalysisDocument.created_at)
+            .skip(skip)
+            .limit(page_size)
             .to_list()
         )
 

@@ -5,6 +5,7 @@ from fastapi import (
     BackgroundTasks,
     Depends,
     File,
+    Query,
     UploadFile,
     status,
 )
@@ -111,8 +112,16 @@ async def stream_status(
 async def get_user_analyses(
     orchestrator: AnalysisOrchestratorPort = Depends(get_analysis_orchestrator),
     user_id: str = Depends(authentication),
+    page: int = Query(1, ge=1, description='Page number to retrieve'),
+    page_size: int = Query(
+        10,
+        alias='pageSize',
+        ge=1,
+        le=50,
+        description='Number of results per page',
+    ),
 ):
-    analyses = await orchestrator.get_by_user_id(user_id)
+    analyses = await orchestrator.get_by_user_id(user_id, page, page_size)
     return [AnalysisSchemaMapper.to_summary(a) for a in analyses]
 
 

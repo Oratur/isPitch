@@ -29,7 +29,9 @@ class AnalysisOrchestratorPort(ABC):
         pass
 
     @abstractmethod
-    async def get_by_user_id(self, user_id: str) -> List[Analysis]:
+    async def get_by_user_id(
+        self, user_id: str, page: int, page_size: int
+    ) -> List[Analysis]:
         pass
 
 

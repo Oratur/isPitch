@@ -50,7 +50,9 @@ class AnalysisRepositoryPort(ABC):
         pass
 
     @abstractmethod
-    async def find_by_user_id(self, user_id: str) -> List[Analysis]:
+    async def find_by_user_id(
+        self, user_id: str, page: int, page_size: int
+    ) -> List[Analysis]:
         pass
 
     @abstractmethod
