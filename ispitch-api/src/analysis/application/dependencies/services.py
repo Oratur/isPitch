@@ -11,6 +11,7 @@ from ...application.dependencies.models import (
 )
 from ...domain.ports.input import (
     AnalysisOrchestratorPort,
+    AnalysisStatsPort,
     AudioAnalysisPort,
     LexicalRichnessPort,
     SpeechAnalysisPort,
@@ -31,6 +32,7 @@ from ...domain.services.analysis_orchestrator_service import (
     AnalysisOrchestratorDependencies,
     AnalysisOrchestratorService,
 )
+from ...domain.services.analysis_stats_service import AnalysisStatsService
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.lexical_richness_service import LexicalRichnessService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
@@ -38,27 +40,18 @@ from ...domain.services.topic_analysis_service import TopicAnalysisService
 from ...domain.services.vocabulary_analysis_service import (
     VocabularyAnalysisService,
 )
-from ...infrastructure.adapters.audio.audio_adapter import AudioAdapter
-from ...infrastructure.adapters.speech.fillerwords_analysis_adapter import (
-    FillerWordsAnalysisAdapter,
-)
-from ...infrastructure.adapters.task_queue.celery_adapter import (
+from ...infrastructure.adapters import (
+    AudioAdapter,
     CeleryTaskQueueAdapter,
-)
-from ...infrastructure.adapters.topics.huggingface_adapter import (
+    FillerWordsAnalysisAdapter,
     HuggingFaceTopicAdapter,
-)
-from ...infrastructure.adapters.transcription.whisper_adapter import (
+    NltkSynonymProviderAdapter,
     WhisperAdapter,
 )
-from ...infrastructure.adapters.vocabulary.nltk_adapter import (
-    NltkSynonymProviderAdapter,
-)
 from ...infrastructure.context.resource_manager import ResourceManager
-from ...infrastructure.persistance.adapters.analysis_repository_adapter import (
+from ...infrastructure.persistance.adapters import (
     AnalysisRepositoryAdapter,
-)
-from ...infrastructure.persistance.adapters.storage_adapter import (
+    AnalysisStatsRepositoryAdapter,
     StorageAdapter,
 )
 from ..adapters.sse_adapter import RedisSSEAdapter
@@ -140,3 +133,9 @@ def get_topic_model_port() -> TopicModelPort:
 def get_topic_analysis_port() -> TopicAnalysisPort:
     load_nltk_tokenizer()
     return TopicAnalysisService(get_topic_model_port())
+
+
+@lru_cache(maxsize=1)
+def get_analysis_stats_service() -> AnalysisStatsPort:
+    stats_repository = AnalysisStatsRepositoryAdapter()
+    return AnalysisStatsService(stats_repository)

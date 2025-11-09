@@ -4,6 +4,7 @@ from typing import List
 from fastapi import BackgroundTasks, UploadFile
 
 from ..models.analysis import Analysis
+from ..models.analysis_stats import AnalysisStats
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.lexical_richness import LexicalRichnessAnalysis
 from ..models.silence import SilenceAnalysis
@@ -86,4 +87,10 @@ class LexicalRichnessPort(ABC):
 class TopicAnalysisPort(ABC):
     @abstractmethod
     def analyze(self, transcription: Transcription) -> TopicAnalysis:
+        pass
+
+
+class AnalysisStatsPort(ABC):
+    @abstractmethod
+    async def get_stats(self, user_id: str) -> AnalysisStats:
         pass
