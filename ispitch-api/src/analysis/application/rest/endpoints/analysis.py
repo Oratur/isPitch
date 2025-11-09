@@ -12,6 +12,7 @@ from fastapi import (
 from .....auth.application.dependencies.security import authentication
 from ....application.dependencies.services import (
     get_analysis_orchestrator,
+    get_analysis_stats_service,
     get_sse_adapter,
 )
 from ....application.dependencies.validations import (
@@ -19,10 +20,13 @@ from ....application.dependencies.validations import (
 )
 from ....domain.ports.input import (
     AnalysisOrchestratorPort,
+    AnalysisStatsPort,
 )
 from ...adapters.sse_adapter import RedisSSEAdapter
 from ...mappers.analysis_schema_mapper import AnalysisSchemaMapper
+from ...mappers.analysis_stats_mapper import AnalysisStatsMapper
 from ..schemas.analysis import AnalysisSchema, AnalysisSummarySchema
+from ..schemas.analysis_stats import AnalysisStatsSchema
 
 router_v1 = APIRouter(prefix='/v1/analysis', tags=['Analysis'])
 router_v2 = APIRouter(prefix='/v2/analysis', tags=['Analysis'])
@@ -110,3 +114,18 @@ async def get_user_analyses(
 ):
     analyses = await orchestrator.get_by_user_id(user_id)
     return [AnalysisSchemaMapper.to_summary(a) for a in analyses]
+
+
+@router_v2.get(
+    '/stats',
+    response_model=AnalysisStatsSchema,
+    summary='Get user analysis statistics',
+    description='Retrieves aggregated statistics for the authenticated user, '
+    'including total analyses, filler words, duration, and chart data.',
+)
+async def get_analysis_stats(
+    stats_service: AnalysisStatsPort = Depends(get_analysis_stats_service),
+    user_id: str = Depends(authentication),
+) -> AnalysisStatsSchema:
+    stats = await stats_service.get_stats(user_id)
+    return AnalysisStatsMapper.from_model(stats)

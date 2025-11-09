@@ -5,6 +5,7 @@ from fastapi import UploadFile
 
 from src.analysis.domain.models.analysis import Analysis
 
+from ..models.analysis_stats import AnalysisStats
 from ..models.events import SseEvent
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.topic import TopicAnalysis
@@ -86,4 +87,10 @@ class SynonymProviderPort(ABC):
 class TopicModelPort(ABC):
     @abstractmethod
     def extract_topics(self, text: str) -> TopicAnalysis:
+        pass
+
+
+class AnalysisStatsRepositoryPort(ABC):
+    @abstractmethod
+    async def get_stats(self, user_id: str) -> AnalysisStats:
         pass
