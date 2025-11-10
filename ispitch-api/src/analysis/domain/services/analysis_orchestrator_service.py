@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Tuple
 
 from ..models.analysis import (
     Analysis,
@@ -117,7 +117,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
 
     async def get_by_user_id(
         self, user_id: str, page: int, page_size: int
-    ) -> List[Analysis]:
+    ) -> Tuple[List[Analysis], int]:
         """
         Retrieves all analyses for a specific user by their user ID.
         Args:

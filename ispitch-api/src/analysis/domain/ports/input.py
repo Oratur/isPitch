@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 
 from fastapi import BackgroundTasks, UploadFile
 
@@ -31,7 +31,7 @@ class AnalysisOrchestratorPort(ABC):
     @abstractmethod
     async def get_by_user_id(
         self, user_id: str, page: int, page_size: int
-    ) -> List[Analysis]:
+    ) -> Tuple[List[Analysis], int]:
         pass
 
 

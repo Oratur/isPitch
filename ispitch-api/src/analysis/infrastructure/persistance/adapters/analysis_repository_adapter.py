@@ -1,4 +1,5 @@
-from typing import List
+import asyncio
+from typing import List, Tuple
 
 from ....domain.models.analysis import Analysis
 from ....domain.ports.output import AnalysisRepositoryPort
@@ -21,23 +22,30 @@ class AnalysisRepositoryAdapter(AnalysisRepositoryPort):
     @classmethod
     async def find_by_user_id(
         self, user_id: str, page: int, page_size: int
-    ) -> List[Analysis]:
+    ) -> Tuple[List[Analysis], int]:
         skip = (page - 1) * page_size
+        find_query = AnalysisDocument.find({'user_id': user_id})
 
-        analysis_documents = (
-            await AnalysisDocument.find({'user_id': user_id})
-            .sort(-AnalysisDocument.created_at)
+        list_task = (
+            find_query.sort(-AnalysisDocument.created_at)
             .skip(skip)
             .limit(page_size)
             .to_list()
         )
+        count_task = find_query.count()
 
-        return [
+        analysis_documents, total_count = await asyncio.gather(
+            list_task, count_task
+        )
+
+        mapped_analyses = [
             analysis
             for document in analysis_documents
             if (analysis := AnalysisDocumentMapper.from_document(document))
             is not None
         ]
+
+        return mapped_analyses, total_count
 
     @classmethod
     async def find_all(self) -> list[Analysis]:
