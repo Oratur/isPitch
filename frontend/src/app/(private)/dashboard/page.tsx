@@ -15,7 +15,7 @@ import { AnalysisChart } from '@/components/features/dashboard/AnalysisChart';
 
 export default function DashboardPage() {
   const { data: stats, isLoading: statsLoading, error: statsError } = useGetDashboardStats();
-  const { data: recentAnalyses, isLoading: analysesLoading, error: analysesError } = useGetRecentAnalyses();
+  const { data: recentAnalysis, isLoading: analysesLoading, error: analysesError } = useGetRecentAnalyses();
 
   const error = statsError || analysesError;
 
@@ -46,8 +46,8 @@ export default function DashboardPage() {
           <Grid size={{ xs: 12 }}>
             {analysesLoading ? (
               <RecentAnalysisCardSkeleton />
-            ) : recentAnalyses && recentAnalyses.length > 0 ? (
-              <RecentAnalysisCard analysis={recentAnalyses[0]} />
+            ) : recentAnalysis ? (
+              <RecentAnalysisCard analysis={recentAnalysis} />
             ) : (
               <Alert severity="info">Nenhuma análise encontrada ainda.</Alert>
             )}

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { DashboardStats, RecentAnalysis } from '../types/dashboard';
-import { getDashboardStats, getRecentAnalyses } from '../services/dashboardService';
+import { getDashboardStats, getRecentAnalysis } from '../services/dashboardService';
 
 
 export const useGetDashboardStats = () => {
@@ -12,10 +12,10 @@ export const useGetDashboardStats = () => {
     });
 };
 
-export const useGetRecentAnalyses = (limit: number = 5) => {
-    return useQuery<RecentAnalysis[], Error>({
-        queryKey: ['dashboard', 'recent', limit],
-        queryFn: () => getRecentAnalyses(limit),
+export const useGetRecentAnalysis = () => {
+    return useQuery<RecentAnalysis, Error>({
+        queryKey: ['dashboard', 'recent'],
+        queryFn: getRecentAnalysis,
         staleTime: 1000 * 60 * 5, // 5 minutos
     });
 };
