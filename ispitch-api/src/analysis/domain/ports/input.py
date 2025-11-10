@@ -34,6 +34,10 @@ class AnalysisOrchestratorPort(ABC):
     ) -> Tuple[List[Analysis], int]:
         pass
 
+    @abstractmethod
+    async def find_recent_by_user_id(self, user_id: str) -> Analysis:
+        pass
+
 
 class AsyncAnalysisOrchestratorPort(ABC):
     @abstractmethod

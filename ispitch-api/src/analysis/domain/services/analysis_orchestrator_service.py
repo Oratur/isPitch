@@ -134,6 +134,11 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
             logger.error(f'Error retrieving analyses {user_id}: {str(e)}')
             raise
 
+    async def find_recent_by_user_id(self, user_id: str) -> Analysis:
+        return await self.analysis_repository_port.find_recent_by_user_id(
+            user_id
+        )
+
     async def _run_analysis(
         self, analysis_id: str, audio_path: str, filename: str
     ):

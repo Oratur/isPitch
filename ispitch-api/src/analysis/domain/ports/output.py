@@ -56,6 +56,10 @@ class AnalysisRepositoryPort(ABC):
         pass
 
     @abstractmethod
+    async def find_recent_by_user_id(self, user_id: str) -> Analysis:
+        pass
+
+    @abstractmethod
     def find_all(self) -> list[Analysis]:
         pass
 
