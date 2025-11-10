@@ -4,6 +4,7 @@ from .analysis_summary import (
     AnalysisSummaryResponseSchema,
     AnalysisSummarySchema,
 )
+from .recent_analysis import RecentAnalysisSchema
 
 __all__ = [
     'AnalysisSchema',
@@ -12,4 +13,5 @@ __all__ = [
     'AudioAnalysisSchema',
     'SpeechAnalysisSchema',
     'AnalysisSummarySchema',
+    'RecentAnalysisSchema',
 ]

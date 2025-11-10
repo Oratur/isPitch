@@ -59,3 +59,15 @@ class AnalysisRepositoryAdapter(AnalysisRepositoryPort):
     async def delete_by_id(self, analysis_id: str):
         analysis_document = await AnalysisDocument.get(analysis_id)
         await analysis_document.delete()
+
+    @classmethod
+    async def find_recent_by_user_id(self, user_id: str) -> Analysis:
+        find_query = AnalysisDocument.find({'user_id': user_id})
+
+        analysis_document = await find_query.sort(
+            -AnalysisDocument.created_at
+        ).first_or_none()
+
+        mapped_analyses = AnalysisDocumentMapper.from_document(analysis_document)
+
+        return mapped_analyses

@@ -101,13 +101,12 @@ class AnalysisStatsRepositoryAdapter(AnalysisStatsRepositoryPort):
         chart_data: list[ChartData] = []
         for item in chart_result:
             month = item['_id']['month']
-            year = item['_id']['year']
             analyses_count = item['analyses']
 
             month_name = self.MONTH_NAMES[month - 1]
-            year_short = str(year)[-2:]
-            name = f'{month_name}/{year_short}'
 
-            chart_data.append(ChartData(name=name, analyses=analyses_count))
+            chart_data.append(
+                ChartData(name=month_name, analyses=analyses_count)
+            )
 
         return chart_data

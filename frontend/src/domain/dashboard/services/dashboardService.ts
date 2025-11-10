@@ -11,7 +11,7 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
     }
 
     return apiRequest<DashboardStats>({
-        url: '/v2/dashboard/stats',
+        url: '/v2/analysis/stats',
         options: {
             method: 'GET',
         },
@@ -19,14 +19,14 @@ export const getDashboardStats = async (): Promise<DashboardStats> => {
     });
 };
 
-export const getRecentAnalyses = async (limit: number = 5): Promise<RecentAnalysis[]> => {
+export const getRecentAnalysis = async (): Promise<RecentAnalysis> => {
     if (USE_MOCK_DATA) {
         await new Promise(resolve => setTimeout(resolve, 1200));
-        return mockRecentAnalyses.slice(0, limit);
+        return mockRecentAnalyses.slice(0, 5)[0];
     }
 
-    return apiRequest<RecentAnalysis[]>({
-        url: `/v2/dashboard/recent?limit=${limit}`,
+    return apiRequest<RecentAnalysis>({
+        url: '/v2/analysis/recent',
         options: {
             method: 'GET',
         },

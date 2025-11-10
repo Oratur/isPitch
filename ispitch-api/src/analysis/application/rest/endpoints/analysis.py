@@ -27,10 +27,12 @@ from ....domain.ports.input import (
 from ...adapters.sse_adapter import RedisSSEAdapter
 from ...mappers.analysis_schema_mapper import AnalysisSchemaMapper
 from ...mappers.analysis_stats_mapper import AnalysisStatsMapper
+from ...mappers.recent_analysis_mapper import RecentAnalysisMapper
 from ..schemas import (
     AnalysisSchema,
     AnalysisStatsSchema,
     AnalysisSummaryResponseSchema,
+    RecentAnalysisSchema,
 )
 
 router_v1 = APIRouter(prefix='/v1/analysis', tags=['Analysis'])
@@ -150,3 +152,17 @@ async def get_analysis_stats(
 ) -> AnalysisStatsSchema:
     stats = await stats_service.get_stats(user_id)
     return AnalysisStatsMapper.from_model(stats)
+
+
+@router_v2.get(
+    '/recent',
+    response_model=RecentAnalysisSchema,
+    summary='Get recent user analysis for dashboard',
+    description='Retrieves the most recent analysis.',
+)
+async def get_recent_analysis(
+    user_id: str = Depends(authentication),
+    orchestrator: AnalysisOrchestratorPort = Depends(get_analysis_orchestrator),
+):
+    analysis = await orchestrator.find_recent_by_user_id(user_id)
+    return RecentAnalysisMapper.from_model(analysis)
