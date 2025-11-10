@@ -157,10 +157,10 @@ async def get_analysis_stats(
 @router_v2.get(
     '/recent',
     response_model=RecentAnalysisSchema,
-    summary='Get recent user analyses for dashboard',
+    summary='Get recent user analysis for dashboard',
     description='Retrieves the most recent analysis.',
 )
-async def get_recent_analyses(
+async def get_recent_analysis(
     user_id: str = Depends(authentication),
     orchestrator: AnalysisOrchestratorPort = Depends(get_analysis_orchestrator),
 ):
