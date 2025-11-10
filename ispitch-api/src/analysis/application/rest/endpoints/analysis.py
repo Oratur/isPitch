@@ -5,11 +5,13 @@ from fastapi import (
     BackgroundTasks,
     Depends,
     File,
+    Query,
     UploadFile,
     status,
 )
 
 from .....auth.application.dependencies.security import authentication
+from .....core.schemas import PaginationMetadata
 from ....application.dependencies.services import (
     get_analysis_orchestrator,
     get_analysis_stats_service,
@@ -25,8 +27,11 @@ from ....domain.ports.input import (
 from ...adapters.sse_adapter import RedisSSEAdapter
 from ...mappers.analysis_schema_mapper import AnalysisSchemaMapper
 from ...mappers.analysis_stats_mapper import AnalysisStatsMapper
-from ..schemas.analysis import AnalysisSchema, AnalysisSummarySchema
-from ..schemas.analysis_stats import AnalysisStatsSchema
+from ..schemas import (
+    AnalysisSchema,
+    AnalysisStatsSchema,
+    AnalysisSummaryResponseSchema,
+)
 
 router_v1 = APIRouter(prefix='/v1/analysis', tags=['Analysis'])
 router_v2 = APIRouter(prefix='/v2/analysis', tags=['Analysis'])
@@ -104,16 +109,32 @@ async def stream_status(
 
 @router_v2.get(
     '/',
-    response_model=list[AnalysisSummarySchema],
+    response_model=AnalysisSummaryResponseSchema,
     summary='Get all user analyses',
     description='Retrieves all analyses created by the authenticated user',
 )
 async def get_user_analyses(
     orchestrator: AnalysisOrchestratorPort = Depends(get_analysis_orchestrator),
     user_id: str = Depends(authentication),
+    page: int = Query(1, ge=1, description='Page number to retrieve'),
+    page_size: int = Query(
+        10,
+        alias='pageSize',
+        ge=1,
+        le=50,
+        description='Number of results per page',
+    ),
 ):
-    analyses = await orchestrator.get_by_user_id(user_id)
-    return [AnalysisSchemaMapper.to_summary(a) for a in analyses]
+    analyses, total = await orchestrator.get_by_user_id(user_id, page, page_size)
+
+    items = [AnalysisSchemaMapper.to_summary(a) for a in analyses]
+    metadata = PaginationMetadata(
+        total=total,
+        page=page,
+        page_size=page_size,
+        has_more=(page * page_size) < total,
+    )
+    return AnalysisSummaryResponseSchema(analyses=items, metadata=metadata)
 
 
 @router_v2.get(

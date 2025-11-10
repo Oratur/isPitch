@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 
 from fastapi import UploadFile
 
@@ -50,7 +50,9 @@ class AnalysisRepositoryPort(ABC):
         pass
 
     @abstractmethod
-    async def find_by_user_id(self, user_id: str) -> List[Analysis]:
+    async def find_by_user_id(
+        self, user_id: str, page: int, page_size: int
+    ) -> Tuple[List[Analysis], int]:
         pass
 
     @abstractmethod

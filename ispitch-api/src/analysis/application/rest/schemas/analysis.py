@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from .....core.schemas.camel_case_model import CamelCaseModel
+from .....core.schemas import CamelCaseModel
 from ..schemas.fillerwords import FillerWordsAnalysisSchema
 from ..schemas.lexical_richness import LexicalRichnessAnalysisSchema
 from ..schemas.silence import SilenceAnalysisSchema
@@ -31,12 +31,3 @@ class AnalysisSchema(CamelCaseModel):
     transcription: Optional[str] = None
     speech_analysis: Optional[SpeechAnalysisSchema] = None
     audio_analysis: Optional[AudioAnalysisSchema] = None
-
-
-class AnalysisSummarySchema(CamelCaseModel):
-    id: str
-    user_id: Optional[str] = None
-    status: str
-    filename: str
-    duration: float
-    created_at: datetime

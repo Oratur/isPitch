@@ -12,7 +12,7 @@ from ..mappers.topic_analysis_schema_mapper import TopicAnalysisSchemaMapper
 from ..mappers.vocabulary_analysis_schema_mapper import (
     VocabularyAnalysisSchemaMapper,
 )
-from ..rest.schemas.analysis import (
+from ..rest.schemas import (
     AnalysisSchema,
     AnalysisSummarySchema,
     AudioAnalysisSchema,

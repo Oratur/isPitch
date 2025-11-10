@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import List
+from typing import List, Tuple
 
 from ..models.analysis import (
     Analysis,
@@ -115,7 +115,9 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
                 audio_analysis=None,
             )
 
-    async def get_by_user_id(self, user_id: str) -> List[Analysis]:
+    async def get_by_user_id(
+        self, user_id: str, page: int, page_size: int
+    ) -> Tuple[List[Analysis], int]:
         """
         Retrieves all analyses for a specific user by their user ID.
         Args:
@@ -125,7 +127,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
         """
         try:
             analyses = await self.analysis_repository_port.find_by_user_id(
-                user_id
+                user_id, page, page_size
             )
             return analyses
         except Exception as e:
