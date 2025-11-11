@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Box, Typography, Grid, Alert } from '@mui/material';
 import { 
   StatsCardsSkeleton,
@@ -12,13 +13,15 @@ import { useGetDashboardStats, useGetRecentAnalyses } from '@/domain/dashboard/h
 import { RecentAnalysisCard } from '@/components/features/dashboard/RecentAnalysisCard';
 import { AnalysisChartSkeleton } from '@/components/features/dashboard/AnalysisChartSkeleton';
 import { AnalysisChart } from '@/components/features/dashboard/AnalysisChart';
+import { TimeRange } from '@/domain/dashboard/types';
 
 export default function DashboardPage() {
-  const { data: stats, isLoading: statsLoading, error: statsError } = useGetDashboardStats();
+  const [timeRange, setTimeRange] = useState<TimeRange>('month');
+  
+  const { data: stats, isLoading: statsLoading, error: statsError } = useGetDashboardStats(timeRange);
   const { data: recentAnalysis, isLoading: analysesLoading, error: analysesError } = useGetRecentAnalyses();
 
   const error = statsError || analysesError;
-
   return (
     <>
       <Box sx={{ p: { xs: 2, sm: 3, lg: 4 }, position: 'relative' }}>
@@ -36,12 +39,14 @@ export default function DashboardPage() {
           </Alert>
         )}
 
+        {/* Cards de estatísticas */}
         {statsLoading ? (
           <StatsCardsSkeleton />
         ) : (
           <StatsCards stats={stats} />
         )}
 
+        {/* Análise recente */}
         <Grid container spacing={4} sx={{ mt: 2 }}>
           <Grid size={{ xs: 12 }}>
             {analysesLoading ? (
@@ -54,12 +59,18 @@ export default function DashboardPage() {
           </Grid>
         </Grid>
 
+        {/* Gráfico com controles integrados */}
         <Grid container spacing={4} sx={{ mt: 2 }}>
-            <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             {statsLoading ? (
               <AnalysisChartSkeleton />
             ) : stats ? (
-              <AnalysisChart data={stats.chartData} />
+              <AnalysisChart 
+                data={stats.chartData}
+                timeRange={timeRange}
+                onTimeRangeChange={setTimeRange}
+                isLoading={statsLoading}
+              />
             ) : null}
           </Grid>
         </Grid>

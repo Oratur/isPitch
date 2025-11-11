@@ -20,6 +20,7 @@ from ....application.dependencies.services import (
 from ....application.dependencies.validations import (
     validate_audio_file,
 )
+from ....domain.models.time_range import TimeRange
 from ....domain.ports.input import (
     AnalysisOrchestratorPort,
     AnalysisStatsPort,
@@ -149,8 +150,12 @@ async def get_user_analyses(
 async def get_analysis_stats(
     stats_service: AnalysisStatsPort = Depends(get_analysis_stats_service),
     user_id: str = Depends(authentication),
+    time_range: TimeRange = Query(
+        alias='timeRange',
+        default=TimeRange.MONTH,
+    ),
 ) -> AnalysisStatsSchema:
-    stats = await stats_service.get_stats(user_id)
+    stats = await stats_service.get_stats(user_id, time_range)
     return AnalysisStatsMapper.from_model(stats)
 
 

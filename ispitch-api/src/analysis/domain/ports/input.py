@@ -8,6 +8,7 @@ from ..models.analysis_stats import AnalysisStats
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.lexical_richness import LexicalRichnessAnalysis
 from ..models.silence import SilenceAnalysis
+from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
 from ..models.vocabulary import VocabularyAnalysis
@@ -98,5 +99,7 @@ class TopicAnalysisPort(ABC):
 
 class AnalysisStatsPort(ABC):
     @abstractmethod
-    async def get_stats(self, user_id: str) -> AnalysisStats:
+    async def get_stats(
+        self, user_id: str, time_range: TimeRange
+    ) -> AnalysisStats:
         pass
