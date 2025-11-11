@@ -6,7 +6,7 @@ export interface AnalysisHistoryItem {
   createdAt: string;
   duration: string; // formato "XX:XX"
   status: AnalysisStatus;
-  score: number; // pontuação geral (0-100)
+  //score: number; // pontuação geral (0-100)
 }
 
 export interface AnalysisHistoryResponse {
@@ -22,6 +22,6 @@ export interface AnalysisHistoryFilters {
   limit?: number;
   status?: AnalysisStatus | 'all';
   search?: string;
-  sortBy?: 'createdAt' | 'filename' | 'score';
+  sortBy?: 'createdAt' | 'filename';
   sortOrder?: 'asc' | 'desc';
 }

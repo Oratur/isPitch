@@ -52,8 +52,6 @@ export const getAnalysisHistory = async (
         comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       } else if (sortBy === 'filename') {
         comparison = a.filename.localeCompare(b.filename);
-      } else if (sortBy === 'score') {
-        comparison = a.score - b.score;
       }
 
       return sortOrder === 'asc' ? comparison : -comparison;

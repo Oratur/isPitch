@@ -26,6 +26,7 @@ import {
   FormControl,
   InputLabel,
   Stack,
+  Link as MuiLink
 } from '@mui/material';
 import { Search, Eye, Trash2, Download } from 'lucide-react';
 import Link from 'next/link';
@@ -168,7 +169,7 @@ export default function AnalysesPage() {
         <Paper variant="card1" sx={{ overflow: 'hidden' }}>
           <TableContainer>
             <Table>
-              <TableHead sx={{ bgcolor: theme.palette.purple.light2 }}>
+              <TableHead sx={{ bgcolor: '#2A1A3D' }}>
                 <TableRow>
                   <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
                     DATA DA SUBMISSÃO
@@ -183,9 +184,6 @@ export default function AnalysesPage() {
                     STATUS DA ANÁLISE
                   </TableCell>
                   <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
-                    PONTUAÇÃO GERAL
-                  </TableCell>
-                  <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }} align="right">
                     AÇÕES
                   </TableCell>
                 </TableRow>
@@ -195,7 +193,8 @@ export default function AnalysesPage() {
                   <TableRow
                     key={analysis.id}
                     sx={{
-                      '&:hover': {
+                      bgcolor: theme.palette.purple.light2,
+                        '&:hover': {
                         bgcolor: theme.palette.purple.hover1,
                       },
                     }}
@@ -217,34 +216,18 @@ export default function AnalysesPage() {
                         sx={{ fontWeight: 500 }}
                       />
                     </TableCell>
-                    <TableCell sx={{ color: theme.palette.purple.contrastText }}>
-                      {analysis.status === 'completed' ? `${analysis.score}%` : 'XXX'}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Tooltip title="Ver Detalhes">
-                        <IconButton
-                          component={Link}
-                          href={`/analysis/${analysis.id}`}
-                          size="small"
-                          sx={{ color: theme.palette.info.main }}
+                    <TableCell>
+                      <MuiLink
+                            component={Link}
+                            href={`/analysis/${analysis.id}`}
+                            sx={{
+                            color: theme.palette.purple.main,
+                            fontWeight: 600,
+                            '&:hover': { color: theme.palette.purple.light1 },
+                            }}
                         >
-                          <Eye size={18} />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Download">
-                        <IconButton size="small" sx={{ color: theme.palette.success.main }}>
-                          <Download size={18} />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Excluir">
-                        <IconButton
-                          size="small"
-                          onClick={() => handleDelete(analysis.id)}
-                          sx={{ color: theme.palette.error.main }}
-                        >
-                          <Trash2 size={18} />
-                        </IconButton>
-                      </Tooltip>
+                            Ver detalhes
+                        </MuiLink>
                     </TableCell>
                   </TableRow>
                 ))}
