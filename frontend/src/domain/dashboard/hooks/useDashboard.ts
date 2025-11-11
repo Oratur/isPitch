@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { DashboardStats, RecentAnalysis } from '../types/dashboard';
+import { DashboardStats, RecentAnalysis, TimeRange } from '../types/dashboard';
 import { getDashboardStats, getRecentAnalysis } from '../services/dashboardService';
 
 
-export const useGetDashboardStats = () => {
+export const useGetDashboardStats = (timeRange: TimeRange = 'month') => {
     return useQuery<DashboardStats, Error>({
-        queryKey: ['dashboard', 'stats'],
-        queryFn: getDashboardStats,
+        queryKey: ['dashboard', 'stats', timeRange],
+        queryFn: () => getDashboardStats(timeRange),
         staleTime: 1000 * 60 * 5, // 5 minutos
     });
 };

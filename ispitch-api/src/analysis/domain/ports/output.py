@@ -8,6 +8,7 @@ from src.analysis.domain.models.analysis import Analysis
 from ..models.analysis_stats import AnalysisStats
 from ..models.events import SseEvent
 from ..models.fillerwords import FillerWordsAnalysis
+from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
 
@@ -98,5 +99,7 @@ class TopicModelPort(ABC):
 
 class AnalysisStatsRepositoryPort(ABC):
     @abstractmethod
-    async def get_stats(self, user_id: str) -> AnalysisStats:
+    async def get_stats(
+        self, user_id: str, time_range: TimeRange
+    ) -> AnalysisStats:
         pass

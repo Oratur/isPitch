@@ -1,3 +1,5 @@
+export type TimeRange = 'day' | 'month' | 'year' | 'all';
+
 export interface DashboardStats {
     totalAnalyses: number;
     totalFillerWords: number;

@@ -1,24 +1,50 @@
-import { Card, CardHeader, CardContent, Typography, Box, Chip, Stack, ToggleButtonGroup, ToggleButton } from '@mui/material';
-import { BarChart2, TrendingUp, Calendar, Download } from 'lucide-react';
+import { Card, CardHeader, CardContent, Typography, Box, Chip, Stack, ToggleButtonGroup, ToggleButton, Divider } from '@mui/material';
+import { BarChart2, TrendingUp, Calendar, Download, Clock } from 'lucide-react';
 import theme from '@/styles/theme';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { useState } from 'react';
-import { ChartData } from '@/domain/dashboard/types';
+import { ChartData, TimeRange } from '@/domain/dashboard/types';
 
 
 interface AnalysisChartProps {
   data?: ChartData[];
+  timeRange: TimeRange;
+  onTimeRangeChange: (range: TimeRange) => void;
+  isLoading?: boolean;
 }
 
 interface TooltipProps {
-    active?: boolean;
-    payload?: Array<{
-      value: number;
-      payload: ChartData;
-    }>;
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    payload: ChartData;
+  }>;
 }
 
-export function AnalysisChart({ data }: AnalysisChartProps) {
+const TIME_RANGE_CONFIG = {
+  day: {
+    label: 'Hoje',
+    description: 'Últimas 24 horas',
+    icon: <Clock size={14} />
+  },
+  month: {
+    label: 'Mês',
+    description: 'Últimos 30 dias',
+    icon: <Calendar size={14} />
+  },
+  year: {
+    label: 'Ano',
+    description: 'Último ano',
+    icon: <TrendingUp size={14} />
+  },
+  all: {
+    label: 'Tudo',
+    description: 'Todo o período',
+    icon: <BarChart2 size={14} />
+  }
+} as const;
+
+export function AnalysisChart({ data, timeRange, onTimeRangeChange, isLoading = false }: AnalysisChartProps) {
   const [chartType, setChartType] = useState<'line' | 'area'>('area');
 
   // Dados de exemplo caso não haja dados
@@ -34,13 +60,13 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
   const chartData = data && data.length > 0 ? data : defaultData;
 
   const totalAnalyses = chartData.reduce((sum, item) => sum + item.analyses, 0);
-  const avgAnalyses = totalAnalyses / chartData.length;
+  const avgAnalyses = chartData.length > 0 ? totalAnalyses / chartData.length : 0;
   const maxMonth = chartData.reduce((max, item) => item.analyses > max.analyses ? item : max, chartData[0]);
   const currentMonth = chartData[chartData.length - 1];
   const previousMonth = chartData[chartData.length - 2];
   const growth = previousMonth && previousMonth.analyses !== 0
-  ? ((currentMonth.analyses - previousMonth.analyses) / previousMonth.analyses * 100)
-  : 0;
+    ? ((currentMonth.analyses - previousMonth.analyses) / previousMonth.analyses * 100)
+    : 0;
 
   const CustomTooltip = ({ active, payload }: TooltipProps) => {
     if (active && payload && payload.length) {
@@ -72,6 +98,14 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
     }
   };
 
+  const handleTimeRangeChange = (_: React.MouseEvent<HTMLElement>, newRange: TimeRange | null) => {
+    if (newRange !== null) {
+      onTimeRangeChange(newRange);
+    }
+  };
+
+  const currentTimeRangeConfig = TIME_RANGE_CONFIG[timeRange];
+
   return (
     <Card 
       variant="card1" 
@@ -83,10 +117,6 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
         '&:hover': {
           transform: 'translateY(-4px)',
           boxShadow: `0 12px 32px ${theme.palette.purple.main}30`,
-          '& .chart-controls': {
-            opacity: 1,
-            transform: 'translateY(0)',
-          }
         }
       }}
     >
@@ -124,39 +154,93 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
               </Typography>
             </Box>
 
-            <ToggleButtonGroup
-              className="chart-controls"
-              value={chartType}
-              exclusive
-              onChange={handleChartTypeChange}
-              size="small"
-              sx={{
-                opacity: 0.6,
-                transform: 'translateY(-5px)',
-                transition: 'all 0.3s ease',
-                '& .MuiToggleButton-root': {
-                  color: theme.palette.purple.light1,
-                  borderColor: theme.palette.purple.light1 + '40',
-                  px: 2,
-                  py: 0.5,
-                  fontSize: '0.75rem',
-                  '&.Mui-selected': {
-                    bgcolor: theme.palette.purple.main + '30',
-                    color: theme.palette.purple.main,
-                    borderColor: theme.palette.purple.main,
+            {/* Controles no canto superior direito */}
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              {/* Time Range Selector */}
+              <ToggleButtonGroup
+                value={timeRange}
+                exclusive
+                onChange={handleTimeRangeChange}
+                size="small"
+                disabled={isLoading}
+                sx={{
+                  '& .MuiToggleButton-root': {
+                    color: theme.palette.purple.light1,
+                    borderColor: theme.palette.purple.light1 + '40',
+                    px: 1.5,
+                    py: 0.5,
+                    fontSize: '0.75rem',
+                    minWidth: '60px',
+                    gap: 0.5,
+                    '&.Mui-selected': {
+                      bgcolor: theme.palette.purple.main + '30',
+                      color: theme.palette.purple.main,
+                      borderColor: theme.palette.purple.main,
+                    }
                   }
-                }
-              }}
-            >
-              <ToggleButton value="line">Linha</ToggleButton>
-              <ToggleButton value="area">Área</ToggleButton>
-            </ToggleButtonGroup>
+                }}
+              >
+                {Object.entries(TIME_RANGE_CONFIG).map(([key, config]) => (
+                  <ToggleButton 
+                    key={key} 
+                    value={key}
+                    aria-label={`Filtrar por ${config.label}`}
+                  >
+                    {config.icon}
+                    {config.label}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+
+              <Divider orientation="vertical" flexItem sx={{ mx: 0.5, bgcolor: theme.palette.purple.light1 + '30' }} />
+
+              {/* Chart Type Selector */}
+              <ToggleButtonGroup
+                value={chartType}
+                exclusive
+                onChange={handleChartTypeChange}
+                size="small"
+                sx={{
+                  '& .MuiToggleButton-root': {
+                    color: theme.palette.purple.light1,
+                    borderColor: theme.palette.purple.light1 + '40',
+                    px: 1.5,
+                    py: 0.5,
+                    fontSize: '0.75rem',
+                    '&.Mui-selected': {
+                      bgcolor: theme.palette.purple.main + '30',
+                      color: theme.palette.purple.main,
+                      borderColor: theme.palette.purple.main,
+                    }
+                  }
+                }}
+              >
+                <ToggleButton value="line">Linha</ToggleButton>
+                <ToggleButton value="area">Área</ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
           </Box>
         }
         sx={{ bgcolor: theme.palette.purple.light2, pb: 1 }}
       />
       
       <CardContent>
+        {/* Badge com descrição do período ativo */}
+        <Box sx={{ mb: 2 }}>
+          <Chip
+            icon={currentTimeRangeConfig.icon}
+            label={currentTimeRangeConfig.description}
+            size="small"
+            sx={{
+              bgcolor: theme.palette.purple.main + '20',
+              color: theme.palette.purple.main,
+              fontWeight: 600,
+              border: `1px solid ${theme.palette.purple.main}40`,
+            }}
+          />
+        </Box>
+
+        {/* Stats Summary */}
         <Stack 
           direction="row" 
           spacing={2} 
@@ -187,7 +271,7 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
 
           <Box sx={{ flex: 1, textAlign: 'center' }}>
             <Typography variant="caption" sx={{ color: theme.palette.purple.light1, display: 'block', mb: 0.5 }}>
-              Média Mensal
+              Média
             </Typography>
             <Typography variant="h5" sx={{ color: theme.palette.info.main, fontWeight: 700 }}>
               {avgAnalyses.toFixed(1)}
@@ -204,10 +288,10 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
 
           <Box sx={{ flex: 1, textAlign: 'center' }}>
             <Typography variant="caption" sx={{ color: theme.palette.purple.light1, display: 'block', mb: 0.5 }}>
-              Mês com Mais
+              Pico
             </Typography>
             <Typography variant="h5" sx={{ color: theme.palette.success.main, fontWeight: 700 }}>
-              {maxMonth.name}
+              {maxMonth?.name || '-'}
             </Typography>
           </Box>
 
@@ -222,7 +306,7 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
           <Box sx={{ flex: 1, textAlign: 'center' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, mb: 0.5 }}>
               <Typography variant="caption" sx={{ color: theme.palette.purple.light1 }}>
-                Crescimento
+                Tendência
               </Typography>
               <TrendingUp 
                 size={14} 
@@ -241,6 +325,7 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
           </Box>
         </Stack>
 
+        {/* Chart */}
         <ResponsiveContainer width="100%" height={280}>
           {chartType === 'area' ? (
             <AreaChart data={chartData}>
@@ -329,6 +414,7 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
           )}
         </ResponsiveContainer>
 
+        {/* Footer */}
         <Box 
           sx={{ 
             mt: 2,
@@ -342,7 +428,7 @@ export function AnalysisChart({ data }: AnalysisChartProps) {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Calendar size={16} color={theme.palette.purple.light1} />
             <Typography variant="caption" sx={{ color: theme.palette.purple.light1 }}>
-              Últimos 12 meses
+              Dados atualizados em tempo real
             </Typography>
           </Box>
 
