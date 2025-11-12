@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import List, Tuple
+
 from fastapi import UploadFile
+
 from src.analysis.domain.models.analysis import Analysis
+
 from ..models.analysis_stats import AnalysisStats
 from ..models.events import SseEvent
 from ..models.fillerwords import FillerWordsAnalysis
