@@ -18,11 +18,11 @@ def segment_transcription(
 
     Args:
         words: Uma lista de objetos Word da transcrição.
-        pause_threshold_ms: O tempo em milissegundos para 
+        pause_threshold_ms: O tempo em milissegundos para
         considerar uma pausa longa.
 
     Yields:
-        Um dicionário representando um segmento de texto com start_time, 
+        Um dicionário representando um segmento de texto com start_time,
         end_time e text.
     """
     if not words:
