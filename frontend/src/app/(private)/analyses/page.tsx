@@ -1,13 +1,9 @@
-// frontend/src/app/(private)/analyses/page.tsx
-
 'use client';
 
 import { useState } from 'react';
 import {
   Box,
   Typography,
-  TextField,
-  InputAdornment,
   Table,
   TableBody,
   TableCell,
@@ -21,66 +17,41 @@ import {
   TablePagination,
   CircularProgress,
   Alert,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Stack,
-  Link as MuiLink
+  Link as MuiLink,
 } from '@mui/material';
-import { Search, Eye, Trash2, Download } from 'lucide-react';
+import { Eye, Trash2, Download } from 'lucide-react';
 import Link from 'next/link';
-import { useAnalysisHistory, useDeleteAnalysis } from '@/domain/analysis/hooks/useAnalysisHistory';
-import { AnalysisHistoryFilters, AnalysisStatus } from '@/domain/analysis/types/analysisHistory';
+import { useAnalysisHistory, useDeleteAnalysis } from '@/domain/analysis/hooks';
+import { AnalysisStatus } from '@/domain/analysis/types/analysisHistory';
 import theme from '@/styles/theme';
 import { NewAnalysisButton } from '@/components/ui/NewAnalysisButton';
 
-const statusLabels: Record<AnalysisStatus | 'all', string> = {
-  all: 'Todos',
+const statusLabels: Record<AnalysisStatus, string> = {
   pending: 'Pendente',
-  transcribing: 'Transcrevendo',
-  analyzing_speech: 'Analisando Fala',
-  analyzing_audio: 'Analisando Áudio',
   completed: 'Concluída',
   failed: 'Erro',
 };
 
-const statusColors: Record<AnalysisStatus, 'default' | 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success'> = {
+const statusColors: Record<AnalysisStatus, 'default' | 'error' | 'success'> = {
   pending: 'default',
-  transcribing: 'info',
-  analyzing_speech: 'info',
-  analyzing_audio: 'info',
   completed: 'success',
   failed: 'error',
 };
 
 export default function AnalysesPage() {
-  const [filters, setFilters] = useState<AnalysisHistoryFilters>({
-    page: 1,
-    limit: 10,
-    status: 'all',
-    search: '',
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
-  });
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
-  const { data, isLoading, error } = useAnalysisHistory(filters);
+  const { data, isLoading, error } = useAnalysisHistory(page, pageSize);
   const { mutate: deleteAnalysis } = useDeleteAnalysis();
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters(prev => ({ ...prev, search: event.target.value, page: 1 }));
-  };
-
-  const handleStatusChange = (event: any) => {
-    setFilters(prev => ({ ...prev, status: event.target.value, page: 1 }));
-  };
-
   const handlePageChange = (_: unknown, newPage: number) => {
-    setFilters(prev => ({ ...prev, page: newPage + 1 }));
+    setPage(newPage + 1);
   };
 
   const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters(prev => ({ ...prev, limit: parseInt(event.target.value, 10), page: 1 }));
+    setPageSize(parseInt(event.target.value, 10));
+    setPage(1);
   };
 
   const handleDelete = (id: string) => {
@@ -98,61 +69,23 @@ export default function AnalysesPage() {
     });
   };
 
+  const formatDuration = (duration: number) => {
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  };
+
   return (
     <Box sx={{ p: { xs: 2, sm: 3, lg: 4 } }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Box>
-          <Typography variant="h4" sx={{ color: 'var(--color-text)', mb: 1 }}>
-            Histórico de Submissões
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Histórico das análises das suas últimas submissões
-          </Typography>
-        </Box>
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h4" sx={{ color: 'var(--color-text)', mb: 1 }}>
+          Histórico de Submissões
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Histórico das análises das suas últimas submissões
+        </Typography>
       </Box>
 
-      {/* Filtros */}
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 3 }}>
-        <TextField
-          placeholder="Buscar por nome do arquivo..."
-          value={filters.search}
-          onChange={handleSearchChange}
-          size="small"
-          sx={{ flex: 1 }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search size={20} color={theme.palette.purple.light1} />
-              </InputAdornment>
-            ),
-            sx: {
-              bgcolor: theme.palette.purple.light2,
-              color: theme.palette.purple.contrastText,
-            },
-          }}
-        />
-
-        <FormControl size="small" sx={{ minWidth: 200 }}>
-          <InputLabel sx={{ color: theme.palette.purple.light1 }}>Status da Análise</InputLabel>
-          <Select
-            value={filters.status}
-            onChange={handleStatusChange}
-            label="Status da Análise"
-            sx={{
-              bgcolor: theme.palette.purple.light2,
-              color: theme.palette.purple.contrastText,
-            }}
-          >
-            {Object.entries(statusLabels).map(([value, label]) => (
-              <MenuItem key={value} value={value}>
-                {label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Stack>
-
-      {/* Tabela */}
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
           {error.message}
@@ -194,7 +127,7 @@ export default function AnalysesPage() {
                     key={analysis.id}
                     sx={{
                       bgcolor: theme.palette.purple.light2,
-                        '&:hover': {
+                      '&:hover': {
                         bgcolor: theme.palette.purple.hover1,
                       },
                     }}
@@ -206,7 +139,7 @@ export default function AnalysesPage() {
                       {analysis.filename}
                     </TableCell>
                     <TableCell sx={{ color: theme.palette.purple.contrastText }}>
-                      {analysis.duration}
+                      {formatDuration(analysis.duration)}
                     </TableCell>
                     <TableCell>
                       <Chip
@@ -217,30 +150,39 @@ export default function AnalysesPage() {
                       />
                     </TableCell>
                     <TableCell>
-                      <MuiLink
-                            component={Link}
-                            href={`/analysis/${analysis.id}`}
-                            sx={{
-                            color: theme.palette.purple.main,
-                            fontWeight: 600,
-                            '&:hover': { color: theme.palette.purple.light1 },
-                            }}
+                      <Tooltip title="Ver Detalhes">
+                        <IconButton
+                          component={Link}
+                          href={`/analysis/${analysis.id}`}
+                          size="small"
+                          sx={{ color: theme.palette.purple.main }}
                         >
-                            Ver detalhes
-                        </MuiLink>
+                          <Eye size={18} />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Excluir">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDelete(analysis.id)}
+                          sx={{ color: theme.palette.error.main }}
+                        >
+                          <Trash2 size={18} />
+                        </IconButton>
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 ))}
+
               </TableBody>
             </Table>
           </TableContainer>
 
           <TablePagination
             component="div"
-            count={data.total}
-            page={data.page - 1}
+            count={data.metadata.total}
+            page={page - 1}
             onPageChange={handlePageChange}
-            rowsPerPage={data.limit}
+            rowsPerPage={pageSize}
             onRowsPerPageChange={handleRowsPerPageChange}
             rowsPerPageOptions={[5, 10, 25, 50]}
             labelRowsPerPage="Linhas por página:"
