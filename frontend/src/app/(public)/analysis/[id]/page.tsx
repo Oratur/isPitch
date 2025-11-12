@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import { useParams, useSearchParams } from 'next/navigation';
 import { Box, CircularProgress, Typography, Alert } from '@mui/material';
 import {AnalysisLayout} from '@/components/layouts/AnalysisLayout/AnalysisLayout';
-import { FillerWordAnalysisCard, SilenceAnalysisCard, SpeechRateCard, TranscriptionCard } from '@/components/features/analysis';
+import { FillerWordAnalysisCard, SilenceAnalysisCard, SpeechRateCard, TranscriptionCard, SentimentTimelineChart } from '@/components/features/analysis';
 import { useAnalysisSubscription, useGetAnalysis } from '@/domain/analysis/hooks';
 
 
@@ -70,6 +70,9 @@ export default function AnalysisPage() {
           </Grid>  
           <Grid size={{xs: 12, lg: 6, xl: 4}}>
             <SpeechRateCard speechRate={analysis.audioAnalysis.speechRate} />
+          </Grid>
+          <Grid size={{xs: 12, lg: 6, xl: 4}}>
+            <SentimentTimelineChart sentimentAnalysis={analysis.speechAnalysis.sentimentAnalysis} />
           </Grid>
         </Grid>
       ) : (
