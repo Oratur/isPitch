@@ -31,15 +31,29 @@ const formatTime = (seconds: number) => {
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
+type ChartData = {
+  name: string; 
+  score: number;
+  sentiment: string;
+  startTime: number;
+  endTime: number;
+};
+
+type TooltipPayload = {
+  payload: ChartData; 
+  value: number; 
+};
+
 interface CustomTooltipProps {
   active?: boolean;
-  payload?: any[];
+  payload?: TooltipPayload[]; 
   label?: string | number;
 }
 
+
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
-    const data = payload[0].payload; 
+    const data: ChartData = payload[0].payload; 
     const style = sentimentStyles[data.sentiment];
 
     return (
@@ -82,7 +96,7 @@ export function SentimentTimelineChart({ sentimentAnalysis }: SentimentTimelineC
 
   const timeline = sentimentAnalysis.timeline;
 
-  const chartData = timeline.map(segment => ({
+  const chartData: ChartData[] = timeline.map(segment => ({
     name: formatTime(segment.startTime), 
     score: segment.score,
     sentiment: segment.sentiment,
