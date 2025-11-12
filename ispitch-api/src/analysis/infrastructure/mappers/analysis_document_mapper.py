@@ -415,7 +415,9 @@ class SpeechAnalysisDocumentMapper:
         )
 
     @staticmethod
-    def _map_sentiment_analysis_from_document(sa: analysis_document.SentimentAnalysis):
+    def _map_sentiment_analysis_from_document(
+        sa: analysis_document.SentimentAnalysis
+    ):
         if sa is None:
             return None
         return SentimentAnalysis(
@@ -426,7 +428,9 @@ class SpeechAnalysisDocumentMapper:
         )
 
     @staticmethod
-    def _map_sentiment_segment_from_document(ss: analysis_document.SentimentSegment):
+    def _map_sentiment_segment_from_document(
+        ss: analysis_document.SentimentSegment
+    ):
         return SentimentSegment(
             start_time=getattr(ss, 'start_time', 0.0),
             end_time=getattr(ss, 'end_time', 0.0),

@@ -91,10 +91,6 @@ def get_storage_port() -> StoragePort:
     return StorageAdapter()
 
 
-def get_speech_analysis_port() -> SpeechAnalysisPort:
-    return SpeechAnalysisService(get_fillerwords_analysis_port())
-
-
 def get_fillerwords_analysis_port() -> FillerWordsAnalysisPort:
     return FillerWordsAnalysisAdapter(get_spacy_model())
 

@@ -7,7 +7,11 @@ from ..ports.output import FillerWordsAnalysisPort
 
 
 class SpeechAnalysisService(SpeechAnalysisPort):
-    def __init__(self, fillerwords_analysis_port: FillerWordsAnalysisPort, sentiment_analysis_port: SentimentAnalysisInputPort):
+    def __init__(
+            self, 
+            fillerwords_analysis_port: FillerWordsAnalysisPort, 
+            sentiment_analysis_port: SentimentAnalysisInputPort
+    ):
         self.fillerwords_analysis_port = fillerwords_analysis_port
         self.sentiment_analysis_port = sentiment_analysis_port
 
