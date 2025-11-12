@@ -17,9 +17,8 @@ import {
   TablePagination,
   CircularProgress,
   Alert,
-  Link as MuiLink,
 } from '@mui/material';
-import { Eye, Trash2, Download } from 'lucide-react';
+import { Eye, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useAnalysisHistory, useDeleteAnalysis } from '@/domain/analysis/hooks';
 import { AnalysisStatus } from '@/domain/analysis/types/analysisHistory';
