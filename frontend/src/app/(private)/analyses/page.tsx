@@ -152,7 +152,7 @@ export default function AnalysesPage() {
                       <Tooltip title="Ver Detalhes">
                         <IconButton
                           component={Link}
-                          href={`/analysis/${analysis.id}`}
+                          href={`/analyses/${analysis.id}`}
                           size="small"
                           sx={{ color: theme.palette.purple.main }}
                         >

@@ -19,6 +19,7 @@ class SpeechAnalysisSchema(CamelCaseModel):
 
 class AudioAnalysisSchema(CamelCaseModel):
     speech_rate: float
+    duration: float
 
 
 class AnalysisSchema(CamelCaseModel):

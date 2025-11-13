@@ -8,7 +8,7 @@ export const useInitiateAnalysis = () => {
     return useMutation({
         mutationFn: initiateAnalysis,
         onSuccess: (analysisId) => {
-            router.push(`/analysis/${analysisId}`);
+            router.push(`/analyses/${analysisId}`);
         }
     });
 };
