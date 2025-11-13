@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import { Analysis } from '@/domain/analysis/types/analysis';
 import { FillerWordsDetailCard, SilencesDetailCard, SpeechRateDetailCard } from '../speech';
-import { ActionButtons } from '../ActionsButtons';
+import { ActionButtons } from '../ActionButtons';
 
 interface OverviewTabProps {
   analysis: Analysis;

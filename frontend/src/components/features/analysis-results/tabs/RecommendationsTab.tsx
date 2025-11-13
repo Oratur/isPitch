@@ -3,7 +3,7 @@ import { Analysis } from '@/domain/analysis/types/analysis';
 import { TrendingUp, Award, Target } from 'lucide-react';
 import theme from '@/styles/theme';
 import { RecommendationsCard } from '../speech';
-import { ActionButtons } from '../ActionsButtons';
+import { ActionButtons } from '../ActionButtons';
 
 interface RecommendationsTabProps {
   analysis: Analysis;

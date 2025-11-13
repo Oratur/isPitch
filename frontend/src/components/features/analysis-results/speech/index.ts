@@ -5,4 +5,4 @@ export { SilencesDetailCard } from './SilencesDetailCard';
 export { SpeechRateDetailCard } from './SpeechRateDetailCard';
 export { TopicAnalysisCard } from './TopicAnalysisCard';
 export { TranscriptionSection } from './TranscriptionSection';
-export { VocabularySuggestionsCard } from './VocabularySuggestionCard';
+export { VocabularySuggestionsCard } from './VocabularySuggestionsCard';
