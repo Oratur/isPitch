@@ -19,5 +19,5 @@ export interface RecentAnalysis {
     fillerWordsCount: number;
     speechRate: number;
     pausesCount: number;
-    status: 'completed' | 'pending' | 'failed';
+    status: 'completed' | 'pending' | 'failed' | 'transcribing' | 'analyzing_speech' | 'analyzing_audio';
 }
