@@ -1,1 +1,2 @@
-export { useGetDashboardStats, useGetRecentAnalysis as useGetRecentAnalyses } from './useDashboard';
+export { useGetDashboardStats, useGetRecentAnalysis } from './useDashboard';
+export { useDashboardAnalysisSubscription } from './useDashboardAnalysisSubscription';
