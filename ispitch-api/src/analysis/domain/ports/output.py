@@ -11,6 +11,7 @@ from ..models.fillerwords import FillerWordsAnalysis
 from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
+from ..models.prosody import IntensityAnalysis, PitchAnalysis, VocalQualityAnalysis
 
 
 class TranscriptionPort(ABC):
@@ -38,6 +39,18 @@ class FillerWordsAnalysisPort(ABC):
 class AudioPort(ABC):
     @abstractmethod
     def get_audio_duration(self, audio_path: str) -> float:
+        pass
+
+    @abstractmethod
+    def get_pitch_analysis(cls, audio_path: str) -> PitchAnalysis:
+        pass
+
+    @abstractmethod
+    def get_intensity_analysis(cls, audio_path: str) -> IntensityAnalysis:
+        pass
+
+    @abstractmethod
+    def get_vocal_quality(cls, audio_path: str) -> VocalQualityAnalysis:
         pass
 
 

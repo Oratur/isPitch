@@ -12,7 +12,7 @@ from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
 from ..models.vocabulary import VocabularyAnalysis
-
+from ..models.prosody import ProsodyAnalysis
 
 class AnalysisOrchestratorPort(ABC):
     @abstractmethod
@@ -76,6 +76,10 @@ class AudioAnalysisPort(ABC):
         audio_duration: float,
         silence_duration: float,
     ) -> float:
+        pass
+
+    @abstractmethod
+    def get_prosody_analysis(self, audio_path: str) -> ProsodyAnalysis:
         pass
 
 

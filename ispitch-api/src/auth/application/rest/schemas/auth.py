@@ -1,25 +1,25 @@
-from pydantic import EmailStr
+from pydantic import BaseModel, EmailStr
 
-from .....core.schemas.camel_case_model import CamelCaseModel
-
-
-class UserRegisterSchema(CamelCaseModel):
+# Utilizado BaseModel ao invés de CamelCaseModel para evitar warnings
+# por conta da redundância de configuração com o tipo EmailStr.
+# Se um campo com nome composto for adicionado, utilizar alias diretamente no campo.
+class UserRegisterSchema(BaseModel):
     name: str
     email: EmailStr
     password: str
 
 
-class UserLoginSchema(CamelCaseModel):
+class UserLoginSchema(BaseModel):
     email: EmailStr
     password: str
 
 
-class UserSchema(CamelCaseModel):
+class UserSchema(BaseModel):
     id: str
     name: str
     email: EmailStr
 
 
-class UserLoginResponseSchema(CamelCaseModel):
+class UserLoginResponseSchema(BaseModel):
     token: str
     user: UserSchema

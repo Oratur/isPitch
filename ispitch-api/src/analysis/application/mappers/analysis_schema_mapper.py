@@ -12,6 +12,10 @@ from ..mappers.topic_analysis_schema_mapper import TopicAnalysisSchemaMapper
 from ..mappers.vocabulary_analysis_schema_mapper import (
     VocabularyAnalysisSchemaMapper,
 )
+from ..mappers.prosody_analysis_schema_mapper import (
+    ProsodyAnalysisSchemaMapper,
+)
+
 from ..rest.schemas import (
     AnalysisSchema,
     AnalysisSummarySchema,
@@ -66,6 +70,11 @@ class AnalysisSchemaMapper:
             audio_analysis=AudioAnalysisSchema(
                 duration=analysis.audio_analysis.duration,
                 speech_rate=analysis.audio_analysis.speech_rate,
+                prosody_analysis=ProsodyAnalysisSchemaMapper.from_model(
+                    analysis.audio_analysis.prosody_analysis
+                )
+                if analysis.audio_analysis and analysis.audio_analysis.prosody_analysis
+                else None,
             )
             if analysis.audio_analysis
             else None,

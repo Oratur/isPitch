@@ -1,4 +1,11 @@
-from ...domain.models.analysis import Analysis, AudioAnalysis, SpeechAnalysis
+from ...domain.models.analysis import (
+    Analysis, 
+    AudioAnalysis, 
+    SpeechAnalysis,
+    ProsodyAnalysis, 
+    PitchAnalysis
+)
+
 from ...domain.models.fillerwords import (
     FillerWordPosition,
     FillerWordsAnalysis,

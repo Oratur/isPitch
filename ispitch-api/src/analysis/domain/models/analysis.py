@@ -9,6 +9,7 @@ from .silence import SilenceAnalysis
 from .topic import TopicAnalysis
 from .transcription import Transcription
 from .vocabulary import VocabularyAnalysis
+from .prosody import ProsodyAnalysis
 
 
 @dataclass
@@ -24,6 +25,7 @@ class SpeechAnalysis:
 class AudioAnalysis:
     duration: float
     speech_rate: float
+    prosody_analysis: Optional[ProsodyAnalysis] = None
 
 
 class AnalysisStatus(str, Enum):

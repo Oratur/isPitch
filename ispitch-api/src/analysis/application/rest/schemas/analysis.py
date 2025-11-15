@@ -7,6 +7,7 @@ from ..schemas.lexical_richness import LexicalRichnessAnalysisSchema
 from ..schemas.silence import SilenceAnalysisSchema
 from ..schemas.topic import TopicAnalysisSchema
 from ..schemas.vocabulary import VocabularyAnalysisSchema
+from ..schemas.prosody import ProsodyAnalysisSchema
 
 
 class SpeechAnalysisSchema(CamelCaseModel):
@@ -20,6 +21,7 @@ class SpeechAnalysisSchema(CamelCaseModel):
 class AudioAnalysisSchema(CamelCaseModel):
     speech_rate: float
     duration: float
+    prosody_analysis: Optional[ProsodyAnalysisSchema] = None
 
 
 class AnalysisSchema(CamelCaseModel):
