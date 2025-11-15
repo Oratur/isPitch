@@ -7,6 +7,7 @@ from ..models.analysis import (
     AnalysisStatus,
     AudioAnalysis,
     SpeechAnalysis,
+    ProsodyAnalysis,
 )
 from ..models.events import SseEvent
 from ..ports.input import (

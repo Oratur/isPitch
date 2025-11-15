@@ -15,6 +15,10 @@ from ..mappers.topic_analysis_schema_mapper import TopicAnalysisSchemaMapper
 from ..mappers.vocabulary_analysis_schema_mapper import (
     VocabularyAnalysisSchemaMapper,
 )
+from ..mappers.prosody_analysis_schema_mapper import (
+    ProsodyAnalysisSchemaMapper,
+)
+
 from ..rest.schemas import (
     AnalysisSchema,
     AnalysisSummarySchema,

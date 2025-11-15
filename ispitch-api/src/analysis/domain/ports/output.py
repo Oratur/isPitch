@@ -16,6 +16,7 @@ from ..models.prosody import (
 from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
+from ..models.prosody import IntensityAnalysis, PitchAnalysis, VocalQualityAnalysis
 
 
 class TranscriptionPort(ABC):
