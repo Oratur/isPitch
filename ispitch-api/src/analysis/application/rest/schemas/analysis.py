@@ -4,10 +4,10 @@ from typing import Optional
 from .....core.schemas import CamelCaseModel
 from ..schemas.fillerwords import FillerWordsAnalysisSchema
 from ..schemas.lexical_richness import LexicalRichnessAnalysisSchema
+from ..schemas.prosody import ProsodyAnalysisSchema
 from ..schemas.silence import SilenceAnalysisSchema
 from ..schemas.topic import TopicAnalysisSchema
 from ..schemas.vocabulary import VocabularyAnalysisSchema
-from ..schemas.prosody import ProsodyAnalysisSchema
 
 
 class SpeechAnalysisSchema(CamelCaseModel):

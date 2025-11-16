@@ -1,14 +1,13 @@
-from dataclasses import asdict
-
 from ...domain.models.prosody import ProsodyAnalysis
 from ..rest.schemas.prosody import (
-    ProsodyAnalysisSchema,
-    PitchAnalysisSchema,
-    PitchContourSchema,
     IntensityAnalysisSchema,
     IntensityContourSchema,
+    PitchAnalysisSchema,
+    PitchContourSchema,
+    ProsodyAnalysisSchema,
     VocalQualitySchema,
 )
+
 
 class ProsodyAnalysisSchemaMapper:
     @staticmethod
@@ -19,27 +18,30 @@ class ProsodyAnalysisSchemaMapper:
         return ProsodyAnalysisSchema(
             pitch_analysis=ProsodyAnalysisSchemaMapper._map_pitch_analysis(
                 prosody_analysis.pitch_analysis
-            ) if prosody_analysis.pitch_analysis else None,
+            )
+            if prosody_analysis.pitch_analysis
+            else None,
             intensity_analysis=ProsodyAnalysisSchemaMapper._map_intensity_analysis(
                 prosody_analysis.intensity_analysis
-            ) if prosody_analysis.intensity_analysis else None,
+            )
+            if prosody_analysis.intensity_analysis
+            else None,
             vocal_quality=ProsodyAnalysisSchemaMapper._map_vocal_quality(
                 prosody_analysis.vocal_quality
-            ) if prosody_analysis.vocal_quality else None,
+            )
+            if prosody_analysis.vocal_quality
+            else None,
         )
 
     @staticmethod
     def _map_pitch_analysis(pitch_analysis) -> PitchAnalysisSchema:
         if not pitch_analysis:
             return None
-        
+
         pitch_contour = None
         if pitch_analysis.pitch_contour:
             pitch_contour = [
-                PitchContourSchema(
-                    time=contour.time,
-                    pitch=contour.pitch
-                )
+                PitchContourSchema(time=contour.time, pitch=contour.pitch)
                 for contour in pitch_analysis.pitch_contour
             ]
 
@@ -56,14 +58,11 @@ class ProsodyAnalysisSchemaMapper:
     def _map_intensity_analysis(intensity_analysis) -> IntensityAnalysisSchema:
         if not intensity_analysis:
             return None
-        
+
         intensity_contour = None
         if intensity_analysis.intensity_contour:
             intensity_contour = [
-                IntensityContourSchema(
-                    time=contour.time,
-                    volume=contour.volume
-                )
+                IntensityContourSchema(time=contour.time, volume=contour.volume)
                 for contour in intensity_analysis.intensity_contour
             ]
 

@@ -11,13 +11,13 @@ from ...domain.models.transcription import Segment, Transcription, Word
 from ...domain.models.vocabulary import VocabularyAnalysis, VocabularySuggestion
 from ..persistance.documents import analysis_document
 from ..persistance.documents.analysis_document import (
-    AnalysisDocument, 
-    PitchAnalysis, 
-    ProsodyAnalysis, 
+    AnalysisDocument,
     IntensityAnalysis,
-    VocalQualityAnalysis,
-    PitchContour,
     IntensityContour,
+    PitchAnalysis,
+    PitchContour,
+    ProsodyAnalysis,
+    VocalQualityAnalysis,
 )
 
 
@@ -408,13 +408,16 @@ class AudioAnalysisDocumentMapper:
                 getattr(document, 'prosody_analysis', None)
             ),
         )
-    
+
+
 class ProsodyAnalysisDocumentMapper:
     @staticmethod
-    def from_entity(entity: ProsodyAnalysis) -> analysis_document.ProsodyAnalysis:
+    def from_entity(
+        entity: ProsodyAnalysis,
+    ) -> analysis_document.ProsodyAnalysis:
         if entity is None:
             return None
-            
+
         return analysis_document.ProsodyAnalysis(
             pitch_analysis=ProsodyAnalysisDocumentMapper._map_pitch_from_entity(
                 getattr(entity, 'pitch_analysis', None)
@@ -424,11 +427,13 @@ class ProsodyAnalysisDocumentMapper:
             ),
             vocal_quality=ProsodyAnalysisDocumentMapper._map_vocal_quality_from_entity(
                 getattr(entity, 'vocal_quality', None)
-            )
+            ),
         )
 
     @staticmethod
-    def from_document(document: analysis_document.ProsodyAnalysis) -> ProsodyAnalysis:
+    def from_document(
+        document: analysis_document.ProsodyAnalysis,
+    ) -> ProsodyAnalysis:
         if document is None:
             return None
 
@@ -441,12 +446,14 @@ class ProsodyAnalysisDocumentMapper:
             ),
             vocal_quality=ProsodyAnalysisDocumentMapper._map_vocal_quality_from_document(
                 getattr(document, 'vocal_quality', None)
-            )
+            ),
         )
 
     # --- Pitch Mappers ---
     @staticmethod
-    def _map_pitch_from_entity(entity: PitchAnalysis) -> analysis_document.PitchAnalysis:
+    def _map_pitch_from_entity(
+        entity: PitchAnalysis,
+    ) -> analysis_document.PitchAnalysis:
         if entity is None:
             return None
         return analysis_document.PitchAnalysis(
@@ -458,13 +465,16 @@ class ProsodyAnalysisDocumentMapper:
             pitch_contour=map_list(
                 getattr(entity, 'pitch_contour', []),
                 lambda item: analysis_document.PitchContour(
-                    time=item.time, pitch=item.pitch if item.pitch is not None else 0.0
-                )
-            )
+                    time=item.time,
+                    pitch=item.pitch if item.pitch is not None else 0.0,
+                ),
+            ),
         )
 
     @staticmethod
-    def _map_pitch_from_document(doc: analysis_document.PitchAnalysis) -> PitchAnalysis:
+    def _map_pitch_from_document(
+        doc: analysis_document.PitchAnalysis,
+    ) -> PitchAnalysis:
         if doc is None:
             return None
         return PitchAnalysis(
@@ -475,13 +485,15 @@ class ProsodyAnalysisDocumentMapper:
             stdev_pitch_semitones=getattr(doc, 'stdev_pitch_semitones', 0.0),
             pitch_contour=map_list(
                 getattr(doc, 'pitch_contour', []),
-                lambda item: PitchContour(time=item.time, pitch=item.pitch)
-            )
+                lambda item: PitchContour(time=item.time, pitch=item.pitch),
+            ),
         )
 
     # --- Intensity Mappers ---
     @staticmethod
-    def _map_intensity_from_entity(entity: IntensityAnalysis) -> analysis_document.IntensityAnalysis:
+    def _map_intensity_from_entity(
+        entity: IntensityAnalysis,
+    ) -> analysis_document.IntensityAnalysis:
         if entity is None:
             return None
         return analysis_document.IntensityAnalysis(
@@ -492,13 +504,16 @@ class ProsodyAnalysisDocumentMapper:
             intensity_contour=map_list(
                 getattr(entity, 'intensity_contour', []),
                 lambda item: analysis_document.IntensityContour(
-                    time=item.time, volume=item.volume if item.volume is not None else 0.0
-                )
-            )
+                    time=item.time,
+                    volume=item.volume if item.volume is not None else 0.0,
+                ),
+            ),
         )
 
     @staticmethod
-    def _map_intensity_from_document(doc: analysis_document.IntensityAnalysis) -> IntensityAnalysis:
+    def _map_intensity_from_document(
+        doc: analysis_document.IntensityAnalysis,
+    ) -> IntensityAnalysis:
         if doc is None:
             return None
         return IntensityAnalysis(
@@ -508,13 +523,17 @@ class ProsodyAnalysisDocumentMapper:
             stdev_intensity=getattr(doc, 'stdev_intensity', 0.0),
             intensity_contour=map_list(
                 getattr(doc, 'intensity_contour', []),
-                lambda item: IntensityContour(time=item.time, volume=item.volume)
-            )
+                lambda item: IntensityContour(
+                    time=item.time, volume=item.volume
+                ),
+            ),
         )
 
     # --- Vocal Quality Mappers ---
     @staticmethod
-    def _map_vocal_quality_from_entity(entity: VocalQualityAnalysis) -> analysis_document.VocalQualityAnalysis:
+    def _map_vocal_quality_from_entity(
+        entity: VocalQualityAnalysis,
+    ) -> analysis_document.VocalQualityAnalysis:
         if entity is None:
             return None
         return analysis_document.VocalQualityAnalysis(
@@ -524,7 +543,9 @@ class ProsodyAnalysisDocumentMapper:
         )
 
     @staticmethod
-    def _map_vocal_quality_from_document(doc: analysis_document.VocalQualityAnalysis) -> VocalQualityAnalysis:
+    def _map_vocal_quality_from_document(
+        doc: analysis_document.VocalQualityAnalysis,
+    ) -> VocalQualityAnalysis:
         if doc is None:
             return None
         return VocalQualityAnalysis(

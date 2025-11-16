@@ -1,10 +1,12 @@
 from dataclasses import dataclass
-from typing import Dict, Optional, List
+from typing import List, Optional
+
 
 @dataclass
 class PitchContour:
     time: Optional[float]
     pitch: Optional[float]
+
 
 @dataclass
 class PitchAnalysis:
@@ -15,10 +17,12 @@ class PitchAnalysis:
     stdev_pitch_semitones: float
     pitch_contour: Optional[List[PitchContour]] = None
 
+
 @dataclass
 class IntensityContour:
     time: Optional[float]
     volume: Optional[float]
+
 
 @dataclass
 class IntensityAnalysis:
@@ -34,6 +38,7 @@ class VocalQualityAnalysis:
     jitter: float
     shimmer: float
     hnr: float
+
 
 @dataclass
 class ProsodyAnalysis:

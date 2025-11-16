@@ -1,7 +1,6 @@
+from ..models.prosody import ProsodyAnalysis
 from ..ports.input import AudioAnalysisPort
 from ..ports.output import AudioPort
-from ..models.prosody import ProsodyAnalysis
-from ..models.transcription import Transcription
 
 
 class AudioAnalysisService(AudioAnalysisPort):
@@ -50,6 +49,7 @@ class AudioAnalysisService(AudioAnalysisPort):
         vocal_quality = self.audio_port.get_vocal_quality(audio_path)
 
         return ProsodyAnalysis(
-            pitch_analysis=pitch_analysis, 
-            intensity_analysis=intensity_analysis, 
-            vocal_quality=vocal_quality)
+            pitch_analysis=pitch_analysis,
+            intensity_analysis=intensity_analysis,
+            vocal_quality=vocal_quality,
+        )

@@ -5,11 +5,11 @@ from typing import Optional
 
 from .fillerwords import FillerWordsAnalysis
 from .lexical_richness import LexicalRichnessAnalysis
+from .prosody import ProsodyAnalysis
 from .silence import SilenceAnalysis
 from .topic import TopicAnalysis
 from .transcription import Transcription
 from .vocabulary import VocabularyAnalysis
-from .prosody import ProsodyAnalysis
 
 
 @dataclass

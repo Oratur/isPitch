@@ -82,9 +82,11 @@ class SpeechAnalysis(BaseModel):
     lexical_richness_analysis: Optional[LexicalRichnessAnalysisDocument] = None
     topic_analysis: Optional[TopicAnalysisDocument] = None
 
+
 class PitchContour(BaseModel):
     time: float
     pitch: float
+
 
 class PitchAnalysis(BaseModel):
     mean_pitch: float
@@ -94,9 +96,11 @@ class PitchAnalysis(BaseModel):
     stdev_pitch_semitones: float
     pitch_contour: Optional[list[PitchContour]] = None
 
+
 class IntensityContour(BaseModel):
     time: float
     volume: float
+
 
 class IntensityAnalysis(BaseModel):
     mean_intensity: float
@@ -105,10 +109,12 @@ class IntensityAnalysis(BaseModel):
     stdev_intensity: float
     intensity_contour: Optional[list[IntensityContour]] = None
 
+
 class VocalQualityAnalysis(BaseModel):
     jitter: float
     shimmer: float
     hnr: float
+
 
 class ProsodyAnalysis(BaseModel):
     pitch_analysis: Optional[PitchAnalysis] = None
