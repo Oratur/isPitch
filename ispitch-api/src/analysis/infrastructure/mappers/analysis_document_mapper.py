@@ -5,6 +5,14 @@ from ...domain.models.analysis import (
 )
 from ...domain.models.fillerwords import FillerWordPosition, FillerWordsAnalysis
 from ...domain.models.lexical_richness import LexicalRichnessAnalysis
+from ...domain.models.prosody import (
+    IntensityAnalysis,
+    IntensityContour,
+    PitchAnalysis,
+    PitchContour,
+    ProsodyAnalysis,
+    VocalQualityAnalysis,
+)
 from ...domain.models.silence import Silence, SilenceAnalysis
 from ...domain.models.topic import Topic, TopicAnalysis
 from ...domain.models.transcription import Segment, Transcription, Word
@@ -12,12 +20,6 @@ from ...domain.models.vocabulary import VocabularyAnalysis, VocabularySuggestion
 from ..persistance.documents import analysis_document
 from ..persistance.documents.analysis_document import (
     AnalysisDocument,
-    IntensityAnalysis,
-    IntensityContour,
-    PitchAnalysis,
-    PitchContour,
-    ProsodyAnalysis,
-    VocalQualityAnalysis,
 )
 
 

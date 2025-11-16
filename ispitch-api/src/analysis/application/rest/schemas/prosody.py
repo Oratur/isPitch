@@ -37,6 +37,6 @@ class VocalQualitySchema(CamelCaseModel):
 
 
 class ProsodyAnalysisSchema(CamelCaseModel):
-    pitch_analysis: PitchAnalysisSchema
-    vocal_quality: Optional[VocalQualitySchema] = None
+    pitch_analysis: Optional[PitchAnalysisSchema]
     intensity_analysis: Optional[IntensityAnalysisSchema] = None
+    vocal_quality: Optional[VocalQualitySchema] = None

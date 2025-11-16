@@ -121,7 +121,7 @@ class AudioAdapter(AudioPort):
         cls, pitch: parselmouth.Pitch, reference_freq: float = None
     ) -> float:
         try:
-            MIN_VOICED_VALUE_LENGTH = 0.05
+            MIN_VOICED_VALUE_LENGTH = 2
             pitch_values = pitch.selected_array['frequency']
 
             voiced_f0_values = pitch_values[
@@ -257,7 +257,7 @@ class AudioAdapter(AudioPort):
             sound = cls.get_filtered_audio(audio_path)
             praat_call(sound, 'Scale intensity', 70.0)
 
-            pitch = cls.get_pitch(sound, 0.0, 75, 600)
+            pitch = cls.get_pitch(sound, 0.0)
             pulses = cls._get_pulses(sound, pitch)
 
             hnr = cls._calculate_hnr(sound, pitch)
@@ -366,7 +366,7 @@ class AudioAdapter(AudioPort):
         for start, end in voiced_segments:
             duration = end - start
 
-            # Pulsos no segmento
+            # Count pulses in segment
             pulses_count = 0
             for p in range(1, num_pulses + 1):
                 pulse_time = praat_call(pulses, 'Get time from index', p)
@@ -405,15 +405,18 @@ class AudioAdapter(AudioPort):
             except Exception:
                 continue
 
-        if durations:
-            total_dur = sum(durations)
+        if not durations:
+            return 0.0, 0.0
 
-            sum_jitter = sum(j * d for j, d in zip(jitter_values, durations))
-            jitter = sum_jitter / total_dur
+        total_dur = sum(durations)
 
-            sum_shimmer = sum(s * d for s, d in zip(shimmer_values, durations))
-            shimmer = sum_shimmer / total_dur
-        else:
-            jitter = shimmer = 0.0
+        if total_dur == 0:
+            return 0.0, 0.0
+
+        sum_jitter = sum(j * d for j, d in zip(jitter_values, durations))
+        jitter = sum_jitter / total_dur
+
+        sum_shimmer = sum(s * d for s, d in zip(shimmer_values, durations))
+        shimmer = sum_shimmer / total_dur
 
         return jitter, shimmer
