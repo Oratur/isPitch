@@ -10,7 +10,6 @@ from .silence import SilenceAnalysis
 from .topic import TopicAnalysis
 from .transcription import Transcription
 from .vocabulary import VocabularyAnalysis
-from .prosody import ProsodyAnalysis
 
 
 @dataclass

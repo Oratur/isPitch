@@ -8,7 +8,6 @@ from ..schemas.prosody import ProsodyAnalysisSchema
 from ..schemas.silence import SilenceAnalysisSchema
 from ..schemas.topic import TopicAnalysisSchema
 from ..schemas.vocabulary import VocabularyAnalysisSchema
-from ..schemas.prosody import ProsodyAnalysisSchema
 
 
 class SpeechAnalysisSchema(CamelCaseModel):

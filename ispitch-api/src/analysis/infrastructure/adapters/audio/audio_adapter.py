@@ -14,9 +14,7 @@ from ....domain.models.prosody import (
     VocalQualityAnalysis,
 )
 from ....domain.ports.output import AudioPort
-from ....domain.models.prosody import IntensityAnalysis, IntensityContour, PitchAnalysis, VocalQualityAnalysis, PitchContour
-from ....domain.models.transcription import Transcription
-from typing import List
+
 
 class AudioAdapter(AudioPort):
     @classmethod
