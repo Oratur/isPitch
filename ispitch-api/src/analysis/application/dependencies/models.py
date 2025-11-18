@@ -5,12 +5,14 @@ import spacy
 import whisper
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 
+from ....core.config import settings
+
 MODEL_NAME = 'unicamp-dl/ptt5-base-portuguese-vocab'
 
 
 @lru_cache(maxsize=1)
 def get_whisper_model():
-    return whisper.load_model('base')
+    return whisper.load_model(settings.whisper_model)
 
 
 @lru_cache(maxsize=1)

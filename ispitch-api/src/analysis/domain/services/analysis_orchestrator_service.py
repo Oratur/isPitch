@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import List, Tuple
 
+from ....core.exceptions import NotFoundException
 from ..models.analysis import (
     Analysis,
     AnalysisStatus,
@@ -135,9 +136,14 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
             raise
 
     async def find_recent_by_user_id(self, user_id: str) -> Analysis:
-        return await self.analysis_repository_port.find_recent_by_user_id(
+        analysis = await self.analysis_repository_port.find_recent_by_user_id(
             user_id
         )
+
+        if analysis is None:
+            raise NotFoundException('Analysis')
+
+        return analysis
 
     async def _run_analysis(
         self, analysis_id: str, audio_path: str, filename: str
