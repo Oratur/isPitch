@@ -7,6 +7,7 @@ from ..models.analysis import Analysis
 from ..models.analysis_stats import AnalysisStats
 from ..models.fillerwords import FillerWordsAnalysis
 from ..models.lexical_richness import LexicalRichnessAnalysis
+from ..models.prosody import ProsodyAnalysis
 from ..models.silence import SilenceAnalysis
 from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
@@ -76,6 +77,10 @@ class AudioAnalysisPort(ABC):
         audio_duration: float,
         silence_duration: float,
     ) -> float:
+        pass
+
+    @abstractmethod
+    def get_prosody_analysis(self, audio_path: str) -> ProsodyAnalysis:
         pass
 
 

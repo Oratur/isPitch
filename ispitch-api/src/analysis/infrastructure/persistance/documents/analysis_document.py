@@ -83,9 +83,49 @@ class SpeechAnalysis(BaseModel):
     topic_analysis: Optional[TopicAnalysisDocument] = None
 
 
+class PitchContour(BaseModel):
+    time: float
+    pitch: float
+
+
+class PitchAnalysis(BaseModel):
+    mean_pitch: float
+    min_pitch: float
+    max_pitch: float
+    stdev_pitch: float
+    stdev_pitch_semitones: float
+    pitch_contour: Optional[list[PitchContour]] = None
+
+
+class IntensityContour(BaseModel):
+    time: float
+    volume: float
+
+
+class IntensityAnalysis(BaseModel):
+    mean_intensity: float
+    min_intensity: float
+    max_intensity: float
+    stdev_intensity: float
+    intensity_contour: Optional[list[IntensityContour]] = None
+
+
+class VocalQualityAnalysis(BaseModel):
+    jitter: float
+    shimmer: float
+    hnr: float
+
+
+class ProsodyAnalysis(BaseModel):
+    pitch_analysis: Optional[PitchAnalysis] = None
+    intensity_analysis: Optional[IntensityAnalysis] = None
+    vocal_quality: Optional[VocalQualityAnalysis] = None
+
+
 class AudioAnalysis(BaseModel):
     duration: Optional[float] = Field(default=0.0)
     speech_rate: float
+    prosody_analysis: Optional[ProsodyAnalysis] = None
 
 
 class AnalysisDocument(Document):

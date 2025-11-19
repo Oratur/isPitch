@@ -5,6 +5,9 @@ from ..mappers.fillerwords_analysis_schema_mapper import (
 from ..mappers.lexical_richness_analysis_schema_mapper import (
     LexicalRichnessAnalysisSchemaMapper,
 )
+from ..mappers.prosody_analysis_schema_mapper import (
+    ProsodyAnalysisSchemaMapper,
+)
 from ..mappers.silence_analysis_schema_mapper import (
     SilenceAnalysisSchemaMapper,
 )
@@ -66,6 +69,14 @@ class AnalysisSchemaMapper:
             audio_analysis=AudioAnalysisSchema(
                 duration=analysis.audio_analysis.duration,
                 speech_rate=analysis.audio_analysis.speech_rate,
+                prosody_analysis=ProsodyAnalysisSchemaMapper.from_model(
+                    analysis.audio_analysis.prosody_analysis
+                )
+                if (
+                    analysis.audio_analysis
+                    and analysis.audio_analysis.prosody_analysis
+                )
+                else None,
             )
             if analysis.audio_analysis
             else None,

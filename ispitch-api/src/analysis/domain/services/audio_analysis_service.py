@@ -1,3 +1,4 @@
+from ..models.prosody import ProsodyAnalysis
 from ..ports.input import AudioAnalysisPort
 from ..ports.output import AudioPort
 
@@ -41,3 +42,14 @@ class AudioAnalysisService(AudioAnalysisPort):
         words_per_minute = (word_count / speech_duration) * 60
 
         return round(words_per_minute, 2)
+
+    def get_prosody_analysis(self, audio_path: str) -> ProsodyAnalysis:
+        pitch_analysis = self.audio_port.get_pitch_analysis(audio_path)
+        intensity_analysis = self.audio_port.get_intensity_analysis(audio_path)
+        vocal_quality = self.audio_port.get_vocal_quality(audio_path)
+
+        return ProsodyAnalysis(
+            pitch_analysis=pitch_analysis,
+            intensity_analysis=intensity_analysis,
+            vocal_quality=vocal_quality,
+        )

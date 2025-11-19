@@ -108,7 +108,18 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         )
 
         logger.info(f'[{self.analysis_id}] Audio analysis completed')
-        return AudioAnalysis(duration=audio_duration, speech_rate=speech_rate)
+
+        prosody_analysis = self._audio_analysis_port.get_prosody_analysis(
+            self.audio_path
+        )
+
+        logger.info(f'[{self.analysis_id}] Prosody analysis completed')
+
+        return AudioAnalysis(
+            duration=audio_duration,
+            speech_rate=speech_rate,
+            prosody_analysis=prosody_analysis,
+        )
 
     def _build_result(
         self,

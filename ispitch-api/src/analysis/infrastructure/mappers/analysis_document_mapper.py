@@ -5,12 +5,22 @@ from ...domain.models.analysis import (
 )
 from ...domain.models.fillerwords import FillerWordPosition, FillerWordsAnalysis
 from ...domain.models.lexical_richness import LexicalRichnessAnalysis
+from ...domain.models.prosody import (
+    IntensityAnalysis,
+    IntensityContour,
+    PitchAnalysis,
+    PitchContour,
+    ProsodyAnalysis,
+    VocalQualityAnalysis,
+)
 from ...domain.models.silence import Silence, SilenceAnalysis
 from ...domain.models.topic import Topic, TopicAnalysis
 from ...domain.models.transcription import Segment, Transcription, Word
 from ...domain.models.vocabulary import VocabularyAnalysis, VocabularySuggestion
 from ..persistance.documents import analysis_document
-from ..persistance.documents.analysis_document import AnalysisDocument
+from ..persistance.documents.analysis_document import (
+    AnalysisDocument,
+)
 
 
 def map_list(items, mapper):
@@ -384,6 +394,9 @@ class AudioAnalysisDocumentMapper:
         return analysis_document.AudioAnalysis(
             duration=getattr(entity, 'duration', 0.0),
             speech_rate=getattr(entity, 'speech_rate', 0.0),
+            prosody_analysis=ProsodyAnalysisDocumentMapper.from_entity(
+                getattr(entity, 'prosody_analysis', None)
+            ),
         )
 
     @staticmethod
@@ -393,4 +406,152 @@ class AudioAnalysisDocumentMapper:
         return AudioAnalysis(
             duration=getattr(document, 'duration', 0.0),
             speech_rate=getattr(document, 'speech_rate', 0.0),
+            prosody_analysis=ProsodyAnalysisDocumentMapper.from_document(
+                getattr(document, 'prosody_analysis', None)
+            ),
+        )
+
+
+class ProsodyAnalysisDocumentMapper:
+    @staticmethod
+    def from_entity(
+        entity: ProsodyAnalysis,
+    ) -> analysis_document.ProsodyAnalysis:
+        if entity is None:
+            return None
+
+        return analysis_document.ProsodyAnalysis(
+            pitch_analysis=ProsodyAnalysisDocumentMapper._map_pitch_from_entity(
+                getattr(entity, 'pitch_analysis', None)
+            ),
+            intensity_analysis=ProsodyAnalysisDocumentMapper._map_intensity_from_entity(
+                getattr(entity, 'intensity_analysis', None)
+            ),
+            vocal_quality=ProsodyAnalysisDocumentMapper._map_vocal_quality_from_entity(
+                getattr(entity, 'vocal_quality', None)
+            ),
+        )
+
+    @staticmethod
+    def from_document(
+        document: analysis_document.ProsodyAnalysis,
+    ) -> ProsodyAnalysis:
+        if document is None:
+            return None
+
+        return ProsodyAnalysis(
+            pitch_analysis=ProsodyAnalysisDocumentMapper._map_pitch_from_document(
+                getattr(document, 'pitch_analysis', None)
+            ),
+            intensity_analysis=ProsodyAnalysisDocumentMapper._map_intensity_from_document(
+                getattr(document, 'intensity_analysis', None)
+            ),
+            vocal_quality=ProsodyAnalysisDocumentMapper._map_vocal_quality_from_document(
+                getattr(document, 'vocal_quality', None)
+            ),
+        )
+
+    # --- Pitch Mappers ---
+    @staticmethod
+    def _map_pitch_from_entity(
+        entity: PitchAnalysis,
+    ) -> analysis_document.PitchAnalysis:
+        if entity is None:
+            return None
+        return analysis_document.PitchAnalysis(
+            mean_pitch=getattr(entity, 'mean_pitch', 0.0),
+            min_pitch=getattr(entity, 'min_pitch', 0.0),
+            max_pitch=getattr(entity, 'max_pitch', 0.0),
+            stdev_pitch=getattr(entity, 'stdev_pitch', 0.0),
+            stdev_pitch_semitones=getattr(entity, 'stdev_pitch_semitones', 0.0),
+            pitch_contour=map_list(
+                getattr(entity, 'pitch_contour', []),
+                lambda item: analysis_document.PitchContour(
+                    time=item.time,
+                    pitch=item.pitch if item.pitch is not None else 0.0,
+                ),
+            ),
+        )
+
+    @staticmethod
+    def _map_pitch_from_document(
+        doc: analysis_document.PitchAnalysis,
+    ) -> PitchAnalysis:
+        if doc is None:
+            return None
+        return PitchAnalysis(
+            mean_pitch=getattr(doc, 'mean_pitch', 0.0),
+            min_pitch=getattr(doc, 'min_pitch', 0.0),
+            max_pitch=getattr(doc, 'max_pitch', 0.0),
+            stdev_pitch=getattr(doc, 'stdev_pitch', 0.0),
+            stdev_pitch_semitones=getattr(doc, 'stdev_pitch_semitones', 0.0),
+            pitch_contour=map_list(
+                getattr(doc, 'pitch_contour', []),
+                lambda item: PitchContour(time=item.time, pitch=item.pitch),
+            ),
+        )
+
+    # --- Intensity Mappers ---
+    @staticmethod
+    def _map_intensity_from_entity(
+        entity: IntensityAnalysis,
+    ) -> analysis_document.IntensityAnalysis:
+        if entity is None:
+            return None
+        return analysis_document.IntensityAnalysis(
+            mean_intensity=getattr(entity, 'mean_intensity', 0.0),
+            min_intensity=getattr(entity, 'min_intensity', 0.0),
+            max_intensity=getattr(entity, 'max_intensity', 0.0),
+            stdev_intensity=getattr(entity, 'stdev_intensity', 0.0),
+            intensity_contour=map_list(
+                getattr(entity, 'intensity_contour', []),
+                lambda item: analysis_document.IntensityContour(
+                    time=item.time,
+                    volume=item.volume if item.volume is not None else 0.0,
+                ),
+            ),
+        )
+
+    @staticmethod
+    def _map_intensity_from_document(
+        doc: analysis_document.IntensityAnalysis,
+    ) -> IntensityAnalysis:
+        if doc is None:
+            return None
+        return IntensityAnalysis(
+            mean_intensity=getattr(doc, 'mean_intensity', 0.0),
+            min_intensity=getattr(doc, 'min_intensity', 0.0),
+            max_intensity=getattr(doc, 'max_intensity', 0.0),
+            stdev_intensity=getattr(doc, 'stdev_intensity', 0.0),
+            intensity_contour=map_list(
+                getattr(doc, 'intensity_contour', []),
+                lambda item: IntensityContour(
+                    time=item.time, volume=item.volume
+                ),
+            ),
+        )
+
+    # --- Vocal Quality Mappers ---
+    @staticmethod
+    def _map_vocal_quality_from_entity(
+        entity: VocalQualityAnalysis,
+    ) -> analysis_document.VocalQualityAnalysis:
+        if entity is None:
+            return None
+        return analysis_document.VocalQualityAnalysis(
+            jitter=getattr(entity, 'jitter', 0.0),
+            shimmer=getattr(entity, 'shimmer', 0.0),
+            hnr=getattr(entity, 'hnr', 0.0),
+        )
+
+    @staticmethod
+    def _map_vocal_quality_from_document(
+        doc: analysis_document.VocalQualityAnalysis,
+    ) -> VocalQualityAnalysis:
+        if doc is None:
+            return None
+        return VocalQualityAnalysis(
+            jitter=getattr(doc, 'jitter', 0.0),
+            shimmer=getattr(doc, 'shimmer', 0.0),
+            hnr=getattr(doc, 'hnr', 0.0),
         )
