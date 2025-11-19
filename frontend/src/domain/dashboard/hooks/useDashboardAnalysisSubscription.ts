@@ -77,6 +77,7 @@ export function useDashboardAnalysisSubscription({
                         fillerWordsCount: analysisData.speechAnalysis?.fillerwordsAnalysis?.total || 0,
                         speechRate: Math.round(analysisData.audioAnalysis?.speechRate || 0),
                         pausesCount: analysisData.speechAnalysis?.silenceAnalysis?.pauses || 0,
+                        score: analysisData?.score || 0,
                     };
                 }
             );

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from .....core.schemas import CamelCaseModel
 
@@ -10,4 +11,5 @@ class RecentAnalysisSchema(CamelCaseModel):
     filler_words_count: int
     speech_rate: float
     pauses_count: int
+    score: Optional[int] = 0
     status: str

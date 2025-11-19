@@ -108,3 +108,9 @@ class AnalysisStatsPort(ABC):
         self, user_id: str, time_range: TimeRange
     ) -> AnalysisStats:
         pass
+
+
+class ScoreCalculationPort(ABC):
+    @abstractmethod
+    def execute(self, analysis: Analysis) -> int:
+        pass

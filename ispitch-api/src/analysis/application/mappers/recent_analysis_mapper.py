@@ -27,4 +27,5 @@ class RecentAnalysisMapper:
                 and analysis.speech_analysis.silence_analysis
                 else 0
             ),
+            score=analysis.score,
         )

@@ -20,4 +20,5 @@ export interface RecentAnalysis {
     speechRate: number;
     pausesCount: number;
     status: 'completed' | 'pending' | 'failed' | 'transcribing' | 'analyzing_speech' | 'analyzing_audio';
+    score: number;
 }

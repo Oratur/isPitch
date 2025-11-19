@@ -1,7 +1,7 @@
 import { Card, CardContent, Box, Typography, LinearProgress } from '@mui/material';
 import theme from '@/styles/theme';
 import { Analysis } from '@/domain/analysis/types/analysis';
-import { calculateOverallScore, getScoreColor, getScoreLabel } from '@/domain/analysis/utils/scoreCalculator';
+import { getScoreColor, getScoreLabel } from '@/domain/analysis/utils/scoreCalculator';
 
 
 interface OverallScoreCardProps {
@@ -9,7 +9,7 @@ interface OverallScoreCardProps {
 }
 
 export function OverallScoreCard({ analysis }: OverallScoreCardProps) {
-  const overallScore = calculateOverallScore(analysis);
+  const overallScore = analysis.score ?? 0;
   const scoreColor = getScoreColor(overallScore);
   const scoreLabel = getScoreLabel(overallScore);
 
