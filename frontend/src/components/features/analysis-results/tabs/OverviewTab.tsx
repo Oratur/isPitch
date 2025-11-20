@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { Analysis } from '@/domain/analysis/types/analysis';
-import { FillerWordsDetailCard, SilencesDetailCard, SpeechRateDetailCard } from '../speech';
+import { FillerWordsDetailCard, SilencesDetailCard, SpeechRateDetailCard, SentimentDetailCard } from '../speech';
 import { ActionButtons } from '../ActionButtons';
 
 interface OverviewTabProps {
@@ -21,6 +21,10 @@ export function OverviewTab({ analysis }: OverviewTabProps) {
 
       <Grid size={{xs: 12, md: 4}}>
         <SilencesDetailCard silences={analysis.speechAnalysis.silenceAnalysis} />
+      </Grid>
+
+      <Grid size={{xs: 12, md: 6, lg: 3}}>
+        <SentimentDetailCard sentimentAnalysis={analysis.speechAnalysis.sentimentAnalysis} />
       </Grid>
 
       {/* Botões de Ação */}

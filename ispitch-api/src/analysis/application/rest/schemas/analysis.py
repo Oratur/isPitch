@@ -5,6 +5,7 @@ from .....core.schemas import CamelCaseModel
 from ..schemas.fillerwords import FillerWordsAnalysisSchema
 from ..schemas.lexical_richness import LexicalRichnessAnalysisSchema
 from ..schemas.prosody import ProsodyAnalysisSchema
+from ..schemas.sentiment import SentimentAnalysisSchema
 from ..schemas.silence import SilenceAnalysisSchema
 from ..schemas.topic import TopicAnalysisSchema
 from ..schemas.vocabulary import VocabularyAnalysisSchema
@@ -16,6 +17,7 @@ class SpeechAnalysisSchema(CamelCaseModel):
     vocabulary_analysis: Optional[VocabularyAnalysisSchema] = None
     lexical_richness_analysis: Optional[LexicalRichnessAnalysisSchema] = None
     topic_analysis: Optional[TopicAnalysisSchema] = None
+    sentiment_analysis: Optional[SentimentAnalysisSchema] = None
 
 
 class AudioAnalysisSchema(CamelCaseModel):
