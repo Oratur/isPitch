@@ -1,14 +1,16 @@
+// src/components/features/analysis-results/speech/SentimentDetailCard.tsx
 import { Card, CardHeader, CardContent, Box, Typography, Divider } from '@mui/material';
 import { HeartPulse } from 'lucide-react';
 import theme from '@/styles/theme';
 import { SentimentAnalysis } from '@/domain/analysis/types/analysis';
-import { BarChart, Bar, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { BarChart, Bar, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 interface SentimentDetailCardProps {
   sentimentAnalysis?: SentimentAnalysis;
 }
 
 export function SentimentDetailCard({ sentimentAnalysis }: SentimentDetailCardProps) {
+  // 1. Determinar o sentimento predominante
   const getDominantSentiment = () => {
     if (!sentimentAnalysis?.timeline || sentimentAnalysis.timeline.length === 0) {
       return { label: 'Indisponível', color: theme.palette.grey[500] };
@@ -38,10 +40,11 @@ export function SentimentDetailCard({ sentimentAnalysis }: SentimentDetailCardPr
     neutro: theme.palette.grey[400],
   };
 
-  const chartData = sentimentAnalysis?.timeline.map((seg, index) => ({
-    id: index,
+  // 2. Preparar dados da timeline (agora com nome formatado para o eixo X)
+  const chartData = sentimentAnalysis?.timeline.map((seg) => ({
     score: seg.score,
     sentiment: seg.sentiment,
+    // Formata tempo mm:ss para o eixo
     time: `${Math.floor(seg.startTime / 60)}:${Math.floor(seg.startTime % 60).toString().padStart(2, '0')}`,
   })) || [];
 
@@ -71,6 +74,7 @@ export function SentimentDetailCard({ sentimentAnalysis }: SentimentDetailCardPr
         }
       />
       <CardContent>
+        {/* Texto de Predominância */}
         <Box sx={{ textAlign: 'center', mb: 1 }}>
           <Typography 
             variant="h5" 
@@ -87,10 +91,38 @@ export function SentimentDetailCard({ sentimentAnalysis }: SentimentDetailCardPr
 
         <Divider sx={{ my: 2, bgcolor: theme.palette.purple.light1 + '20' }} />
 
-        <Box sx={{ width: '100%', height: 160 }}>
+        {/* Gráfico de Timeline com Eixos */}
+        <Box sx={{ width: '100%', height: 180 }}>
           {chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 5, right: 5, left: 5, bottom: 0 }}>
+              <BarChart 
+                data={chartData} 
+                margin={{ top: 10, right: 10, left: -25, bottom: 0 }}
+              >
+                <CartesianGrid 
+                  strokeDasharray="3 3" 
+                  vertical={false} 
+                  stroke={theme.palette.purple.light1 + '20'} 
+                />
+                
+                <XAxis 
+                  dataKey="time" 
+                  stroke={theme.palette.purple.light1} 
+                  fontSize={10}
+                  tickLine={false}
+                  axisLine={false}
+                  interval="preserveStartEnd" // Evita sobreposição se houver muitos segmentos
+                />
+                
+                <YAxis 
+                  stroke={theme.palette.purple.light1} 
+                  fontSize={10}
+                  tickLine={false}
+                  axisLine={false}
+                  // Formata como porcentagem simples (0.8 -> 80%)
+                  tickFormatter={(value) => `${(value * 100).toFixed(0)}%`}
+                />
+
                 <Tooltip
                   cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                   content={({ active, payload }) => {
@@ -101,13 +133,14 @@ export function SentimentDetailCard({ sentimentAnalysis }: SentimentDetailCardPr
                           bgcolor: theme.palette.purple.dark, 
                           border: `1px solid ${theme.palette.purple.light1}`,
                           p: 1, 
-                          borderRadius: 1 
+                          borderRadius: 1,
+                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
                         }}>
-                          <Typography variant="caption" sx={{ color: '#fff', display: 'block' }}>
-                            Início: {data.time}
+                          <Typography variant="caption" sx={{ color: '#fff', display: 'block', fontWeight: 'bold' }}>
+                            {data.time}
                           </Typography>
                           <Typography variant="caption" sx={{ color: sentimentColors[data.sentiment] }}>
-                            {data.sentiment.charAt(0).toUpperCase() + data.sentiment.slice(1)} ({data.score.toFixed(2)})
+                            {data.sentiment.charAt(0).toUpperCase() + data.sentiment.slice(1)}: {(data.score * 100).toFixed(0)}%
                           </Typography>
                         </Box>
                       );
@@ -115,7 +148,8 @@ export function SentimentDetailCard({ sentimentAnalysis }: SentimentDetailCardPr
                     return null;
                   }}
                 />
-                <Bar dataKey="score" radius={[2, 2, 0, 0]}>
+
+                <Bar dataKey="score" radius={[3, 3, 0, 0]}>
                   {chartData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={sentimentColors[entry.sentiment] || sentimentColors.neutro} />
                   ))}
@@ -131,6 +165,7 @@ export function SentimentDetailCard({ sentimentAnalysis }: SentimentDetailCardPr
           )}
         </Box>
         
+        {/* Legenda Simples */}
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                 <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: theme.palette.success.main }} />
