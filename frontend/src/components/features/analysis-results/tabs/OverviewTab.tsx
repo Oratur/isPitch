@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { Analysis } from '@/domain/analysis/types/analysis';
-import { FillerWordsDetailCard, SilencesDetailCard, SpeechRateDetailCard } from '../speech';
+import { FillerWordsDetailCard, SilencesDetailCard, SpeechRateDetailCard, SentimentDetailCard } from '../speech';
 import { ProsodyAnalysisCard } from '../speech/ProsodyAnalysisCard'; // Importe o novo componente
 import { ActionButtons } from '../ActionButtons';
 
@@ -30,7 +30,11 @@ export function OverviewTab({ analysis }: OverviewTabProps) {
            <ProsodyAnalysisCard prosodyData={analysis.audioAnalysis.prosodyAnalysis} />
         </Grid>
       )}
-      
+
+      <Grid size={{xs: 12, md: 6, lg: 3}}>
+        <SentimentDetailCard sentimentAnalysis={analysis.speechAnalysis.sentimentAnalysis} />
+      </Grid>
+
       {/* Botões de Ação */}
       <Grid size={{xs: 12}}>
         <ActionButtons />
