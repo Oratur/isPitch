@@ -18,7 +18,8 @@ export const useInitiateAnalysis = () => {
                 fillerWordsCount: 0,
                 speechRate: 0,
                 pausesCount: 0,
-                status: 'pending'
+                status: 'pending',
+                score: 0,
             };
 
             queryClient.setQueryData(['dashboard', 'recent'], pendingAnalysis);

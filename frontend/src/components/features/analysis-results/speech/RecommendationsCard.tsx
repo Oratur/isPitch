@@ -17,9 +17,9 @@ export function RecommendationsCard({ analysis }: RecommendationsCardProps) {
     );
   }
 
-  if (analysis.audioAnalysis.speechRate > 170) {
+  if (analysis.audioAnalysis.speechRate > 160) {
     recommendations.push('Diminua um pouco o ritmo da fala para melhorar a clareza');
-  } else if (analysis.audioAnalysis.speechRate < 130) {
+  } else if (analysis.audioAnalysis.speechRate < 100) {
     recommendations.push('Aumente um pouco o ritmo da fala para manter o engajamento');
   }
 

@@ -12,8 +12,8 @@ class ScoreCalculationService(ScoreCalculationPort):
     LONG_PAUSE_PENALTY = 5
 
     # Speech Rate Thresholds (PPM)
-    MIN_IDEAL_RATE = 130
-    MAX_IDEAL_RATE = 170
+    MIN_IDEAL_RATE = 100
+    MAX_IDEAL_RATE = 160
     IDEAL_CENTER_RATE = 150
     RATE_PENALTY_FACTOR = 0.5
 

@@ -68,5 +68,5 @@ export interface Analysis {
     transcription: string;
     speechAnalysis: SpeechAnalysis;
     audioAnalysis: AudioAnalysis;
-    score: number,
+    score: number;
 }
