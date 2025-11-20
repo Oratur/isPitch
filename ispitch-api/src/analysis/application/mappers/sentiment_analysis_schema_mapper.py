@@ -8,7 +8,7 @@ class SentimentAnalysisSchemaMapper:
     @staticmethod
     def from_model(
         sentiment_analysis: SentimentAnalysis) -> SentimentAnalysisSchema:
-        if not sentiment_analysis:
+        if sentiment_analysis is None:
             return SentimentAnalysisSchema(timeline=[])
 
         return SentimentAnalysisSchema(

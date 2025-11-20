@@ -12,7 +12,7 @@ import {
   Cell
 } from 'recharts';
 import { Smile, Frown, Meh, BarChart2, Info } from 'lucide-react';
-import { SentimentAnalysis, SentimentSegment } from '@/domain/analysis/types/analysis';
+import { SentimentAnalysis } from '@/domain/analysis/types/analysis';
 import theme from '@/styles/theme'; 
 
 interface SentimentTimelineChartProps {
@@ -54,7 +54,7 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const data: ChartData = payload[0].payload; 
-    const style = sentimentStyles[data.sentiment];
+    const style = sentimentStyles[data.sentiment] || sentimentStyles.neutro;
 
     return (
       <Paper elevation={3} sx={{ padding: '0.5rem 1rem', background: 'rgba(255, 255, 255, 0.95)', color: '#000' }}>
@@ -158,7 +158,7 @@ export function SentimentTimelineChart({ sentimentAnalysis }: SentimentTimelineC
                 {chartData.map((entry, index) => (
                   <Cell 
                     key={`cell-${index}`} 
-                    fill={sentimentStyles[entry.sentiment].color} 
+                    fill={sentimentStyles[entry.sentiment]?.color || sentimentStyles.neutro.color} 
                   />
                 ))}
               </Bar>

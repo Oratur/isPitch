@@ -160,6 +160,7 @@ def get_sentiment_analysis_port() -> SentimentAnalysisInputPort:
     return SentimentAnalysisService(get_sentiment_analysis_adapter())
 
 
+@lru_cache(maxsize=1)
 def get_sentiment_analysis_adapter() -> SentimentAnalysisOutputPort:
     return SentimentAnalysisAdapter()
 
