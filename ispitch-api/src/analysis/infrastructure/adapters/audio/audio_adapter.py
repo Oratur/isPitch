@@ -4,6 +4,8 @@ from typing import List
 import librosa
 import numpy as np
 import parselmouth
+import warnings
+
 from parselmouth.praat import call as praat_call
 
 from ....domain.models.prosody import (
@@ -14,6 +16,9 @@ from ....domain.models.prosody import (
     VocalQualityAnalysis,
 )
 from ....domain.ports.output import AudioPort
+from ....domain.models.prosody import IntensityAnalysis, IntensityContour, PitchAnalysis, VocalQualityAnalysis, PitchContour
+from ....domain.models.transcription import Transcription
+from typing import List, Optional
 
 
 class AudioAdapter(AudioPort):
@@ -72,6 +77,51 @@ class AudioAdapter(AudioPort):
     @staticmethod
     def is_valid_value(value: float) -> bool:
         return not (math.isnan(value) or math.isinf(value))
+    
+    @staticmethod
+    def _downsample_data(
+        time_values: List[float], 
+        y_values: List[Optional[float]], 
+        target_points: int = 800
+    ) -> tuple[List[float], List[Optional[float]]]:
+        
+        total_points = len(time_values)
+        
+        if total_points <= target_points:
+            return time_values, y_values
+
+        indices = np.linspace(0, total_points, target_points + 1).astype(int)
+        
+        new_times = []
+        new_values = []
+
+        y_np = np.array([v if v is not None else np.nan for v in y_values], dtype=float)
+        t_np = np.array(time_values, dtype=float)
+
+        for i in range(len(indices) - 1):
+            start_idx = indices[i]
+            end_idx = indices[i+1]
+            
+            chunk_y = y_np[start_idx:end_idx]
+            chunk_t = t_np[start_idx:end_idx]
+            
+            if len(chunk_y) == 0:
+                continue
+
+            avg_time = np.mean(chunk_t)
+            new_times.append(round(avg_time, 2))
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", category=RuntimeWarning)
+                avg_val = np.nanmean(chunk_y)
+
+            if np.isnan(avg_val):
+                new_values.append(None)
+            else:
+                new_values.append(round(avg_val, 2))
+
+        return new_times, new_values
+    
 
     @classmethod
     def get_pitch_analysis(cls, audio_path: str) -> PitchAnalysis:
@@ -149,9 +199,11 @@ class AudioAdapter(AudioPort):
         try:
             sound = cls.get_filtered_audio(audio_path)
 
-            pitch = cls.get_pitch(sound, 0.05)
+            pitch = cls.get_pitch(sound, 0.01)
 
             contour = []
+            time_values = []
+            pitch_values = []
 
             frames = praat_call(pitch, 'Get number of frames')
             for i in range(1, frames + 1):
@@ -166,8 +218,16 @@ class AudioAdapter(AudioPort):
                 if not (np.isnan(f0_value) or f0_value == 0):
                     pitch_value = round(f0_value, 2)
 
+                time_values.append(time)
+                pitch_values.append(pitch_value)
+
+            downsampled_times, downsampled_pitches = cls._downsample_data(
+                time_values, pitch_values, target_points=500
+            )
+
+            for time, pitch_val in zip(downsampled_times, downsampled_pitches):
                 contour.append(
-                    PitchContour(time=round(time, 2), pitch=pitch_value)
+                    PitchContour(time=time, pitch=pitch_val)
                 )
 
             return contour
@@ -223,11 +283,13 @@ class AudioAdapter(AudioPort):
         try:
             sound = cls.get_filtered_audio(audio_path)
 
-            intensity = cls.get_intensity(sound, 0.05)
+            intensity = cls.get_intensity(sound, 0.01)
 
             n_frames = praat_call(intensity, 'Get number of frames')
 
             contour = []
+            time_values = []
+            intensity_values = []
 
             for frame_number in range(1, n_frames + 1):
                 time = praat_call(
@@ -243,9 +305,17 @@ class AudioAdapter(AudioPort):
                 if not (np.isnan(db_value) or db_value == 0):
                     volume_value = round(db_value, 2)
 
+                time_values.append(time)
+                intensity_values.append(volume_value)
+
+            downsampled_times, downsampled_volumes = cls._downsample_data(
+                time_values, intensity_values, target_points=500
+            )
+
+            for time, volume in zip(downsampled_times, downsampled_volumes):
                 contour.append(
-                    IntensityContour(time=round(time, 2), volume=volume_value)
-                )
+                    IntensityContour(time=time, volume=volume)
+                )  
             return contour
 
         except Exception as e:

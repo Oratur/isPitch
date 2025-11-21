@@ -211,6 +211,7 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
         speech_analysis: SpeechAnalysis,
     ) -> AudioAnalysis:
         logger.info(f'[{analysis_id}] Calculating speech rate')
+        prosody_analysis = self.audio_analysis_port.get_prosody_analysis(audio_path)
         speech_rate = self.audio_analysis_port.get_speech_rate(
             audio_path=audio_path,
             transcription=transcription.text,
@@ -218,4 +219,4 @@ class AnalysisOrchestratorService(AnalysisOrchestratorPort):
         )
         logger.info(f'[{analysis_id}] Speech rate calculated: {speech_rate} WPM')
 
-        return AudioAnalysis(speech_rate=speech_rate)
+        return AudioAnalysis(speech_rate=speech_rate, prosody_analysis=prosody_analysis)

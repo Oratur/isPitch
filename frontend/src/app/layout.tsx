@@ -43,7 +43,7 @@ export default function RootLayout({
   }, [darkMode]);
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <title>isPitch</title>
       </head>

@@ -1,9 +1,12 @@
 'use client';
 
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import theme from '@/styles/theme';
 import { SidebarProvider } from '@/contexts/SidebarContext';
 import { Sidebar } from '@/components/layouts/Sidebar';
+import { useCurrentUser } from '@/domain/auth/hooks/useCurrentUser'; // Importe o hook criado
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 
 export default function PrivateLayout({
@@ -11,10 +14,40 @@ export default function PrivateLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = {
-    name: 'Nome Sobrenome',
-    initials: 'NS',
-    email: 'usuario@exemplo.com',
+  const router = useRouter();
+
+  const { data: user, isLoading, isAuthenticated } = useCurrentUser();
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isLoading, isAuthenticated, router]);
+
+  if (isLoading) {
+    return (
+      <Box 
+        sx={{ 
+          height: '100vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          bgcolor: theme.palette.purple.dark 
+        }}
+      >
+        <CircularProgress sx={{ color: theme.palette.purple.light1 }} />
+      </Box>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
+    return null; 
+  }
+
+  const sidebarUser = {
+    name: user.name,
+    initials: user.initials,
+    avatarUrl: undefined
   };
 
   return (
@@ -27,7 +60,7 @@ export default function PrivateLayout({
         }}
       >
         <Sidebar 
-          user={user}
+          user={sidebarUser}
         />
         <Box
           component="main"

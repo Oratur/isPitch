@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import logging
 
 from ...domain.models.analysis import Analysis, AnalysisStatus
@@ -59,7 +60,10 @@ class AsyncAnalysisWorkflowService:
     async def _handle_failure(self, error: Exception) -> None:
         failed_analysis = Analysis(
             id=self._orchestrator.analysis_id,
+            user_id=self._orchestrator.user_id,
             status=AnalysisStatus.FAILED,
+            updated_at=datetime.now(timezone.utc),
+            created_at=datetime.now(timezone.utc),
             filename=self._orchestrator.filename,
         )
         await self._analysis_repository.save(failed_analysis)

@@ -59,7 +59,7 @@ export function ResultsHeader({ analysis }: ResultsHeaderProps) {
           </Box>
         </Box>
         
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        {/* <Box sx={{ display: 'flex', gap: 1 }}>
           <Tooltip title="Compartilhar">
             <IconButton 
               sx={{ 
@@ -80,7 +80,7 @@ export function ResultsHeader({ analysis }: ResultsHeaderProps) {
               <Download size={20} color={theme.palette.purple.light1} />
             </IconButton>
           </Tooltip>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

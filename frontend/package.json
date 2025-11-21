@@ -19,6 +19,7 @@
     "@tanstack/react-query": "^5.90.2",
     "event-source-polyfill": "^1.0.31",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.513.0",
     "next": "^15.5.4",
     "react": "^19.0.0",
