@@ -33,6 +33,7 @@ class AnalysisSchemaMapper:
             filename=analysis.filename,
             created_at=analysis.created_at,
             updated_at=analysis.updated_at,
+            score=analysis.score,
             transcription=analysis.transcription.text
             if analysis.transcription
             else None,
@@ -93,4 +94,5 @@ class AnalysisSchemaMapper:
             if analysis.audio_analysis
             else 0.0,
             created_at=analysis.created_at,
+            score=analysis.score,
         )

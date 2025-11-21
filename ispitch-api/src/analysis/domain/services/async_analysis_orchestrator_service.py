@@ -13,6 +13,7 @@ from ..ports.input import (
     AsyncAnalysisOrchestratorPort,
     AudioAnalysisPort,
     LexicalRichnessPort,
+    ScoreCalculationPort,
     SpeechAnalysisPort,
     TopicAnalysisPort,
     VocabularyAnalysisPort,
@@ -39,6 +40,7 @@ class AnalysisPort:
     lexical_richness_port: LexicalRichnessPort
     topic_analysis_port: TopicAnalysisPort
     notification_port: NotificationPort
+    score_calculation_port: ScoreCalculationPort
 
 
 @dataclass
@@ -55,6 +57,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         self._lexical_richness_port = ports.lexical_richness_port
         self._topic_analysis_port = ports.topic_analysis_port
         self._notification_port = ports.notification_port
+        self._score_calculation_port = ports.score_calculation_port
 
     async def execute(self) -> Analysis:
         transcription = await self._transcribe_audio()
@@ -63,11 +66,15 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
             transcription=transcription, speech_analysis=speech_analysis
         )
 
-        return self._build_result(
+        analysis = self._build_result(
             transcription=transcription,
             speech_analysis=speech_analysis,
             audio_analysis=audio_analysis,
         )
+
+        analysis.score = self._score_calculation_port.execute(analysis=analysis)
+
+        return analysis
 
     async def _transcribe_audio(self):
         await self._publish_status(AnalysisStatus.TRANSCRIBING)
@@ -137,6 +144,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
             transcription=transcription,
             speech_analysis=speech_analysis,
             audio_analysis=audio_analysis,
+            score=0,
         )
 
     async def _publish_status(self, status: AnalysisStatus) -> None:

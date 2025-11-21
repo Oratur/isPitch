@@ -47,24 +47,7 @@ export function RecentAnalysisCard({ analysis, statusMessage }: RecentAnalysisCa
 
   const isProcessing = ['pending', 'transcribing', 'analyzing_speech', 'analyzing_audio'].includes(analysis.status);
 
-  // Score de qualidade baseado nas métricas (apenas para análises completas)
-  const calculateQualityScore = () => {
-    if (isProcessing) return 0;
-    
-    let score = 100;
-    score -= analysis.fillerWordsCount * 2;
-    score -= analysis.pausesCount * 1.5;
-    
-    if (analysis.speechRate >= 100 && analysis.speechRate <= 160) {
-      score += 10;
-    } else {
-      score -= Math.abs(130 - analysis.speechRate) * 0.3;
-    }
-    
-    return Math.max(0, Math.min(100, Math.round(score)));
-  };
-
-  const qualityScore = calculateQualityScore();
+  const qualityScore = analysis.score ?? 0;
   
   const getScoreColor = (score: number) => {
     if (score >= 80) return theme.palette.success.main;

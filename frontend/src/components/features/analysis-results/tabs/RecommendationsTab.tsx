@@ -16,7 +16,7 @@ export function RecommendationsTab({ analysis }: RecommendationsTabProps) {
   if (analysis.speechAnalysis.fillerwordsAnalysis.total <= 5) {
     strengths.push('Uso controlado de vícios de linguagem');
   }
-  if (analysis.audioAnalysis.speechRate >= 130 && analysis.audioAnalysis.speechRate <= 170) {
+  if (analysis.audioAnalysis.speechRate >= 100 && analysis.audioAnalysis.speechRate <= 160) {
     strengths.push('Ritmo de fala ideal para apresentações');
   }
   if (analysis.speechAnalysis.silenceAnalysis.pauses <= 3) {
@@ -34,7 +34,7 @@ export function RecommendationsTab({ analysis }: RecommendationsTabProps) {
   if (analysis.speechAnalysis.fillerwordsAnalysis.total > 5) {
     improvements.push('Reduzir o uso de vícios de linguagem');
   }
-  if (analysis.audioAnalysis.speechRate < 130 || analysis.audioAnalysis.speechRate > 170) {
+  if (analysis.audioAnalysis.speechRate < 100 || analysis.audioAnalysis.speechRate > 160) {
     improvements.push('Ajustar o ritmo da fala');
   }
   if (analysis.speechAnalysis.silenceAnalysis.pauses > 5) {

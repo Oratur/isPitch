@@ -10,6 +10,7 @@ class AnalysisSummarySchema(CamelCaseModel):
     status: str
     filename: str
     duration: float
+    score: Optional[int] = 0
     created_at: datetime
 
 

@@ -49,3 +49,4 @@ class Analysis:
     transcription: Optional[Transcription] = None
     speech_analysis: Optional[SpeechAnalysis] = None
     audio_analysis: Optional[AudioAnalysis] = None
+    score: Optional[int] = 0

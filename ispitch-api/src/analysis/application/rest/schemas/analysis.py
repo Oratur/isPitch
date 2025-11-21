@@ -31,6 +31,7 @@ class AnalysisSchema(CamelCaseModel):
     filename: str
     created_at: datetime
     updated_at: datetime
+    score: Optional[int] = 0
     transcription: Optional[str] = None
     speech_analysis: Optional[SpeechAnalysisSchema] = None
     audio_analysis: Optional[AudioAnalysisSchema] = None

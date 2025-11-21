@@ -7,6 +7,7 @@ export interface AnalysisHistoryItem {
   createdAt: string;
   duration: number;
   status: AnalysisStatus;
+  score: number;
 }
 
 export interface PaginationMetadata {

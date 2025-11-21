@@ -103,17 +103,20 @@ export default function AnalysesPage() {
             <Table>
               <TableHead sx={{ bgcolor: '#2A1A3D' }}>
                 <TableRow>
-                  <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
+                  <TableCell align="center" sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
                     DATA DA SUBMISSÃO
                   </TableCell>
-                  <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
+                  <TableCell align="center" sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
                     NOME DO ARQUIVO
                   </TableCell>
-                  <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
+                  <TableCell align="center" sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
                     DURAÇÃO
                   </TableCell>
-                  <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
+                  <TableCell align="center" sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
                     STATUS DA ANÁLISE
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
+                    PONTUAÇÃO DA ANÁLISE
                   </TableCell>
                   <TableCell sx={{ color: theme.palette.purple.light1, fontWeight: 600 }}>
                     AÇÕES
@@ -131,22 +134,25 @@ export default function AnalysesPage() {
                       },
                     }}
                   >
-                    <TableCell sx={{ color: theme.palette.purple.contrastText }}>
+                    <TableCell align="center" sx={{ color: theme.palette.purple.contrastText }}>
                       {formatDate(analysis.createdAt)}
                     </TableCell>
-                    <TableCell sx={{ color: theme.palette.purple.contrastText }}>
+                    <TableCell align="center" sx={{ color: theme.palette.purple.contrastText }}>
                       {analysis.filename}
                     </TableCell>
-                    <TableCell sx={{ color: theme.palette.purple.contrastText }}>
+                    <TableCell align="center" sx={{ color: theme.palette.purple.contrastText }}>
                       {formatDuration(analysis.duration)}
                     </TableCell>
-                    <TableCell>
+                    <TableCell align="center">
                       <Chip
                         label={statusLabels[analysis.status]}
                         color={statusColors[analysis.status]}
                         size="small"
                         sx={{ fontWeight: 500 }}
                       />
+                    </TableCell>
+                    <TableCell align="center" sx={{ color: theme.palette.purple.contrastText }}>
+                      {analysis.score ?? 0}
                     </TableCell>
                     <TableCell>
                       <Tooltip title="Ver Detalhes">

@@ -37,6 +37,7 @@ class AnalysisDocumentMapper:
             user_id=document.user_id,
             status=document.status,
             filename=document.filename,
+            score=document.score,
             created_at=document.created_at,
             updated_at=document.updated_at,
             transcription=TranscriptionDocumentMapper.from_document(
@@ -67,6 +68,7 @@ class AnalysisDocumentMapper:
             filename=entity.filename,
             created_at=entity.created_at,
             updated_at=entity.updated_at,
+            score=entity.score,
             transcription=TranscriptionDocumentMapper.from_entity(
                 entity.transcription
             )

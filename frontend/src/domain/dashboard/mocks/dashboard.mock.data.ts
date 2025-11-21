@@ -12,7 +12,8 @@ export const mockRecentAnalyses: RecentAnalysis[] = [
         fillerWordsCount: 12,
         speechRate: 140,
         pausesCount: 5,
-        status: 'completed'
+        status: 'completed',
+        score: 75,
     },
     {
         id: '550e8400-e29b-41d4-a716-446655440002',
@@ -21,7 +22,8 @@ export const mockRecentAnalyses: RecentAnalysis[] = [
         fillerWordsCount: 8,
         speechRate: 135,
         pausesCount: 3,
-        status: 'completed'
+        status: 'completed',
+        score: 75,
     },
     {
         id: '550e8400-e29b-41d4-a716-446655440003',
@@ -30,7 +32,8 @@ export const mockRecentAnalyses: RecentAnalysis[] = [
         fillerWordsCount: 15,
         speechRate: 150,
         pausesCount: 7,
-        status: 'completed'
+        status: 'completed',
+        score: 75,
     },
     {
         id: '550e8400-e29b-41d4-a716-446655440004',
@@ -39,7 +42,8 @@ export const mockRecentAnalyses: RecentAnalysis[] = [
         fillerWordsCount: 20,
         speechRate: 125,
         pausesCount: 10,
-        status: 'completed'
+        status: 'completed',
+        score: 75,
     },
     {
         id: '550e8400-e29b-41d4-a716-446655440005',
@@ -48,7 +52,8 @@ export const mockRecentAnalyses: RecentAnalysis[] = [
         fillerWordsCount: 6,
         speechRate: 145,
         pausesCount: 4,
-        status: 'completed'
+        status: 'completed',
+        score: 75,
     }
 ];
 
@@ -191,7 +196,8 @@ export function generateRandomAnalysis(): RecentAnalysis {
         fillerWordsCount: Math.floor(Math.random() * 30) + 1,
         speechRate: Math.floor(Math.random() * 80) + 100, // 100-180 PPM
         pausesCount: Math.floor(Math.random() * 15) + 1,
-        status: 'completed'
+        status: 'completed',
+        score: 75
     };
 }
 

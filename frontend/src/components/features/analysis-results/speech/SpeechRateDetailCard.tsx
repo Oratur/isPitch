@@ -8,14 +8,14 @@ interface SpeechRateDetailCardProps {
 
 export function SpeechRateDetailCard({ speechRate }: SpeechRateDetailCardProps) {
   const getSpeechRateFeedback = (rate: number) => {
-    if (rate < 130) {
+    if (rate < 100) {
       return { 
         text: 'Ritmo abaixo do ideal. Tente falar um pouco mais rápido.', 
         icon: <TrendingDown size={20} />, 
         color: theme.palette.warning.main 
       };
     }
-    if (rate > 170) {
+    if (rate > 160) {
       return { 
         text: 'Ritmo acima do ideal. Tente falar um pouco mais devagar.', 
         icon: <TrendingUp size={20} />, 

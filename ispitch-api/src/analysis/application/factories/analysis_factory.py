@@ -27,6 +27,7 @@ class AsyncAnalysisFactory:
         topic_analysis_port = deps.get_topic_analysis_port()
         analysis_repository = deps.get_analysis_repository()
         storage_port = deps.get_storage_port()
+        score_calculation_port = deps.get_score_calculation_service()
 
         orchestrator = AsyncAnalysisOrchestratorService(
             config=AnalysisConfig(
@@ -43,6 +44,7 @@ class AsyncAnalysisFactory:
                 lexical_richness_port=lexical_richness_port,
                 topic_analysis_port=topic_analysis_port,
                 notification_port=notification_port,
+                score_calculation_port=score_calculation_port,
             ),
         )
 

@@ -132,6 +132,7 @@ class AnalysisDocument(Document):
     user_id: str = Field(default=None, index=True)
     status: AnalysisStatus
     filename: str
+    score: Optional[int] = Field(default=None)
     transcription: Optional[Transcription] = None
     speech_analysis: Optional[SpeechAnalysis] = None
     audio_analysis: Optional[AudioAnalysis] = None

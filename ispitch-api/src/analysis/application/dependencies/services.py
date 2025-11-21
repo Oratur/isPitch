@@ -14,6 +14,7 @@ from ...domain.ports.input import (
     AnalysisStatsPort,
     AudioAnalysisPort,
     LexicalRichnessPort,
+    ScoreCalculationPort,
     SpeechAnalysisPort,
     TopicAnalysisPort,
     VocabularyAnalysisPort,
@@ -35,6 +36,7 @@ from ...domain.services.analysis_orchestrator_service import (
 from ...domain.services.analysis_stats_service import AnalysisStatsService
 from ...domain.services.audio_analysis_service import AudioAnalysisService
 from ...domain.services.lexical_richness_service import LexicalRichnessService
+from ...domain.services.score_calculation_service import ScoreCalculationService
 from ...domain.services.speech_analysis_service import SpeechAnalysisService
 from ...domain.services.topic_analysis_service import TopicAnalysisService
 from ...domain.services.vocabulary_analysis_service import (
@@ -139,3 +141,8 @@ def get_topic_analysis_port() -> TopicAnalysisPort:
 def get_analysis_stats_service() -> AnalysisStatsPort:
     stats_repository = AnalysisStatsRepositoryAdapter()
     return AnalysisStatsService(stats_repository)
+
+
+@lru_cache(maxsize=1)
+def get_score_calculation_service() -> ScoreCalculationPort:
+    return ScoreCalculationService()
