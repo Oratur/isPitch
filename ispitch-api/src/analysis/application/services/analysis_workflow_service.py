@@ -1,5 +1,5 @@
-from datetime import datetime, timezone
 import logging
+from datetime import datetime, timezone
 
 from ...domain.models.analysis import Analysis, AnalysisStatus
 from ...domain.models.events import SseEvent
