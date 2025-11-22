@@ -125,9 +125,9 @@ const IntensityTooltipContent = () => (
       Dinâmica de Volume
     </Typography>
     <Stack spacing={0.5}>
-      <Typography variant="caption" display="block" sx={{ color: '#fbff00ff' }}>• <strong>Estática:</strong> &lt; 3.0 dB</Typography>
+      <Typography variant="caption" display="block" sx={{ color: '#fbff00' }}>• <strong>Estática:</strong> &lt; 3.0 dB</Typography>
       <Typography variant="caption" display="block" sx={{ color: '#4caf50' }}>• <strong>Dinâmica:</strong> 3.0 - 8.0 dB</Typography>
-      <Typography variant="caption" display="block" sx={{ color: '#ff6600ff' }}>• <strong>Instável:</strong> &gt; 8.0 dB</Typography>
+      <Typography variant="caption" display="block" sx={{ color: '#ff6600' }}>• <strong>Instável:</strong> &gt; 8.0 dB</Typography>
     </Stack>
     <DisclaimerText />
   </Box>

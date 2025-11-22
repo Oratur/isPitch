@@ -21,13 +21,17 @@ export const getUserFromToken = (): CurrentUser | null => {
 
     if (!token) return null;
 
-    const decoded = jwtDecode<JWTPayload>(token);
+    try {
+        const decoded = jwtDecode<JWTPayload>(token);
 
-    return {
-        id: decoded.sub,
-        name: decoded.name,
-        initials: getInitials(decoded.name)
-    };
+        return {
+            id: decoded.sub,
+            name: decoded.name,
+            initials: getInitials(decoded.name)
+        };
+    } catch (error) {
+        return null;
+    }
 };
 
 const getInitials = (name: string) => {

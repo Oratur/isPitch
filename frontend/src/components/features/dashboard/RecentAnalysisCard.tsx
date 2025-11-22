@@ -1,5 +1,5 @@
 import { Card, CardContent, Typography, Box, IconButton, Stack, LinearProgress, Button } from '@mui/material';
-import { FileAudio, Calendar, Play, Share2, Download, MoreVertical, Clock, Eye } from 'lucide-react';
+import { FileAudio, Calendar, MoreVertical, Clock, Eye } from 'lucide-react';
 import theme from '@/styles/theme';
 import { RecentAnalysis } from '@/domain/dashboard/types';
 import Link from 'next/link';
