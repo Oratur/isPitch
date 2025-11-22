@@ -1,10 +1,48 @@
-import { Card, CardHeader, CardContent, Box, Typography, Divider } from '@mui/material';
-import { BarChart3, TrendingUp, TrendingDown, Award } from 'lucide-react';
+import { Card, CardHeader, CardContent, Box, Typography, Divider, Stack, Tooltip } from '@mui/material';
+import { BarChart3, TrendingUp, TrendingDown, Award, HelpCircle } from 'lucide-react';
 import theme from '@/styles/theme';
 
 interface SpeechRateDetailCardProps {
   speechRate: number;
 }
+
+const DisclaimerText = () => (
+  <Typography 
+    variant="caption" 
+    display="block" 
+    sx={{ 
+      mt: 1.5, 
+      pt: 1, 
+      borderTop: '1px solid rgba(255,255,255,0.1)', 
+      color: 'rgba(255,255,255,0.5)', 
+      fontSize: '0.65rem',
+      fontStyle: 'italic',
+      lineHeight: 1.3
+    }}
+  >
+    * Valores de referência para apresentações. O ritmo ideal pode variar conforme o contexto.
+  </Typography>
+);
+
+const SpeechRateTooltipContent = () => (
+  <Box sx={{ p: 0.5, maxWidth: 220 }}>
+    <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1, pb: 0.5, borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+      Ritmo da Fala (PPM)
+    </Typography>
+    <Stack spacing={0.5}>
+      <Typography variant="caption" display="block" sx={{ color: theme.palette.warning.main }}>
+        • <strong>Lento:</strong> &lt; 130 PPM
+      </Typography>
+      <Typography variant="caption" display="block" sx={{ color: theme.palette.success.main }}>
+        • <strong>Ideal:</strong> 130 - 170 PPM
+      </Typography>
+      <Typography variant="caption" display="block" sx={{ color: theme.palette.warning.main }}>
+        • <strong>Rápido:</strong> &gt; 170 PPM
+      </Typography>
+    </Stack>
+    <DisclaimerText />
+  </Box>
+);
 
 export function SpeechRateDetailCard({ speechRate }: SpeechRateDetailCardProps) {
   const getSpeechRateFeedback = (rate: number) => {
@@ -58,9 +96,30 @@ export function SpeechRateDetailCard({ speechRate }: SpeechRateDetailCardProps) 
           </Box>
         }
         title={
-          <Typography variant="h6" sx={{ color: theme.palette.purple.contrastText }}>
-            Ritmo da Fala
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="h6" sx={{ color: theme.palette.purple.contrastText }}>
+              Ritmo da Fala
+            </Typography>
+            
+            {/* Tooltip adicionado aqui */}
+            <Tooltip 
+              title={<SpeechRateTooltipContent />} 
+              arrow 
+              placement="top"
+              componentsProps={{ 
+                tooltip: { 
+                  sx: { 
+                    bgcolor: '#1e1e1e', 
+                    border: '1px solid rgba(255,255,255,0.1)' 
+                  } 
+                } 
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'help' }}>
+                <HelpCircle size={16} color={theme.palette.purple.light1} style={{ opacity: 0.7 }} />
+              </Box>
+            </Tooltip>
+          </Box>
         }
       />
       <CardContent>

@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { Analysis } from '@/domain/analysis/types/analysis';
 import { FillerWordsDetailCard, SilencesDetailCard, SpeechRateDetailCard } from '../speech';
+import { ProsodyAnalysisCard } from '../speech/ProsodyAnalysisCard'; // Importe o novo componente
 import { ActionButtons } from '../ActionButtons';
 
 interface OverviewTabProps {
@@ -23,6 +24,13 @@ export function OverviewTab({ analysis }: OverviewTabProps) {
         <SilencesDetailCard silences={analysis.speechAnalysis.silenceAnalysis} />
       </Grid>
 
+      {/* Gráfico de Prosódia */}
+      {analysis.audioAnalysis.prosodyAnalysis && (
+        <Grid size={{ xs: 12 }}>
+           <ProsodyAnalysisCard prosodyData={analysis.audioAnalysis.prosodyAnalysis} />
+        </Grid>
+      )}
+      
       {/* Botões de Ação */}
       <Grid size={{xs: 12}}>
         <ActionButtons />

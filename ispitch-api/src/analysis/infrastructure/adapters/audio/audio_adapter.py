@@ -1,5 +1,6 @@
 import math
-from typing import List
+import warnings
+from typing import List, Optional
 
 import librosa
 import numpy as np
@@ -72,6 +73,52 @@ class AudioAdapter(AudioPort):
     @staticmethod
     def is_valid_value(value: float) -> bool:
         return not (math.isnan(value) or math.isinf(value))
+
+    @staticmethod
+    def _downsample_data(
+        time_values: List[float],
+        y_values: List[Optional[float]],
+        target_points: int = 800,
+    ) -> tuple[List[float], List[Optional[float]]]:
+        total_points = len(time_values)
+
+        if total_points <= target_points:
+            return time_values, y_values
+
+        indices = np.linspace(0, total_points, target_points + 1).astype(int)
+
+        new_times = []
+        new_values = []
+
+        y_np = np.array(
+            [v if v is not None else np.nan for v in y_values], dtype=float
+        )
+
+        t_np = np.array(time_values, dtype=float)
+
+        for i in range(len(indices) - 1):
+            start_idx = indices[i]
+            end_idx = indices[i + 1]
+
+            chunk_y = y_np[start_idx:end_idx]
+            chunk_t = t_np[start_idx:end_idx]
+
+            if len(chunk_y) == 0:
+                continue
+
+            avg_time = np.mean(chunk_t)
+            new_times.append(round(avg_time, 2))
+
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', category=RuntimeWarning)
+                avg_val = np.nanmean(chunk_y)
+
+            if np.isnan(avg_val):
+                new_values.append(None)
+            else:
+                new_values.append(round(avg_val, 2))
+
+        return new_times, new_values
 
     @classmethod
     def get_pitch_analysis(cls, audio_path: str) -> PitchAnalysis:
@@ -149,9 +196,11 @@ class AudioAdapter(AudioPort):
         try:
             sound = cls.get_filtered_audio(audio_path)
 
-            pitch = cls.get_pitch(sound, 0.05)
+            pitch = cls.get_pitch(sound, 0.01)
 
             contour = []
+            time_values = []
+            pitch_values = []
 
             frames = praat_call(pitch, 'Get number of frames')
             for i in range(1, frames + 1):
@@ -166,9 +215,15 @@ class AudioAdapter(AudioPort):
                 if not (np.isnan(f0_value) or f0_value == 0):
                     pitch_value = round(f0_value, 2)
 
-                contour.append(
-                    PitchContour(time=round(time, 2), pitch=pitch_value)
-                )
+                time_values.append(time)
+                pitch_values.append(pitch_value)
+
+            downsampled_times, downsampled_pitches = cls._downsample_data(
+                time_values, pitch_values, target_points=500
+            )
+
+            for time, pitch_val in zip(downsampled_times, downsampled_pitches):
+                contour.append(PitchContour(time=time, pitch=pitch_val))
 
             return contour
 
@@ -223,11 +278,13 @@ class AudioAdapter(AudioPort):
         try:
             sound = cls.get_filtered_audio(audio_path)
 
-            intensity = cls.get_intensity(sound, 0.05)
+            intensity = cls.get_intensity(sound, 0.01)
 
             n_frames = praat_call(intensity, 'Get number of frames')
 
             contour = []
+            time_values = []
+            intensity_values = []
 
             for frame_number in range(1, n_frames + 1):
                 time = praat_call(
@@ -243,9 +300,15 @@ class AudioAdapter(AudioPort):
                 if not (np.isnan(db_value) or db_value == 0):
                     volume_value = round(db_value, 2)
 
-                contour.append(
-                    IntensityContour(time=round(time, 2), volume=volume_value)
-                )
+                time_values.append(time)
+                intensity_values.append(volume_value)
+
+            downsampled_times, downsampled_volumes = cls._downsample_data(
+                time_values, intensity_values, target_points=500
+            )
+
+            for time, volume in zip(downsampled_times, downsampled_volumes):
+                contour.append(IntensityContour(time=time, volume=volume))
             return contour
 
         except Exception as e:
@@ -262,7 +325,8 @@ class AudioAdapter(AudioPort):
 
             hnr = cls._calculate_hnr(sound, pitch)
             voiced_segments = cls._get_voiced_segments(pitch)
-            jitter, shimmer = cls._calculate_jitter_shimmer(
+
+            jitter, shimmer = cls._calculate_jitter_shimmer_optimized(
                 sound, pulses, voiced_segments
             )
 
@@ -312,8 +376,9 @@ class AudioAdapter(AudioPort):
 
         return np.mean(hnr_values) if hnr_values else 0.0
 
+    # Manter a versão antiga para referência temporariamente
     @classmethod
-    def _get_voiced_segments(cls, pitch: parselmouth.Pitch) -> List[tuple]:
+    def _get_voiced_segments_old(cls, pitch: parselmouth.Pitch) -> List[tuple]:
         """Extract voiced segments from pitch."""
         MIN_VOICED_SEGMENT_DURATION = 0.4
         MAX_GAP = 0.1
@@ -350,7 +415,168 @@ class AudioAdapter(AudioPort):
         return voiced_segments
 
     @classmethod
-    def _calculate_jitter_shimmer(
+    def _get_voiced_segments(cls, pitch: parselmouth.Pitch) -> List[tuple]:
+        """Extract voiced segments from pitch using vectorized operations."""
+        MIN_VOICED_SEGMENT_DURATION = 0.4
+        MAX_GAP = 0.1
+
+        times, f0_values = cls._extract_pitch_frames(pitch)
+
+        # Identificar frames com voz usando operações vetorizadas (NumPy)
+        is_voiced = (f0_values > 0) & (~np.isnan(f0_values))
+
+        if not np.any(is_voiced):
+            return []
+
+        # Encontrar transições voiced/unvoiced
+        voiced_diff = np.diff(is_voiced.astype(int))
+        starts = np.where(voiced_diff == 1)[0] + 1
+        ends = np.where(voiced_diff == -1)[0] + 1
+
+        # Ajustar se começar ou terminar voiced
+        if is_voiced[0]:
+            starts = np.concatenate([[0], starts])
+        if is_voiced[-1]:
+            ends = np.concatenate([ends, [len(is_voiced)]])
+
+        voiced_segments = []
+
+        for start_idx, end_idx in zip(starts, ends):
+            segment_start = times[start_idx]
+            segment_end = times[end_idx - 1]
+            duration = segment_end - segment_start
+
+            if duration >= MIN_VOICED_SEGMENT_DURATION:
+                voiced_segments.append((segment_start, segment_end))
+
+        # Mesclar segmentos próximos
+        if len(voiced_segments) > 1:
+            merged_segments = [voiced_segments[0]]
+
+            for current_start, current_end in voiced_segments[1:]:
+                prev_start, prev_end = merged_segments[-1]
+
+                if current_start - prev_end <= MAX_GAP:
+                    # Mesclar segmentos estendendo o fim do anterior
+                    merged_segments[-1] = (prev_start, current_end)
+                else:
+                    merged_segments.append((current_start, current_end))
+
+            # Filtrar segmentos mesclados por duração mínima novamente
+            voiced_segments = [
+                seg
+                for seg in merged_segments
+                if seg[1] - seg[0] >= MIN_VOICED_SEGMENT_DURATION
+            ]
+
+        return voiced_segments
+
+    @classmethod
+    def _extract_pitch_frames(cls, pitch: parselmouth.Pitch) -> tuple:
+        """Extract time and f0 values from pitch object."""
+        num_frames = praat_call(pitch, 'Get number of frames')
+
+        times = []
+        f0_values = []
+
+        for i in range(1, num_frames + 1):
+            time = praat_call(pitch, 'Get time from frame number', i)
+            f0 = praat_call(pitch, 'Get value in frame', i, 'Hertz')
+            times.append(time)
+            f0_values.append(f0)
+
+        return np.array(times), np.array(f0_values)
+
+    @classmethod
+    def _calculate_jitter_shimmer_optimized(
+        cls, sound: parselmouth.Sound, pulses, voiced_segments: List[tuple]
+    ) -> tuple[float, float]:
+        """
+        Calculate jitter and shimmer values with optimized performance.
+        """
+        MAX_JITTER = 0.05
+        MAX_SHIMMER = 0.15
+        MIN_VALID_PULSES = 10
+
+        if not voiced_segments:
+            return 0.0, 0.0
+
+        # Otimização: Extrair todos os tempos de pulsos de uma vez só
+        num_pulses = praat_call(pulses, 'Get number of points')
+
+        if num_pulses < MIN_VALID_PULSES:
+            return 0.0, 0.0
+
+        pulse_times = np.array([
+            praat_call(pulses, 'Get time from index', p)
+            for p in range(1, num_pulses + 1)
+        ])
+
+        jitter_values = []
+        shimmer_values = []
+        durations = []
+
+        for start, end in voiced_segments:
+            duration = end - start
+
+            # Contar pulsos no segmento usando operações vetorizadas
+            segment_mask = (pulse_times >= start) & (pulse_times <= end)
+            pulses_count = np.sum(segment_mask)
+
+            if pulses_count < MIN_VALID_PULSES:
+                continue
+
+            try:
+                # Calcular jitter e shimmer para o segmento inteiro
+                jitter = praat_call(
+                    pulses, 'Get jitter (rap)', start, end, 0.0001, 0.02, 1.3
+                )
+
+                shimmer = praat_call(
+                    [sound, pulses],
+                    'Get shimmer (apq3)',
+                    start,
+                    end,
+                    0.0001,
+                    0.02,
+                    1.3,
+                    1.6,
+                )
+
+                # Validar valores
+                if (
+                    not np.isnan(jitter)
+                    and 0 < jitter < MAX_JITTER
+                    and not np.isnan(shimmer)
+                    and 0 < shimmer < MAX_SHIMMER
+                ):
+                    jitter_values.append(jitter)
+                    shimmer_values.append(shimmer)
+                    durations.append(duration)
+
+            except Exception:
+                continue
+
+        if not durations:
+            return 0.0, 0.0
+
+        # Calcular média ponderada pela duração
+        total_dur = sum(durations)
+
+        if total_dur == 0:
+            return 0.0, 0.0
+
+        jitter = sum(j * d for j, d in zip(jitter_values, durations)) / total_dur
+
+        shimmer = (
+            sum(s * d for s, d in zip(shimmer_values, durations)) / total_dur
+        )
+
+        return jitter, shimmer
+
+    # Manter a versão antiga para referência temporariamente
+    @classmethod
+    def _calculate_jitter_shimmer_old(
         cls, sound: parselmouth.Sound, pulses, voiced_segments: List[tuple]
     ) -> tuple[float, float]:
         """Calculate jitter and shimmer values."""

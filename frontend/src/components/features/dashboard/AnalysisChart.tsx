@@ -432,7 +432,7 @@ export function AnalysisChart({ data, timeRange, onTimeRangeChange, isLoading = 
             </Typography>
           </Box>
 
-          <Chip
+          {/* <Chip
             icon={<Download size={14} />}
             label="Exportar"
             size="small"
@@ -450,7 +450,7 @@ export function AnalysisChart({ data, timeRange, onTimeRangeChange, isLoading = 
                 color: 'inherit'
               }
             }}
-          />
+          /> */}
         </Box>
       </CardContent>
     </Card>
