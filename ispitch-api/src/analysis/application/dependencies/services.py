@@ -21,6 +21,7 @@ from ...domain.ports.input import (
 )
 from ...domain.ports.input import (
     SentimentAnalysisPort as SentimentAnalysisInputPort,
+    GrammarCheckerPort as GrammarCheckerInputPort,
 )
 from ...domain.ports.output import (
     AnalysisRepositoryPort,
@@ -34,6 +35,7 @@ from ...domain.ports.output import (
 )
 from ...domain.ports.output import (
     SentimentAnalysisPort as SentimentAnalysisOutputPort,
+    GrammarCheckerPort as GrammarCheckerOutputPort,
 )
 from ...domain.services.analysis_orchestrator_service import (
     AnalysisOrchestratorDependencies,
@@ -62,6 +64,7 @@ from ...infrastructure.adapters import (
 from ...infrastructure.adapters.speech.sentiment_analysis_adapter import (
     SentimentAnalysisAdapter,
 )
+from ...infrastructure.adapters.grammar.language_tool_adapter import LanguageToolAdapter
 from ...infrastructure.context.resource_manager import ResourceManager
 from ...infrastructure.persistance.adapters import (
     AnalysisRepositoryAdapter,
@@ -166,8 +169,14 @@ def get_sentiment_analysis_adapter() -> SentimentAnalysisOutputPort:
     return SentimentAnalysisAdapter()
 
 
+@lru_cache(maxsize=1)
+def get_grammar_checker_adapter() -> GrammarCheckerOutputPort:
+    return LanguageToolAdapter()
+
+
 def get_speech_analysis_port() -> SpeechAnalysisPort:
     return SpeechAnalysisService(
         fillerwords_analysis_port=get_fillerwords_analysis_port(),
         sentiment_analysis_port=get_sentiment_analysis_port(),
+        grammar_checker_port=get_grammar_checker_port(),
     )

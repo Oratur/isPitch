@@ -4,16 +4,20 @@ from ..models.transcription import Transcription
 from ..ports.input import SentimentAnalysisPort as SentimentAnalysisInputPort
 from ..ports.input import SpeechAnalysisPort
 from ..ports.output import FillerWordsAnalysisPort
+from ..ports.output import GrammarCheckerPort
+from ..models.grammar import GrammarAnalysis
 
 
 class SpeechAnalysisService(SpeechAnalysisPort):
     def __init__(
             self,
             fillerwords_analysis_port: FillerWordsAnalysisPort,
-            sentiment_analysis_port: SentimentAnalysisInputPort
+            sentiment_analysis_port: SentimentAnalysisInputPort,
+            grammar_checker_port: GrammarCheckerPort,
     ):
         self.fillerwords_analysis_port = fillerwords_analysis_port
         self.sentiment_analysis_port = sentiment_analysis_port
+        self.grammar_checker_port = grammar_checker_port
 
     @classmethod
     def detect_silences(
@@ -63,3 +67,8 @@ class SpeechAnalysisService(SpeechAnalysisPort):
 
     def analyze_sentiment(self, transcription: Transcription):
         return self.sentiment_analysis_port.analyze_sentiment(transcription)
+    
+    def analyze_grammar(self, transcription: Transcription):
+        if not transcription or not transcription.text:
+            return GrammarAnalysis(issues=[])
+        return self.grammar_checker_port.check(transcription.text)

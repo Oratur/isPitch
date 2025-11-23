@@ -14,6 +14,9 @@ from ..mappers.sentiment_analysis_schema_mapper import (
 from ..mappers.silence_analysis_schema_mapper import (
     SilenceAnalysisSchemaMapper,
 )
+from ..mappers.grammar_analysis_schema_mapper import (
+    GrammarAnalysisSchemaMapper,
+)
 from ..mappers.topic_analysis_schema_mapper import TopicAnalysisSchemaMapper
 from ..mappers.vocabulary_analysis_schema_mapper import (
     VocabularyAnalysisSchemaMapper,
@@ -71,9 +74,15 @@ class AnalysisSchemaMapper:
                 else None,
                 sentiment_analysis=SentimentAnalysisSchemaMapper.from_model(
                     analysis.speech_analysis.sentiment_analysis
-                )
+                )                
                 if analysis.speech_analysis
                 and analysis.speech_analysis.sentiment_analysis
+                else None,
+                grammar_analysis=GrammarAnalysisSchemaMapper.from_model(
+                    analysis.speech_analysis.grammar_analysis
+                )
+                if analysis.speech_analysis
+                and analysis.speech_analysis.grammar_analysis
                 else None,
             ),
             audio_analysis=AudioAnalysisSchema(

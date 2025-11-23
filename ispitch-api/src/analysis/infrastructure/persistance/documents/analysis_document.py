@@ -86,6 +86,20 @@ class SentimentAnalysis(BaseModel):
     timeline: list[SentimentSegment]
 
 
+class GrammarIssue(BaseModel):
+    offset: int
+    length: int
+    message: str
+    short_message: str
+    text: str
+    suggestions: list[str]
+    rule_id: str
+
+
+class GrammarAnalysis(BaseModel):
+    issues: list[GrammarIssue]
+
+
 class SpeechAnalysis(BaseModel):
     silence_analysis: SilenceAnalysis
     fillerwords_analysis: FillerWordsAnalysis
@@ -93,6 +107,7 @@ class SpeechAnalysis(BaseModel):
     lexical_richness_analysis: Optional[LexicalRichnessAnalysisDocument] = None
     topic_analysis: Optional[TopicAnalysisDocument] = None
     sentiment_analysis: Optional[SentimentAnalysis] = None
+    grammar_analysis: Optional[GrammarAnalysis] = None
 
 
 class PitchContour(BaseModel):

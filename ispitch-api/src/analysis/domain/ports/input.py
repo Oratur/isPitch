@@ -12,6 +12,7 @@ from ..models.sentiment import SentimentAnalysis
 from ..models.silence import SilenceAnalysis
 from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
+from ..models.grammar import GrammarAnalysis
 from ..models.transcription import Transcription
 from ..models.vocabulary import VocabularyAnalysis
 
@@ -122,4 +123,12 @@ class SentimentAnalysisPort(ABC):
     def analyze_sentiment(
         self, transcription: Transcription
     ) -> SentimentAnalysis:
+        pass
+
+
+class GrammarCheckerPort(ABC):
+    @abstractmethod
+    def analyze_grammar(
+        self, transcription: Transcription
+    ) -> GrammarAnalysis:
         pass

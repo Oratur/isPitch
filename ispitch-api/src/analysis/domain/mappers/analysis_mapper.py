@@ -4,6 +4,10 @@ from ...domain.models.fillerwords import (
     FillerWordsAnalysis,
 )
 from ...domain.models.silence import Silence, SilenceAnalysis
+from ...domain.models.grammar import (
+    GrammarAnalysis, 
+    GrammarIssue,
+)
 from ...domain.models.transcription import Segment, Transcription, Word
 
 
@@ -56,9 +60,16 @@ class AnalysisModelMapper:
             occurrences=occurrences,
         )
 
+        grammar_data = speech_analysis_data.get('grammar_analysis', {})
+        grammar_issues = [
+            GrammarIssue(**i) for i in grammar_data.get('issues', [])
+        ]
+        grammar_analysis = GrammarAnalysis(issues=grammar_issues)
+
         speech_analysis = SpeechAnalysis(
             silence_analysis=silence_analysis,
             fillerwords_analysis=fillerwords_analysis,
+            grammar_analysis=grammar_analysis,
         )
 
         # AudioAnalysis

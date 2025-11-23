@@ -16,6 +16,7 @@ from ...domain.models.prosody import (
 from ...domain.models.sentiment import SentimentAnalysis, SentimentSegment
 from ...domain.models.silence import Silence, SilenceAnalysis
 from ...domain.models.topic import Topic, TopicAnalysis
+from ...domain.models.grammar import GrammarAnalysis, GrammarIssue
 from ...domain.models.transcription import Segment, Transcription, Word
 from ...domain.models.vocabulary import VocabularyAnalysis, VocabularySuggestion
 from ..persistance.documents import analysis_document
@@ -178,6 +179,9 @@ class SpeechAnalysisDocumentMapper:
             sentiment_analysis=SpeechAnalysisDocumentMapper._map_sentiment_analysis(
                 getattr(entity, 'sentiment_analysis', None)
             ),
+            grammar_analysis=SpeechAnalysisDocumentMapper._map_grammar_analysis(
+                getattr(entity, 'grammar_analysis', None)
+            ),
         )
 
     @staticmethod
@@ -291,6 +295,26 @@ class SpeechAnalysisDocumentMapper:
         )
 
     @staticmethod
+    def _map_grammar_analysis(ga):
+        if ga is None: 
+            return None
+        return analysis_document.GrammarAnalysis(
+            issues=map_list(ga.issues, SpeechAnalysisDocumentMapper._map_grammar_issue)
+        )
+
+    @staticmethod
+    def _map_grammar_issue(issue):
+        return analysis_document.GrammarIssue(
+            offset=issue.offset,
+            length=issue.length,
+            message=issue.message,
+            short_message=issue.short_message,
+            text=issue.text,
+            suggestions=issue.suggestions,
+            rule_id=issue.rule_id
+        )
+
+    @staticmethod
     def from_document(document):
         if document is None:
             return None
@@ -312,6 +336,9 @@ class SpeechAnalysisDocumentMapper:
             ),
             sentiment_analysis=SpeechAnalysisDocumentMapper._map_sentiment_analysis_from_document(
                 getattr(document, 'sentiment_analysis', None)
+            ),
+            grammar_analysis=SpeechAnalysisDocumentMapper._map_grammar_analysis_from_document(
+                getattr(document, 'grammar_analysis', None)
             ),
         )
 
@@ -436,6 +463,26 @@ class SpeechAnalysisDocumentMapper:
             end_time=getattr(ss, 'end_time', 0.0),
             sentiment=getattr(ss, 'sentiment', 'neutro'),
             score=getattr(ss, 'score', 0.0),
+        )
+
+    @staticmethod
+    def _map_grammar_analysis_from_document(ga_doc):
+        if ga_doc is None:
+            return None
+        return GrammarAnalysis(
+            issues=map_list(ga_doc.issues, SpeechAnalysisDocumentMapper._map_grammar_issue_from_document)
+        ) 
+
+    @staticmethod
+    def _map_grammar_issue_from_document(issue_doc):
+        return GrammarIssue(
+            offset=issue_doc.offset,
+            length=issue_doc.length,
+            message=issue_doc.message,
+            short_message=issue_doc.short_message,
+            text=issue_doc.text,
+            suggestions=issue_doc.suggestions,
+            rule_id=issue_doc.rule_id
         )
 
 

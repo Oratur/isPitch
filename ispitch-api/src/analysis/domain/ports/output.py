@@ -132,5 +132,5 @@ class SentimentAnalysisPort(ABC):
 
 class GrammarCheckerPort(ABC):
     @abstractmethod
-    def check(self, text: str) -> GrammarAnalysis:
+    def analyze(self, text: str) -> GrammarAnalysis:
         pass
