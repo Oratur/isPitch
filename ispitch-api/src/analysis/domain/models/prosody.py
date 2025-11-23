@@ -42,6 +42,6 @@ class VocalQualityAnalysis:
 
 @dataclass
 class ProsodyAnalysis:
-    pitch_analysis: PitchAnalysis
+    pitch_analysis: Optional[PitchAnalysis] = None
     intensity_analysis: Optional[IntensityAnalysis] = None
     vocal_quality: Optional[VocalQualityAnalysis] = None

@@ -1,21 +1,51 @@
 import { useSidebar } from '@/contexts/SidebarContext';
 import { useNavigation } from '@/hooks/useNavigation';
 import { SidebarProps } from './sidebar.types';
-import { getSidebarContainerStyles } from './sidebar.styles';
+import { getSidebarContainerStyles, getNavItemStyles } from './sidebar.styles';
 import { UserProfile } from './SidebarUser';
-import { NAV_ITEMS, SETTINGS_NAV } from './sidebar.constants';
+import { NAV_ITEMS } from './sidebar.constants';
 import { NavItem } from './SidebarNav';
-import { Box, List } from '@mui/material';
+import { Box, List, ListItemButton, ListItemIcon, ListItemText, Tooltip } from '@mui/material';
 import { SidebarToggle } from './SidebarToggle';
+import { LogOut } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+import { removeClientSideToken } from '@/domain/auth/services/tokenService';
 
 export function Sidebar({ user, onCollapse }: SidebarProps) {
   const { isCollapsed, toggle } = useSidebar();
   const { isActive } = useNavigation();
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const handleToggle = () => {
     toggle();
     onCollapse?.(isCollapsed);
   };
+
+  const handleLogout = () => {
+    removeClientSideToken();
+    queryClient.clear();
+    router.push('/login');
+  };
+
+  const logoutButton = (
+    <ListItemButton
+      onClick={handleLogout}
+      sx={getNavItemStyles(false, isCollapsed)}
+      aria-label="Sair"
+    >
+      <ListItemIcon sx={{ 
+        minWidth: 0, 
+        mr: isCollapsed ? 0 : 2, 
+        justifyContent: 'center', 
+        color: 'purple.light1' 
+      }}>
+        <LogOut size={20} />
+      </ListItemIcon>
+      <ListItemText primary="Sair" sx={{ opacity: isCollapsed ? 0 : 1 }} />
+    </ListItemButton>
+  );
 
   return (
     <Box
@@ -39,11 +69,13 @@ export function Sidebar({ user, onCollapse }: SidebarProps) {
 
       <Box sx={{ mt: 'auto' }}>
         <List component="nav" sx={{ width: '100%' }}>
-          <NavItem
-            item={SETTINGS_NAV}
-            isActive={isActive(SETTINGS_NAV.href)}
-            isCollapsed={isCollapsed}
-          />
+          {isCollapsed ? (
+            <Tooltip title="Sair" placement="right" arrow>
+              {logoutButton}
+            </Tooltip>
+          ) : (
+            logoutButton
+          )}
         </List>
 
         <SidebarToggle isCollapsed={isCollapsed} onToggle={handleToggle} />

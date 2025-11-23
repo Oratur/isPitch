@@ -30,6 +30,8 @@ export const UserProfile = memo(function UserProfile({
         alt={user.name}
         sx={{
           bgcolor: 'primary.main',
+          color: '#FFFFFF',
+          fontWeight: 700, 
           width: 40,
           height: 40,
           transition: 'transform 0.2s ease',
@@ -52,7 +54,7 @@ export const UserProfile = memo(function UserProfile({
         <Typography variant="body1" color="white" fontWeight="bold" noWrap>
           {user.name}
         </Typography>
-        <Typography
+        {/* <Typography
           variant="body2"
           color="purple.light1"
           noWrap
@@ -62,7 +64,7 @@ export const UserProfile = memo(function UserProfile({
           }}
         >
           Ver perfil
-        </Typography>
+        </Typography> */}
       </Box>
     </Box>
   );

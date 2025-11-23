@@ -1,5 +1,5 @@
-import { Card, CardContent, Typography, Box, IconButton, Stack, LinearProgress } from '@mui/material';
-import { FileAudio, Calendar, Play, Share2, Download, MoreVertical, Clock } from 'lucide-react';
+import { Card, CardContent, Typography, Box, IconButton, Stack, LinearProgress, Button } from '@mui/material';
+import { FileAudio, Calendar, MoreVertical, Clock, Eye } from 'lucide-react';
 import theme from '@/styles/theme';
 import { RecentAnalysis } from '@/domain/dashboard/types';
 import Link from 'next/link';
@@ -278,7 +278,32 @@ export function RecentAnalysisCard({ analysis, statusMessage }: RecentAnalysisCa
               transition: 'all 0.3s ease'
             }}
           >
-            <IconButton 
+            <Button
+              component={Link}
+              href={`/analyses/${analysis.id}`}
+              variant="contained"
+              startIcon={<Eye size={18} />}
+              fullWidth
+              sx={{
+                bgcolor: theme.palette.purple.main,
+                color: '#fff',
+                textTransform: 'none',
+                fontWeight: 600,
+                fontSize: '0.875rem',
+                py: 1,
+                borderRadius: 2,
+                boxShadow: `0 4px 12px ${theme.palette.purple.main}40`,
+                '&:hover': { 
+                  bgcolor: theme.palette.purple.main + 'CC',
+                  transform: 'translateY(-2px)',
+                  boxShadow: `0 6px 16px ${theme.palette.purple.main}60`,
+                },
+                transition: 'all 0.2s ease'
+              }}
+            >
+              Ver Detalhes
+            </Button>
+            {/* <IconButton 
               component={Link}
               href={`/analyses/${analysis.id}`}
               size="small"
@@ -289,9 +314,9 @@ export function RecentAnalysisCard({ analysis, statusMessage }: RecentAnalysisCa
               }}
             >
               <Play size={18} color={theme.palette.purple.main} />
-            </IconButton>
+            </IconButton> */}
 
-            <IconButton 
+            {/* <IconButton 
               size="small"
               sx={{ 
                 bgcolor: theme.palette.info.main + '20',
@@ -309,7 +334,7 @@ export function RecentAnalysisCard({ analysis, statusMessage }: RecentAnalysisCa
               }}
             >
               <Download size={18} color={theme.palette.success.main} />
-            </IconButton>
+            </IconButton> */}
           </Stack>
         )}
       </CardContent>

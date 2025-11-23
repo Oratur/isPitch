@@ -55,9 +55,44 @@ export interface SpeechAnalysis {
     topicAnalysis: TopicAnalysis;
 }
 
+export interface ContourPoint {
+  time: number;
+  value: number;
+}
+
+export interface PitchAnalysis {
+  meanPitch: number;
+  minPitch: number;
+  maxPitch: number;
+  stdevPitch: number;
+  stdevPitchSemitones: number;
+  pitchContour: Array<{ time: number; pitch: number }>;
+}
+
+export interface IntensityAnalysis {
+  meanIntensity: number;
+  minIntensity: number;
+  maxIntensity: number;
+  stdevIntensity: number;
+  intensityContour: Array<{ time: number; volume: number }>;
+}
+
+export interface ProsodyAnalysis {
+  pitchAnalysis?: PitchAnalysis;
+  intensityAnalysis?: IntensityAnalysis;
+  vocalQuality?: VocalQualityAnalysis;
+}
+
+export interface VocalQualityAnalysis {
+  jitter: number;
+  shimmer: number;
+  hnr: number;
+}
+
 export interface AudioAnalysis {
     speechRate: number;
     duration: number;
+    prosodyAnalysis?: ProsodyAnalysis;
 }
 
 export interface Analysis {
