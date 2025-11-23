@@ -115,7 +115,8 @@ class ScoreCalculationPort(ABC):
     @abstractmethod
     def execute(self, analysis: Analysis) -> int:
         pass
-    
+
+
 class SentimentAnalysisPort(ABC):
     @abstractmethod
     def analyze_sentiment(

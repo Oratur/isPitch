@@ -155,6 +155,7 @@ def get_analysis_stats_service() -> AnalysisStatsPort:
 def get_score_calculation_service() -> ScoreCalculationPort:
     return ScoreCalculationService()
 
+
 @lru_cache(maxsize=1)
 def get_sentiment_analysis_port() -> SentimentAnalysisInputPort:
     return SentimentAnalysisService(get_sentiment_analysis_adapter())
