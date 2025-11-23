@@ -13,6 +13,7 @@ from ..models.prosody import (
     PitchAnalysis,
     VocalQualityAnalysis,
 )
+from ..models.sentiment import SentimentAnalysis
 from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
 from ..models.transcription import Transcription
@@ -119,4 +120,10 @@ class AnalysisStatsRepositoryPort(ABC):
     async def get_stats(
         self, user_id: str, time_range: TimeRange
     ) -> AnalysisStats:
+        pass
+
+
+class SentimentAnalysisPort(ABC):
+    @abstractmethod
+    def analyze(self, text: str) -> SentimentAnalysis:
         pass

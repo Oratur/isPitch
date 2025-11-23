@@ -90,6 +90,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
         vocabulary = self._vocabulary_analysis_port.analyze(transcription)
         lexical_richness = self._lexical_richness_port.analyze(transcription)
         topics = self._topic_analysis_port.analyze(transcription)
+        sentiment = self._speech_analysis_port.analyze_sentiment(transcription)
 
         logger.info(f'[{self.analysis_id}] Speech analysis completed')
         return SpeechAnalysis(
@@ -98,6 +99,7 @@ class AsyncAnalysisOrchestratorService(AsyncAnalysisOrchestratorPort):
             vocabulary_analysis=vocabulary,
             lexical_richness_analysis=lexical_richness,
             topic_analysis=topics,
+            sentiment_analysis=sentiment,
         )
 
     async def _analyze_audio(

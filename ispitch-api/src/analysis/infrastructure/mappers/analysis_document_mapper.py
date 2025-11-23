@@ -13,6 +13,7 @@ from ...domain.models.prosody import (
     ProsodyAnalysis,
     VocalQualityAnalysis,
 )
+from ...domain.models.sentiment import SentimentAnalysis, SentimentSegment
 from ...domain.models.silence import Silence, SilenceAnalysis
 from ...domain.models.topic import Topic, TopicAnalysis
 from ...domain.models.transcription import Segment, Transcription, Word
@@ -174,6 +175,9 @@ class SpeechAnalysisDocumentMapper:
             topic_analysis=SpeechAnalysisDocumentMapper._map_topic_analysis(
                 getattr(entity, 'topic_analysis', None)
             ),
+            sentiment_analysis=SpeechAnalysisDocumentMapper._map_sentiment_analysis(
+                getattr(entity, 'sentiment_analysis', None)
+            ),
         )
 
     @staticmethod
@@ -267,6 +271,26 @@ class SpeechAnalysisDocumentMapper:
         )
 
     @staticmethod
+    def _map_sentiment_analysis(sa: SentimentAnalysis):
+        if sa is None:
+            return None
+        return analysis_document.SentimentAnalysis(
+            timeline=map_list(
+                getattr(sa, 'timeline', []),
+                SpeechAnalysisDocumentMapper._map_sentiment_segment,
+            )
+        )
+
+    @staticmethod
+    def _map_sentiment_segment(ss: SentimentSegment):
+        return analysis_document.SentimentSegment(
+            start_time=getattr(ss, 'start_time', 0.0),
+            end_time=getattr(ss, 'end_time', 0.0),
+            sentiment=getattr(ss, 'sentiment', 'neutro'),
+            score=getattr(ss, 'score', 0.0),
+        )
+
+    @staticmethod
     def from_document(document):
         if document is None:
             return None
@@ -285,6 +309,9 @@ class SpeechAnalysisDocumentMapper:
             ),
             topic_analysis=SpeechAnalysisDocumentMapper._map_topic_analysis_from_document(
                 getattr(document, 'topic_analysis', None)
+            ),
+            sentiment_analysis=SpeechAnalysisDocumentMapper._map_sentiment_analysis_from_document(
+                getattr(document, 'sentiment_analysis', None)
             ),
         )
 
@@ -385,6 +412,30 @@ class SpeechAnalysisDocumentMapper:
         return Topic(
             topic=getattr(topic_doc, 'topic', ''),
             summary=getattr(topic_doc, 'summary', ''),
+        )
+
+    @staticmethod
+    def _map_sentiment_analysis_from_document(
+        sa: analysis_document.SentimentAnalysis
+    ):
+        if sa is None:
+            return None
+        return SentimentAnalysis(
+            timeline=map_list(
+                getattr(sa, 'timeline', []),
+                SpeechAnalysisDocumentMapper._map_sentiment_segment_from_document,
+            )
+        )
+
+    @staticmethod
+    def _map_sentiment_segment_from_document(
+        ss: analysis_document.SentimentSegment
+    ):
+        return SentimentSegment(
+            start_time=getattr(ss, 'start_time', 0.0),
+            end_time=getattr(ss, 'end_time', 0.0),
+            sentiment=getattr(ss, 'sentiment', 'neutro'),
+            score=getattr(ss, 'score', 0.0),
         )
 
 
