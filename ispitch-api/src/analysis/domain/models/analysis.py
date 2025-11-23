@@ -9,6 +9,7 @@ from .prosody import ProsodyAnalysis
 from .sentiment import SentimentAnalysis
 from .silence import SilenceAnalysis
 from .topic import TopicAnalysis
+from .grammar import GrammarAnalysis
 from .transcription import Transcription
 from .vocabulary import VocabularyAnalysis
 
@@ -21,6 +22,7 @@ class SpeechAnalysis:
     lexical_richness_analysis: Optional[LexicalRichnessAnalysis] = None
     topic_analysis: Optional[TopicAnalysis] = None
     sentiment_analysis: Optional[SentimentAnalysis] = None
+    grammar_analysis: Optional[GrammarAnalysis] = None
 
 
 @dataclass

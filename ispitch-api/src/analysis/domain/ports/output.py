@@ -16,6 +16,7 @@ from ..models.prosody import (
 from ..models.sentiment import SentimentAnalysis
 from ..models.time_range import TimeRange
 from ..models.topic import TopicAnalysis
+from ..models.grammar import GrammarAnalysis
 from ..models.transcription import Transcription
 
 
@@ -126,4 +127,10 @@ class AnalysisStatsRepositoryPort(ABC):
 class SentimentAnalysisPort(ABC):
     @abstractmethod
     def analyze(self, text: str) -> SentimentAnalysis:
+        pass
+
+
+class GrammarCheckerPort(ABC):
+    @abstractmethod
+    def check(self, text: str) -> GrammarAnalysis:
         pass
