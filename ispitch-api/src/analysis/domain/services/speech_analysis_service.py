@@ -71,4 +71,4 @@ class SpeechAnalysisService(SpeechAnalysisPort):
     def analyze_grammar(self, transcription: Transcription):
         if not transcription or not transcription.text:
             return GrammarAnalysis(issues=[])
-        return self.grammar_checker_port.check(transcription.text)
+        return self.grammar_checker_port.analyze(transcription.text)
