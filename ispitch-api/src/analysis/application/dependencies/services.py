@@ -170,7 +170,7 @@ def get_sentiment_analysis_adapter() -> SentimentAnalysisOutputPort:
 
 
 @lru_cache(maxsize=1)
-def get_grammar_checker_adapter() -> GrammarCheckerOutputPort:
+def get_grammar_checker_port() -> GrammarCheckerOutputPort:
     return LanguageToolAdapter()
 
 

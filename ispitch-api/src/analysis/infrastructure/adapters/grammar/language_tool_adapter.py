@@ -6,7 +6,7 @@ class LanguageToolAdapter(GrammarCheckerPort):
     def __init__(self):
         self.tool = language_tool_python.LanguageTool('pt-BR')
 
-    def check(self, text: str) -> GrammarAnalysis:
+    def analyze(self, text: str) -> GrammarAnalysis:
         matches = self.tool.check(text)
         issues = []
         for match in matches:

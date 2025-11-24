@@ -7,3 +7,4 @@ export { TopicAnalysisCard } from './TopicAnalysisCard';
 export { TranscriptionSection } from './TranscriptionSection';
 export { VocabularySuggestionsCard } from './VocabularySuggestionsCard';
 export { SentimentDetailCard } from './SentimentDetailCard';
+export { GrammarDetailCard } from './GrammarDetailCard';

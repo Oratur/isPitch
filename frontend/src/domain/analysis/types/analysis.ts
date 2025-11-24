@@ -58,6 +58,20 @@ export interface SentimentAnalysis {
   timeline: SentimentSegment[];
 }
 
+export interface GrammarIssueSegment{
+    offset: number;
+    length: number;
+    message: string;
+    short_message: string;
+    text: string;
+    suggestions: string[];
+    rule_id: string;
+}
+
+export interface GrammarAnalysis {
+    issues: GrammarIssueSegment[];
+}
+
 export interface SpeechAnalysis {
     silenceAnalysis: SilenceAnalysis;
     fillerwordsAnalysis: FillerwordAnalysis;
@@ -65,6 +79,7 @@ export interface SpeechAnalysis {
     lexicalRichnessAnalysis: LexicalRichnessAnalysis;
     topicAnalysis: TopicAnalysis;
     sentimentAnalysis?: SentimentAnalysis;
+    grammarAnalysis: GrammarAnalysis;
 }
 
 export interface ContourPoint {

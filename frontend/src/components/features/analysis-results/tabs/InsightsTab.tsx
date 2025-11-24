@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { Analysis } from '@/domain/analysis/types/analysis';
-import { LexicalRichnessCard, TopicAnalysisCard, VocabularySuggestionsCard } from '../speech';
+import { LexicalRichnessCard, TopicAnalysisCard, VocabularySuggestionsCard, GrammarDetailCard } from '../speech';
 
 
 interface InsightsTabProps {
@@ -17,6 +17,10 @@ export function InsightsTab({ analysis }: InsightsTabProps) {
 
       <Grid size={{xs: 12, md: 6}}>
         <VocabularySuggestionsCard suggestions={analysis.speechAnalysis.vocabularyAnalysis.suggestions} />
+      </Grid>
+
+      <Grid size={{xs: 12, md: 6}}>
+        <GrammarDetailCard grammarAnalysis={analysis.speechAnalysis.grammarAnalysis} />
       </Grid>
 
       {/* Análise de Tópicos */}
