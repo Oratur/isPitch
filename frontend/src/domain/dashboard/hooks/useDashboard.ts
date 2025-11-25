@@ -13,9 +13,11 @@ export const useGetDashboardStats = (timeRange: TimeRange = 'month') => {
 };
 
 export const useGetRecentAnalysis = () => {
-    return useQuery<RecentAnalysis, Error>({
+    return useQuery<RecentAnalysis | null, Error>({
         queryKey: ['dashboard', 'recent'],
         queryFn: getRecentAnalysis,
         staleTime: 1000 * 60 * 5, // 5 minutos
+        retry: false,
+        throwOnError: false,
     });
 };

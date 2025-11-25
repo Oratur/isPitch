@@ -27,10 +27,6 @@ export function StatsCards({ stats }: StatsCardsProps) {
       icon: <BarChart3 size={32} />,
       value: stats.totalAnalyses || 0,
       label: 'Total de Análises',
-      trend: {
-        value: '+3 esta semana',
-        isPositive: true
-      },
       color: theme.palette.purple.main,
       bgGradient: 'linear-gradient(135deg, #7F13EC 0%, #9333EA 100%)'
     },
@@ -38,10 +34,6 @@ export function StatsCards({ stats }: StatsCardsProps) {
       icon: <Mic size={32} />,
       value: stats.totalFillerWords || 0,
       label: 'Vícios Detectados',
-      trend: {
-        value: '-12 vs mês anterior',
-        isPositive: true
-      },
       color: theme.palette.warning.main,
       bgGradient: 'linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%)'
     },
@@ -49,10 +41,6 @@ export function StatsCards({ stats }: StatsCardsProps) {
       icon: <Clock size={32} />,
       value: `${stats.totalDuration || 0}min`,
       label: 'Tempo Total',
-      trend: {
-        value: '+15min esta semana',
-        isPositive: false
-      },
       color: theme.palette.info.main,
       bgGradient: 'linear-gradient(135deg, #06B6D4 0%, #0891B2 100%)'
     },

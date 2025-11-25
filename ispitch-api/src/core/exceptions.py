@@ -16,7 +16,9 @@ class DomainException(Exception):
 class NotFoundException(DomainException):
     def __init__(self, resource: str):
         message = f'{resource} não encontrado(a).'
-        super().__init__(status_code=status.HTTP_404_NOT_FOUND, message=message)
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND, message=message, details=[]
+        )
 
 
 class ValidationException(DomainException):

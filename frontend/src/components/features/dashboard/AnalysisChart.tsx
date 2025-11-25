@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardContent, Typography, Box, Chip, Stack, ToggleButtonGroup, ToggleButton, Divider } from '@mui/material';
-import { BarChart2, TrendingUp, Calendar, Download, Clock } from 'lucide-react';
+import { BarChart2, TrendingUp, Calendar, Clock } from 'lucide-react';
 import theme from '@/styles/theme';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
 import { useState } from 'react';
@@ -62,11 +62,6 @@ export function AnalysisChart({ data, timeRange, onTimeRangeChange, isLoading = 
   const totalAnalyses = chartData.reduce((sum, item) => sum + item.analyses, 0);
   const avgAnalyses = chartData.length > 0 ? totalAnalyses / chartData.length : 0;
   const maxMonth = chartData.reduce((max, item) => item.analyses > max.analyses ? item : max, chartData[0]);
-  const currentMonth = chartData[chartData.length - 1];
-  const previousMonth = chartData[chartData.length - 2];
-  const growth = previousMonth && previousMonth.analyses !== 0
-    ? ((currentMonth.analyses - previousMonth.analyses) / previousMonth.analyses * 100)
-    : 0;
 
   const CustomTooltip = ({ active, payload }: TooltipProps) => {
     if (active && payload && payload.length) {
@@ -302,27 +297,6 @@ export function AnalysisChart({ data, timeRange, onTimeRangeChange, isLoading = 
               alignSelf: 'stretch'
             }} 
           />
-
-          <Box sx={{ flex: 1, textAlign: 'center' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5, mb: 0.5 }}>
-              <Typography variant="caption" sx={{ color: theme.palette.purple.light1 }}>
-                Tendência
-              </Typography>
-              <TrendingUp 
-                size={14} 
-                color={growth >= 0 ? theme.palette.success.main : theme.palette.error.main} 
-              />
-            </Box>
-            <Typography 
-              variant="h5" 
-              sx={{ 
-                color: growth >= 0 ? theme.palette.success.main : theme.palette.error.main,
-                fontWeight: 700 
-              }}
-            >
-              {growth > 0 ? '+' : ''}{growth.toFixed(1)}%
-            </Typography>
-          </Box>
         </Stack>
 
         {/* Chart */}
