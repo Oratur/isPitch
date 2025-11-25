@@ -31,13 +31,13 @@ const SpeechRateTooltipContent = () => (
     </Typography>
     <Stack spacing={0.5}>
       <Typography variant="caption" display="block" sx={{ color: theme.palette.warning.main }}>
-        • <strong>Lento:</strong> &lt; 130 PPM
+        • <strong>Lento:</strong> &lt; 100 PPM
       </Typography>
       <Typography variant="caption" display="block" sx={{ color: theme.palette.success.main }}>
-        • <strong>Ideal:</strong> 130 - 170 PPM
+        • <strong>Ideal:</strong> 100 - 160 PPM
       </Typography>
       <Typography variant="caption" display="block" sx={{ color: theme.palette.warning.main }}>
-        • <strong>Rápido:</strong> &gt; 170 PPM
+        • <strong>Rápido:</strong> &gt; 160 PPM
       </Typography>
     </Stack>
     <DisclaimerText />
