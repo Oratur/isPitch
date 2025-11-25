@@ -1,4 +1,4 @@
-import { Home, History, Settings } from 'lucide-react';
+import { Home, History } from 'lucide-react';
 import { NavItem } from './sidebar.types';
 
 export const NAV_ITEMS: NavItem[] = [
@@ -13,12 +13,6 @@ export const NAV_ITEMS: NavItem[] = [
     icon: <History size={20} />,
   },
 ];
-
-// export const SETTINGS_NAV: NavItem = {
-//     text: 'Configurações',
-//     href: '/settings',
-//     icon: <Settings size={20} />,
-// };
 
 export const SIDEBAR_WIDTH = {
     expanded: 280,

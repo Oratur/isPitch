@@ -1,4 +1,3 @@
-
 import { jwtDecode } from 'jwt-decode';
 import { getClientSideToken } from '@/domain/auth/services/tokenService';
 
@@ -29,7 +28,7 @@ export const getUserFromToken = (): CurrentUser | null => {
             name: decoded.name,
             initials: getInitials(decoded.name)
         };
-    } catch (error) {
+    } catch {
         return null;
     }
 };
