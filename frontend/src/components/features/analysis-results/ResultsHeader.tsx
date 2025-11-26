@@ -1,5 +1,5 @@
-import { Box, Typography, IconButton, Tooltip } from '@mui/material';
-import { FileAudio, Share2, Download } from 'lucide-react';
+import { Box, Typography } from '@mui/material';
+import { FileAudio } from 'lucide-react';
 import theme from '@/styles/theme';
 import { Analysis } from '@/domain/analysis/types/analysis';
 

@@ -1,5 +1,4 @@
-import { Card, CardContent, Box, Typography, LinearProgress, Tooltip, IconButton, Alert } from '@mui/material';
-import { InfoIcon } from 'lucide-react';
+import { Card, CardContent, Box, Typography, LinearProgress, Alert } from '@mui/material';
 import theme from '@/styles/theme';
 import { Analysis } from '@/domain/analysis/types/analysis';
 import { getScoreColor, getScoreLabel } from '@/domain/analysis/utils/scoreCalculator';
@@ -14,45 +13,45 @@ export function OverallScoreCard({ analysis }: OverallScoreCardProps) {
   const scoreColor = getScoreColor(overallScore);
   const scoreLabel = getScoreLabel(overallScore);
 
-  const scoreTooltipContent = (
-    <Box sx={{ p: 1 }}>
-      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
-        Como a pontuação é calculada:
-      </Typography>
-      <Box component="ul" sx={{ m: 0, pl: 2, '& li': { mb: 0.5 } }}>
-        <li><Typography variant="body2">Clareza da fala (30%)</Typography></li>
-        <li><Typography variant="body2">Ritmo e pausas (25%)</Typography></li>
-        <li><Typography variant="body2">Volume e entonação (20%)</Typography></li>
-        <li><Typography variant="body2">Estrutura do discurso (15%)</Typography></li>
-        <li><Typography variant="body2">Palavras de preenchimento (10%)</Typography></li>
-      </Box>
-      <Typography variant="subtitle2" sx={{ fontWeight: 700, mt: 2, mb: 1 }}>
-        Classificação:
-      </Typography>
-      <Box sx={{ '& > div': { mb: 0.5 } }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#4caf50' }} />
-          <Typography variant="body2">90-100%: Excelente</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#8bc34a' }} />
-          <Typography variant="body2">75-89%: Muito Bom</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#ffc107' }} />
-          <Typography variant="body2">60-74%: Bom</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#ff9800' }} />
-          <Typography variant="body2">40-59%: Regular</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#f44336' }} />
-          <Typography variant="body2">0-39%: Precisa Melhorar</Typography>
-        </Box>
-      </Box>
-    </Box>
-  );
+  // const scoreTooltipContent = (
+  //   <Box sx={{ p: 1 }}>
+  //     <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5 }}>
+  //       Como a pontuação é calculada:
+  //     </Typography>
+  //     <Box component="ul" sx={{ m: 0, pl: 2, '& li': { mb: 0.5 } }}>
+  //       <li><Typography variant="body2">Clareza da fala (30%)</Typography></li>
+  //       <li><Typography variant="body2">Ritmo e pausas (25%)</Typography></li>
+  //       <li><Typography variant="body2">Volume e entonação (20%)</Typography></li>
+  //       <li><Typography variant="body2">Estrutura do discurso (15%)</Typography></li>
+  //       <li><Typography variant="body2">Palavras de preenchimento (10%)</Typography></li>
+  //     </Box>
+  //     <Typography variant="subtitle2" sx={{ fontWeight: 700, mt: 2, mb: 1 }}>
+  //       Classificação:
+  //     </Typography>
+  //     <Box sx={{ '& > div': { mb: 0.5 } }}>
+  //       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+  //         <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#4caf50' }} />
+  //         <Typography variant="body2">90-100%: Excelente</Typography>
+  //       </Box>
+  //       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+  //         <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#8bc34a' }} />
+  //         <Typography variant="body2">75-89%: Muito Bom</Typography>
+  //       </Box>
+  //       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+  //         <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#ffc107' }} />
+  //         <Typography variant="body2">60-74%: Bom</Typography>
+  //       </Box>
+  //       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+  //         <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#ff9800' }} />
+  //         <Typography variant="body2">40-59%: Regular</Typography>
+  //       </Box>
+  //       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+  //         <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#f44336' }} />
+  //         <Typography variant="body2">0-39%: Precisa Melhorar</Typography>
+  //       </Box>
+  //     </Box>
+  //   </Box>
+  // );
 
   return (
     <Card 

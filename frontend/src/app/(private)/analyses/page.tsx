@@ -18,9 +18,9 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import { Eye, Trash2 } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import Link from 'next/link';
-import { useAnalysisHistory, useDeleteAnalysis } from '@/domain/analysis/hooks';
+import { useAnalysisHistory } from '@/domain/analysis/hooks';
 import { AnalysisStatus } from '@/domain/analysis/types/analysisHistory';
 import theme from '@/styles/theme';
 import { NewAnalysisButton } from '@/components/ui/NewAnalysisButton';
@@ -42,7 +42,6 @@ export default function AnalysesPage() {
   const [pageSize, setPageSize] = useState(10);
 
   const { data, isLoading, error } = useAnalysisHistory(page, pageSize);
-  const { mutate: deleteAnalysis } = useDeleteAnalysis();
 
   const handlePageChange = (_: unknown, newPage: number) => {
     setPage(newPage + 1);
@@ -51,12 +50,6 @@ export default function AnalysesPage() {
   const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPageSize(parseInt(event.target.value, 10));
     setPage(1);
-  };
-
-  const handleDelete = (id: string) => {
-    if (confirm('Tem certeza que deseja excluir esta análise?')) {
-      deleteAnalysis(id);
-    }
   };
 
   const formatDate = (dateString: string) => {
@@ -163,15 +156,6 @@ export default function AnalysesPage() {
                           sx={{ color: theme.palette.purple.main }}
                         >
                           <Eye size={18} />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Excluir">
-                        <IconButton
-                          size="small"
-                          onClick={() => handleDelete(analysis.id)}
-                          sx={{ color: theme.palette.error.main }}
-                        >
-                          <Trash2 size={18} />
                         </IconButton>
                       </Tooltip>
                     </TableCell>

@@ -6,9 +6,7 @@ from ..utils.text_segmenter import segment_transcription
 
 
 class SentimentAnalysisService(SentimentAnalysisInputPort):
-    def __init__(
-        self, sentiment_analysis_port: SentimentAnalysisOutputPort
-    ):
+    def __init__(self, sentiment_analysis_port: SentimentAnalysisOutputPort):
         self.sentiment_analysis_port = sentiment_analysis_port
 
     def analyze_sentiment(
@@ -19,9 +17,7 @@ class SentimentAnalysisService(SentimentAnalysisInputPort):
         e analisando cada segmento individualmente.
         """
         all_words = [
-            word
-            for segment in transcription.segments
-            for word in segment.words
+            word for segment in transcription.segments for word in segment.words
         ]
 
         if not all_words:

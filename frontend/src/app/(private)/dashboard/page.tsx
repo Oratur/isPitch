@@ -20,8 +20,8 @@ export default function DashboardPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>('month');
   const [pendingAnalysisId, setPendingAnalysisId] = useState<string | null>(null);
   
-  const { data: stats, isLoading: statsLoading, error: statsError } = useGetDashboardStats(timeRange);
-  const { data: recentAnalysis, isLoading: analysesLoading, error: analysesError } = useGetRecentAnalysis();
+  const { data: stats, isLoading: statsLoading } = useGetDashboardStats(timeRange);
+  const { data: recentAnalysis, isLoading: analysesLoading, } = useGetRecentAnalysis();
 
   // Detecta se há uma análise pendente após upload
   useEffect(() => {
@@ -46,8 +46,6 @@ export default function DashboardPage() {
       setPendingAnalysisId(null);
     }
   }, [recentAnalysis, pendingAnalysisId]);
-
-  const error = statsError || analysesError;
   
   return (
     <>
@@ -59,12 +57,6 @@ export default function DashboardPage() {
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
           Visão geral das suas análises
         </Typography>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: 4 }}>
-            {error.message}
-          </Alert>
-        )}
 
         {/* Cards de estatísticas */}
         {statsLoading ? (

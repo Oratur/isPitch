@@ -36,8 +36,8 @@ def segment_transcription(
 
         # Verifica se a palavra atual termina com uma pontuação de fim
         # de sentença
-        ends_with_punctuation = (
-            word.word.strip().endswith(tuple(sentence_punctuations))
+        ends_with_punctuation = word.word.strip().endswith(
+            tuple(sentence_punctuations)
         )
 
         # Verifica a pausa entre a palavra atual e a próxima
@@ -50,7 +50,7 @@ def segment_transcription(
 
         # Se for a última palavra, ou se houver pontuação ou
         # uma pausa longa, fecha o segmento
-        is_last_word = (i == len(words) - 1)
+        is_last_word = i == len(words) - 1
         if is_last_word or ends_with_punctuation or is_long_pause:
             if not current_segment_words:
                 continue
