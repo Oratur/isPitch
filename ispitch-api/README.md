@@ -95,3 +95,25 @@ Para configurar e executar a API localmente:
 * `GET /analysis/{analysis_id}`: Endpoint para consultar o status e o resultado de uma análise usando o ID retornado pelo endpoint de criação.
 
 Para ver a documentação interativa da API (gerada automaticamente pelo FastAPI), acesse [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs) com a API em execução.
+
+## Referências e Créditos
+
+Este projeto utiliza modelos de estado da arte para processamento de linguagem natural em português. Agradecemos aos pesquisadores e instituições que disponibilizam esses recursos para a comunidade open source.
+
+### Modelo de Sumarização e Tópicos (PTT5)
+
+Para as tarefas de **geração de títulos** e **sumarização de tópicos**, utilizamos o modelo **PTT5** (Portuguese T5), desenvolvido pela Unicamp Deep Learning Lab (unicamp-dl).
+
+* **Modelo**: `unicamp-dl/ptt5-base-portuguese-vocab`
+* **Repositório**: [Hugging Face Model Card](https://huggingface.co/unicamp-dl/ptt5-base-portuguese-vocab)
+* **Paper**: [arXiv:2008.09144](https://arxiv.org/abs/2008.09144)
+
+**Citação Acadêmica (BibTeX):**
+
+```bibtex
+@article{ptt5_2020,
+  title={PTT5: Pretraining and validating the T5 model on Brazilian Portuguese data},
+  author={Carmo, Diedre and Piau, Marcos and Campiotti, Israel and Nogueira, Rodrigo and Lotufo, Roberto},
+  journal={arXiv preprint arXiv:2008.09144},
+  year={2020}
+}
